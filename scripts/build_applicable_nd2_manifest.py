@@ -9,10 +9,10 @@ import pandas as pd
 
 
 DEFAULT_RAW_ROOT = Path(
-    "/Users/makennarodriguez/Documents/"
+    "/Users/pmihack/claire/tmem_2026/data/"
     "260213_Feb16recopy_HYdiff_landingpadlines_survival_384well1"
 )
-DEFAULT_PROCESSED_ROOT = Path("/Users/makennarodriguez/Documents/TMEM106B_processed")
+DEFAULT_PROCESSED_ROOT = Path("/Users/pmihack/claire/tmem_2026/data/TMEM106B_processed")
 
 REPORTER_ROWS = {"E", "I", "M"}
 PRIMARY_ROWS = {"F", "J", "N"}
@@ -84,7 +84,7 @@ def parse_filename(path: Path) -> dict[str, object]:
         "is_brightfield": is_brightfield,
         "condition": condition,
         "mcherry_valid": row in REPORTER_ROWS | PRIMARY_ROWS,
-        "safe_for_mcherry_puncta_diffusion": row in REPORTER_ROWS | PRIMARY_ROWS
+        "safe_for_mcherry_puncta_diffusion": (row in REPORTER_ROWS | PRIMARY_ROWS)
         and not is_brightfield,
     }
 

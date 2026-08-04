@@ -1,3 +1,0 @@
-condition,coloc_rows,roi_count,mean_pearson_correlation,median_pearson_correlation,mean_manders_a_in_b,mean_manders_b_in_a,saturation_warning_rows
-PLD3_TMEM106B_mCherry_primary,1080,240,0.10018295620174905,0.09172472364013655,0.23894155677633122,0.05728945814477975,109
-PLD3_mCherry_reporter_control,1160,240,0.1059932157977613,0.0887416758736364,0.0909605852412801,0.08297603841723925,119

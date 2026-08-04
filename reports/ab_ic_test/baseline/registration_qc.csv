@@ -1,0 +1,7 @@
+well,condition,timepoint_day,registration_channel,estimated_y_shift,estimated_x_shift,pre_registration_correlation,post_registration_correlation,overlap_fraction,registration_error,qc_pass,qc_note,large_shift
+E05,PLD3_mCherry_reporter_control,8,488nm Binned,0.0,0.0,1.0,1.0,1.0,0.0,True,reference_timepoint,
+E05,PLD3_mCherry_reporter_control,12,488nm Binned,-524.7,0.0,0.0009767041202637637,0.000429902692293138,0.8170502092050209,0.9999999999999203,True,phase_cross_correlation_on_stable_channel,True
+E05,PLD3_mCherry_reporter_control,16,488nm Binned,-83.9,0.0,0.018409225787471794,0.006672656903218372,0.9707461645746165,0.9999999999999645,True,phase_cross_correlation_on_stable_channel,False
+F05,PLD3_TMEM106B_mCherry_primary,8,488nm Binned,0.0,0.0,1.0,1.0,1.0,0.0,True,reference_timepoint,
+F05,PLD3_TMEM106B_mCherry_primary,12,488nm Binned,-863.4,0.0,-0.004106967825473243,-0.002613562897013449,0.6989539748953975,0.9999999999999767,True,phase_cross_correlation_on_stable_channel,True
+F05,PLD3_TMEM106B_mCherry_primary,16,488nm Binned,0.0,434.8,0.021506714391797636,0.00958500161936851,0.8483960948396094,0.9999999999999822,True,phase_cross_correlation_on_stable_channel,False

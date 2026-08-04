@@ -12,12 +12,13 @@ os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib")
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import tifffile as tif
 
-from tmem_align.quantify import quantify_puncta_vs_diffuse_roi
+from tmem_align.analysis.mcherry_metrics import quantify_mcherry_from_file
 
 
-DEFAULT_INTERIM_ROOT = Path("/Users/makennarodriguez/Documents/TMEM106B_interim")
-DEFAULT_PROCESSED_ROOT = Path("/Users/makennarodriguez/Documents/TMEM106B_processed")
+DEFAULT_INTERIM_ROOT = Path("/Users/pmihack/claire/tmem_2026/data/TMEM106B_interim")
+DEFAULT_PROCESSED_ROOT = Path("/Users/pmihack/claire/tmem_2026/data/TMEM106B_processed")
 DEFAULT_COLUMNS = ["05", "06", "07"]
 DEFAULT_ROWS = ["E", "F", "I", "J", "M", "N"]
 
@@ -100,8 +101,13 @@ def run_roi_quantification(args: argparse.Namespace) -> pd.DataFrame:
             if not stack_path.exists() or not full_metrics_path.exists():
                 continue
 
-            roi = quantify_puncta_vs_diffuse_roi(stack_path, phenotype_channel_index=args.mcherry_channel)
+            roi = quantify_mcherry_from_file(stack_path, phenotype_channel_index=args.mcherry_channel)
+            page_shape = tif.TiffFile(str(stack_path)).pages[0].shape
+            frame_pixels = page_shape[-2] * page_shape[-1]
+            roi["roi_fraction"] = roi["cell_roi_area"] / frame_pixels
+            roi = roi.rename(columns={"diffuse_mcherry_mean_intensity": "diffuse_mean"})
             full = pd.read_csv(full_metrics_path)
+            full = full.rename(columns={"diffuse_mcherry_mean_intensity": "diffuse_mean"})
             merged = full.merge(roi, on="time_index", suffixes=("_full_frame", "_roi"))
             merged.insert(0, "well", well)
             merged.insert(1, "row", row.upper())

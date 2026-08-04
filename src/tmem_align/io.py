@@ -7,7 +7,7 @@ import numpy as np
 import tifffile as tif
 
 
-def find_images(folder: str | Path, suffixes: Iterable[str] = (".tif", ".tiff", ".ome.tif", ".ome.tiff")) -> list[Path]:
+def find_images(folder: str | Path, suffixes: Iterable[str] = (".tif", ".tiff", ".ome.tif", ".ome.tiff", ".nd2")) -> list[Path]:
     folder = Path(folder)
     if folder.is_file():
         return [folder]
@@ -16,6 +16,10 @@ def find_images(folder: str | Path, suffixes: Iterable[str] = (".tif", ".tiff", 
 
 
 def read_image(path: str | Path) -> np.ndarray:
+    path = Path(path)
+    if path.suffix.lower() == ".nd2":
+        import nd2
+        return np.asarray(nd2.imread(str(path)))
     arr = tif.imread(path)
     return np.asarray(arr)
 

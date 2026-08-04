@@ -32,7 +32,7 @@ def main() -> None:
         if time_index == 0:
             recovered = (0.0, 0.0)
         else:
-            _, recovered = register_translation(stack[0, 0], stack[time_index, 0], upsample_factor=20)
+            _, recovered, _ = register_translation(stack[0, 0], stack[time_index, 0], upsample_factor=20)
             registered.append(apply_shift(stack[time_index], *recovered))
         rows.append(
             {

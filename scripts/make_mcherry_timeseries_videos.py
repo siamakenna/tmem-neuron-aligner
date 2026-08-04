@@ -16,8 +16,8 @@ import tifffile as tif
 from PIL import Image, ImageDraw, ImageFont
 
 
-DEFAULT_INTERIM_ROOT = Path("/Users/makennarodriguez/Documents/TMEM106B_interim")
-DEFAULT_PROCESSED_ROOT = Path("/Users/makennarodriguez/Documents/TMEM106B_processed")
+DEFAULT_INTERIM_ROOT = Path("/Users/pmihack/claire/tmem_2026/data/TMEM106B_interim")
+DEFAULT_PROCESSED_ROOT = Path("/Users/pmihack/claire/tmem_2026/data/TMEM106B_processed")
 DEFAULT_WELLS = ["E05", "F05", "M07", "J06"]
 DEFAULT_COMPARISON_PAIRS = [("E05", "F05"), ("M07", "J06")]
 DEFAULT_DAYS = [8, 25, 39]

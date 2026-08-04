@@ -1,3 +1,0 @@
-condition,total_rois,uncertain_identity,confirmed_same_neuron,lost_or_dead,poor_registration,exclude
-PLD3_TMEM106B_mCherry_primary,240,240,0,0,0,0
-PLD3_mCherry_reporter_control,240,240,0,0,0,0

@@ -1,0 +1,26 @@
+C05 (unknown): 9 timepoints, channels=['405nm Binned', '561nm Binned', '488nm Binned'], stable_idx=2
+E05 (PLD3_mCherry_reporter_control): 9 timepoints, channels=['405nm Binned', '561nm Binned', '488nm Binned'], stable_idx=2
+F05 (PLD3_TMEM106B_mCherry_primary): 9 timepoints, channels=['405nm Binned', '561nm Binned', '488nm Binned'], stable_idx=2
+I05 (PLD3_mCherry_reporter_control): 9 timepoints, channels=['405nm Binned', '561nm Binned', '488nm Binned'], stable_idx=2
+J05 (PLD3_TMEM106B_mCherry_primary): 9 timepoints, channels=['405nm Binned', '561nm Binned', '488nm Binned'], stable_idx=2
+M20 (PLD3_mCherry_reporter_control): 9 timepoints, channels=['405nm Binned', '561nm Binned', '488nm Binned'], stable_idx=2
+N20 (PLD3_TMEM106B_mCherry_primary): 9 timepoints, channels=['405nm Binned', '561nm Binned', '488nm Binned'], stable_idx=2
+
+=== A_cli vs B_pilot shift disagreement (px) — high on mCherry wells = leak ===
+well  condition                    
+C05   unknown                          1282.3
+E05   PLD3_mCherry_reporter_control    1204.1
+F05   PLD3_TMEM106B_mCherry_primary    2750.2
+I05   PLD3_mCherry_reporter_control    1446.3
+J05   PLD3_TMEM106B_mCherry_primary    2080.7
+M20   PLD3_mCherry_reporter_control    1546.0
+N20   PLD3_TMEM106B_mCherry_primary    2408.9
+
+=== post-registration correlation by method (real values → calibrate QC threshold) ===
+                    min     50%     max
+method                                 
+A_cli           -0.0094  0.0024  0.0324
+B_pilot          0.0095  0.0889  0.1832
+stable_subpixel -0.0172  0.0027  0.0205
+
+Wrote CSVs + montages under reports/alignment_comparison/real_data/  — review the montages by eye.

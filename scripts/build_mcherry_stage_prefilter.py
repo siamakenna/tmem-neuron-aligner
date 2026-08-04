@@ -15,7 +15,7 @@ from tmem_align.stage_qc import (
 )
 
 
-DEFAULT_PROCESSED_ROOT = Path("/Users/makennarodriguez/Documents/TMEM106B_processed")
+DEFAULT_PROCESSED_ROOT = Path("/Users/pmihack/claire/tmem_2026/data/TMEM106B_processed")
 
 
 def parse_args() -> argparse.Namespace:

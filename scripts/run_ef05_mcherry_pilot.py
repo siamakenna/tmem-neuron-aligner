@@ -17,15 +17,15 @@ import pandas as pd
 import tifffile as tif
 
 from tmem_align.nd2_tools import extract_nd2_selection, inspect_nd2
-from tmem_align.quantify import quantify_puncta_vs_diffuse
+from tmem_align.analysis.mcherry_metrics import quantify_mcherry_from_file
 
 
 DEFAULT_RAW_ROOT = Path(
-    "/Users/makennarodriguez/Documents/"
+    "/Users/pmihack/claire/tmem_2026/data/"
     "260213_Feb16recopy_HYdiff_landingpadlines_survival_384well1"
 )
-DEFAULT_INTERIM_ROOT = Path("/Users/makennarodriguez/Documents/TMEM106B_interim")
-DEFAULT_PROCESSED_ROOT = Path("/Users/makennarodriguez/Documents/TMEM106B_processed")
+DEFAULT_INTERIM_ROOT = Path("/Users/pmihack/claire/tmem_2026/data/TMEM106B_interim")
+DEFAULT_PROCESSED_ROOT = Path("/Users/pmihack/claire/tmem_2026/data/TMEM106B_processed")
 
 PILOT_FILES = {
     "E05": {
@@ -91,7 +91,7 @@ def main() -> None:
         if args.force or not output_path.exists():
             extract_nd2_selection(nd2_path, output_path, channel=args.channel)
 
-        metrics = quantify_puncta_vs_diffuse(output_path)
+        metrics = quantify_mcherry_from_file(output_path)
         metrics.insert(0, "well", well)
         metrics.insert(1, "condition", spec["condition"])
         metrics.insert(2, "channel_index", args.channel)

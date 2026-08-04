@@ -1,0 +1,7 @@
+well,time_index,day,local_y_shift,local_x_shift,local_shift_pixels,local_qc_pass
+E05,0,8,0.0,0.0,0.0,True
+E05,1,12,0.0,0.0,0.0,True
+E05,2,16,0.0,0.0,0.0,True
+F05,0,8,0.0,0.0,0.0,True
+F05,1,12,0.0,0.0,0.0,True
+F05,2,16,0.0,0.0,0.0,True

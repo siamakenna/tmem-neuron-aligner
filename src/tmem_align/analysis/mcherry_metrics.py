@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -181,18 +182,37 @@ def detect_puncta(
 
     max_area = max(cfg.min_puncta_area, int(foreground.sum() * cfg.max_puncta_area_fraction))
     labels = measure.label(puncta)
-    keep = np.zeros_like(puncta, dtype=bool)
-    for prop in measure.regionprops(labels):
-        if cfg.min_puncta_area <= prop.area <= max_area:
-            keep[labels == prop.label] = True
-    return keep
+    keep_ids = [p.label for p in measure.regionprops(labels)
+                if cfg.min_puncta_area <= p.area <= max_area]
+    return np.isin(labels, keep_ids) if keep_ids else np.zeros_like(puncta, dtype=bool)
 
 
 def _remove_small_objects(mask: np.ndarray, min_size: int) -> np.ndarray:
-    try:
-        return morphology.remove_small_objects(mask, max_size=min_size - 1)
-    except TypeError:
-        return morphology.remove_small_objects(mask, min_size=min_size)
+    return morphology.remove_small_objects(mask, max_size=min_size - 1)
+
+
+def quantify_mcherry_from_file(
+    timeseries_path: str | Path,
+    phenotype_channel_index: int | None = None,
+    config: MCherryMetricConfig | None = None,
+) -> pd.DataFrame:
+    """Convenience wrapper: read a TYX/TCYX file and quantify mCherry."""
+    from ..io import read_image
+
+    arr = np.squeeze(np.asarray(read_image(timeseries_path)))
+    if arr.ndim == 2:
+        mcherry = arr[np.newaxis, :, :]
+    elif arr.ndim == 3:
+        mcherry = arr
+    elif arr.ndim == 4:
+        ch = phenotype_channel_index if phenotype_channel_index is not None else 0
+        mcherry = arr[:, ch, :, :]
+    elif arr.ndim == 5:
+        ch = phenotype_channel_index if phenotype_channel_index is not None else 0
+        mcherry = arr[:, ch].max(axis=1)
+    else:
+        raise ValueError(f"Unsupported timeseries shape: {arr.shape}")
+    return quantify_mcherry_timeseries(mcherry, config=config)
 
 
 def _as_tyx(arr: np.ndarray) -> np.ndarray:

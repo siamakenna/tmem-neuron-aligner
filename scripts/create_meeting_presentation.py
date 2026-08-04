@@ -132,6 +132,8 @@ def add_title(slide, title, subtitle=None):
 
 def add_image(slide, path: Path, x, y, w, h, crop=False):
     path = ensure_png_or_supported(path)
+    if not path.exists():
+        return None
     with Image.open(path) as im:
         iw, ih = im.size
     box_ratio = w / h

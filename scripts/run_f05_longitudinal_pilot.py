@@ -19,7 +19,7 @@ import pandas as pd
 import tifffile as tif
 
 from tmem_align.nd2_tools import inspect_nd2
-from tmem_align.quantify import quantify_puncta_vs_diffuse
+from tmem_align.analysis.mcherry_metrics import quantify_mcherry_from_file
 from tmem_align.register import apply_shift, register_translation
 from tmem_align.stage_qc import (
     DEFAULT_STAGE_XY_THRESHOLD_UM,
@@ -29,11 +29,11 @@ from tmem_align.stage_qc import (
 
 
 DEFAULT_RAW_ROOT = Path(
-    "/Users/makennarodriguez/Documents/"
+    "/Users/pmihack/claire/tmem_2026/data/"
     "260213_Feb16recopy_HYdiff_landingpadlines_survival_384well1"
 )
-DEFAULT_INTERIM_ROOT = Path("/Users/makennarodriguez/Documents/TMEM106B_interim")
-DEFAULT_PROCESSED_ROOT = Path("/Users/makennarodriguez/Documents/TMEM106B_processed")
+DEFAULT_INTERIM_ROOT = Path("/Users/pmihack/claire/tmem_2026/data/TMEM106B_interim")
+DEFAULT_PROCESSED_ROOT = Path("/Users/pmihack/claire/tmem_2026/data/TMEM106B_processed")
 DEFAULT_DAYS = [8, 25, 39]
 
 
@@ -49,10 +49,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--processed-root", type=Path, default=DEFAULT_PROCESSED_ROOT)
     parser.add_argument("--well", default="F05")
     parser.add_argument("--days", type=int, nargs="+", default=DEFAULT_DAYS)
-    parser.add_argument("--alignment-channel", type=int, default=2, help="Default 2 = 488nm Binned.")
+    parser.add_argument(
+        "--alignment-channel", type=int, default=2, help="Default 2 = 488nm Binned."
+    )
     parser.add_argument("--mcherry-channel", type=int, default=1, help="Default 1 = 561nm Binned.")
     parser.add_argument("--max-shift-pixels", type=float, default=1200.0)
-    parser.add_argument("--stage-xy-threshold-um", type=float, default=DEFAULT_STAGE_XY_THRESHOLD_UM)
+    parser.add_argument(
+        "--stage-xy-threshold-um", type=float, default=DEFAULT_STAGE_XY_THRESHOLD_UM
+    )
     parser.add_argument(
         "--allow-stage-prefilter-fail",
         action="store_true",
@@ -136,11 +140,15 @@ def main() -> None:
         alignment_channel=args.alignment_channel,
         max_shift_pixels=args.max_shift_pixels,
     )
-    registered_stack_path = interim_dir / f"{args.well}_days_{day_label(paths)}_registered_tcyx.ome.tif"
+    registered_stack_path = (
+        interim_dir / f"{args.well}_days_{day_label(paths)}_registered_tcyx.ome.tif"
+    )
     write_tcyx(registered_stack_path, registered_stack)
 
     common_stack, common_crop = crop_common_overlap(registered_stack, shifts)
-    common_stack_path = interim_dir / f"{args.well}_days_{day_label(paths)}_registered_common_overlap_tcyx.ome.tif"
+    common_stack_path = (
+        interim_dir / f"{args.well}_days_{day_label(paths)}_registered_common_overlap_tcyx.ome.tif"
+    )
     write_tcyx(common_stack_path, common_stack)
 
     metrics_path = processed_dir / f"{args.well}_days_{day_label(paths)}_mcherry_metrics.csv"
@@ -178,7 +186,9 @@ def main() -> None:
     print(metrics.to_string(index=False))
 
 
-def select_well_paths(raw_root: Path, well: str, requested_days: list[int]) -> list[tuple[int, Path]]:
+def select_well_paths(
+    raw_root: Path, well: str, requested_days: list[int]
+) -> list[tuple[int, Path]]:
     candidates: dict[int, Path] = {}
     pattern = re.compile(r"day\s*(\d+)", re.IGNORECASE)
     for path in sorted(raw_root.rglob(f"*Well{well}*.nd2")):
@@ -227,7 +237,9 @@ def read_cyx_nd2(path: Path, max_read_bytes: int) -> np.ndarray:
 
     with nd2.ND2File(path) as image:
         data = image.to_dask()
-        estimated_read_bytes = int(np.prod(data.shape, dtype=np.int64)) * np.dtype(data.dtype).itemsize
+        estimated_read_bytes = (
+            int(np.prod(data.shape, dtype=np.int64)) * np.dtype(data.dtype).itemsize
+        )
         if estimated_read_bytes > max_read_bytes:
             raise ValueError(
                 f"Requested file read is estimated at {estimated_read_bytes:,} bytes, "
@@ -254,11 +266,13 @@ def register_tcyx_stack(
     registered = [stack[0]]
     shifts = [(0.0, 0.0)]
     for time_index in range(1, stack.shape[0]):
-        _, (dy, dx) = register_translation(
+        # raw stable channel + masked phase correlation (no clip+blur — see docs)
+        _, (dy, dx), _ = register_translation(
             reference,
             stack[time_index, alignment_channel],
-            upsample_factor=10,
             max_shift_pixels=max_shift_pixels,
+            robust_preprocess=False,
+            mask_percentile=20.0,
         )
         registered.append(apply_shift(stack[time_index], dy, dx))
         shifts.append((dy, dx))
@@ -288,9 +302,15 @@ def quantify_registered_mcherry(
 ) -> pd.DataFrame:
     output_csv.parent.mkdir(parents=True, exist_ok=True)
     temp_path = output_csv.with_suffix(".mcherry_tmp.ome.tif")
-    tif.imwrite(temp_path, registered_stack[:, mcherry_channel], photometric="minisblack", metadata={"axes": "TYX"}, ome=True)
+    tif.imwrite(
+        temp_path,
+        registered_stack[:, mcherry_channel],
+        photometric="minisblack",
+        metadata={"axes": "TYX"},
+        ome=True,
+    )
     try:
-        metrics = quantify_puncta_vs_diffuse(temp_path)
+        metrics = quantify_mcherry_from_file(temp_path)
     finally:
         temp_path.unlink(missing_ok=True)
     metrics.insert(0, "day", [day for day, _ in paths])

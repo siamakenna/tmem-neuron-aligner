@@ -2,8 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import csv
-import html
 import json
 import re
 import shutil

@@ -26,7 +26,7 @@ def test_phase_correlation_shift_recovery_on_synthetic_image() -> None:
     known_shift = (5.0, -7.0)
     moving = ndi_shift(image, shift=known_shift, order=1, mode="constant", cval=0)
 
-    _, recovered = register_translation(image, moving, upsample_factor=10)
+    _, recovered, _ = register_translation(image, moving, upsample_factor=10)
 
     assert abs(recovered[0] + known_shift[0]) < 0.25
     assert abs(recovered[1] + known_shift[1]) < 0.25

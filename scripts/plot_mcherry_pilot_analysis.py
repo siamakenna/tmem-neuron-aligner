@@ -16,7 +16,7 @@ import numpy as np
 import pandas as pd
 
 
-DEFAULT_PROCESSED_ROOT = Path("/Users/makennarodriguez/Documents/TMEM106B_processed")
+DEFAULT_PROCESSED_ROOT = Path("/Users/pmihack/claire/tmem_2026/data/TMEM106B_processed")
 
 REPORTER_ROWS = {"E", "I", "M"}
 PRIMARY_ROWS = {"F", "J", "N"}

@@ -1,0 +1,130 @@
+
+=== E05 — to-first vs anchored (masked; re-anchor thresh 0.07) ===
+ day  first_px first_corr  anch_px anch_corr reanchored
+   8         0      1.000        0     1.000           
+  12       120      0.163      120     0.163           
+  16        41      0.143       41     0.143           
+  20       129      0.116      129     0.116           
+  25        75      0.091       75     0.091           
+  29        59      0.087       59     0.087           
+  32       524      0.049      530     0.271        YES
+  36       153      0.042      170     0.181           
+  39       901      0.032      892     0.110           
+net drift day8->day39: to-first=901 px, anchored=892 px -> reports/alignment_comparison/real_data/day_overlays/E05_day_overlay.png
+
+=== F05 — to-first vs anchored (masked; re-anchor thresh 0.07) ===
+ day  first_px first_corr  anch_px anch_corr reanchored
+   8         0      1.000        0     1.000           
+  12       112      0.181      112     0.181           
+  16        42      0.152       42     0.152           
+  20       116      0.116      116     0.116           
+  25        77      0.080       77     0.080           
+  29        60      0.073       60     0.073           
+  32       527      0.047      529     0.283        YES
+  36      1840      0.010      151     0.194           
+  39      1829      0.017      895     0.101           
+net drift day8->day39: to-first=1829 px, anchored=895 px -> reports/alignment_comparison/real_data/day_overlays/F05_day_overlay.png
+
+=== I05 — to-first vs anchored (masked; re-anchor thresh 0.07) ===
+ day  first_px first_corr  anch_px anch_corr reanchored
+   8         0      1.000        0     1.000           
+  12        86      0.171       86     0.171           
+  16        36      0.157       36     0.157           
+  20        83      0.129       83     0.129           
+  25        74      0.092       74     0.092           
+  29        62      0.073       62     0.073           
+  32       514      0.051      519     0.246        YES
+  36       132      0.050      126     0.209           
+  39      1580      0.013      886     0.081           
+net drift day8->day39: to-first=1580 px, anchored=886 px -> reports/alignment_comparison/real_data/day_overlays/I05_day_overlay.png
+
+=== J05 — to-first vs anchored (masked; re-anchor thresh 0.07) ===
+ day  first_px first_corr  anch_px anch_corr reanchored
+   8         0      1.000        0     1.000           
+  12        78      0.183       78     0.183           
+  16        36      0.139       36     0.139           
+  20        71      0.119       71     0.119           
+  25        78      0.098       78     0.098           
+  29        53      0.077       53     0.077           
+  32       513      0.059      510     0.237        YES
+  36       125      0.049      121     0.173           
+  39      1957      0.019      880     0.102           
+net drift day8->day39: to-first=1957 px, anchored=880 px -> reports/alignment_comparison/real_data/day_overlays/J05_day_overlay.png
+
+=== M20 — to-first vs anchored (masked; re-anchor thresh 0.07) ===
+ day  first_px first_corr  anch_px anch_corr reanchored
+   8         0      1.000        0     1.000           
+  12       190      0.177      190     0.177           
+  16        80      0.158       80     0.158           
+  20       197      0.121      197     0.121           
+  25        97      0.111       97     0.111           
+  29        56      0.100       56     0.100           
+  32       331      0.087      331     0.087           
+  36       226      0.060      222     0.235        YES
+  39       532      0.054      530     0.155           
+net drift day8->day39: to-first=532 px, anchored=530 px -> reports/alignment_comparison/real_data/day_overlays/M20_day_overlay.png
+
+=== N20 — to-first vs anchored (masked; re-anchor thresh 0.07) ===
+ day  first_px first_corr  anch_px anch_corr reanchored
+   8         0      1.000        0     1.000           
+  12       184      0.182      184     0.182           
+  16        76      0.143       76     0.143           
+  20       200      0.104      200     0.104           
+  25        99      0.082       99     0.082           
+  29        54      0.081       54     0.081           
+  32      1831      0.023      328     0.301        YES
+  36      1490      0.035      216     0.194           
+  39      1787      0.030      536     0.109           
+net drift day8->day39: to-first=1787 px, anchored=536 px -> reports/alignment_comparison/real_data/day_overlays/N20_day_overlay.png
+
+=== C05 — to-first vs anchored (masked; re-anchor thresh 0.07) ===
+ day  first_px first_corr  anch_px anch_corr reanchored
+   8         0      1.000        0     1.000           
+  12       137      0.179      137     0.179           
+  16        45      0.160       45     0.160           
+  20       152      0.119      152     0.119           
+  25        75      0.097       75     0.097           
+  29        57      0.092       57     0.092           
+  32       536      0.060      537     0.271        YES
+  36       190      0.065      180     0.177           
+  39       900      0.037      897     0.110           
+net drift day8->day39: to-first=900 px, anchored=897 px -> reports/alignment_comparison/real_data/day_overlays/C05_day_overlay.png
+
+=== D05 — to-first vs anchored (masked; re-anchor thresh 0.07) ===
+ day  first_px first_corr  anch_px anch_corr reanchored
+   8         0      1.000        0     1.000           
+  12       128      0.192      128     0.192           
+  16        44      0.161       44     0.161           
+  20       142      0.135      142     0.135           
+  25        75      0.092       75     0.092           
+  29        57      0.083       57     0.083           
+  32       534      0.051      530     0.276        YES
+  36       173      0.070      178     0.215           
+  39       892      0.021      891     0.084           
+net drift day8->day39: to-first=892 px, anchored=891 px -> reports/alignment_comparison/real_data/day_overlays/D05_day_overlay.png
+
+=== G20 — to-first vs anchored (masked; re-anchor thresh 0.07) ===
+ day  first_px first_corr  anch_px anch_corr reanchored
+   8         0      1.000        0     1.000           
+  12       206      0.157      206     0.157           
+  16        83      0.136       83     0.136           
+  20       221      0.105      221     0.105           
+  25        95      0.080       95     0.080           
+  29        56      0.073       56     0.073           
+  32       350      0.047      355     0.334        YES
+  36       251      0.054      252     0.213           
+  39       532      0.026      523     0.123           
+net drift day8->day39: to-first=532 px, anchored=523 px -> reports/alignment_comparison/real_data/day_overlays/G20_day_overlay.png
+
+=== H20 — to-first vs anchored (masked; re-anchor thresh 0.07) ===
+ day  first_px first_corr  anch_px anch_corr reanchored
+   8         0      1.000        0     1.000           
+  12       203      0.182      203     0.182           
+  16        79      0.161       79     0.161           
+  20       213      0.127      213     0.127           
+  25        98      0.082       98     0.082           
+  29        53      0.089       53     0.089           
+  32       351      0.066      346     0.355        YES
+  36       239      0.069      244     0.224           
+  39       531      0.044      520     0.128           
+net drift day8->day39: to-first=531 px, anchored=520 px -> reports/alignment_comparison/real_data/day_overlays/H20_day_overlay.png

@@ -54,7 +54,9 @@ def build_roi_timeseries(
             registered_crop = crop
             shifts.append((0.0, 0.0))
         elif local_register:
-            registered_crop, shift = register_translation(reference_crop, crop, upsample_factor, max_shift_pixels)
+            registered_crop, shift, _ = register_translation(
+                reference_crop, crop, upsample_factor, max_shift_pixels, robust_preprocess=False
+            )
             shifts.append(shift)
         else:
             registered_crop = crop

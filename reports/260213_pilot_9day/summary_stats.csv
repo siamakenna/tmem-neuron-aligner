@@ -1,0 +1,3 @@
+well,condition,n_timepoints,first_day,last_day,first_diffuse_to_punctate_ratio,last_diffuse_to_punctate_ratio,diffuse_to_punctate_slope_per_day,mean_puncta_count,registration_qc_pass_count,registration_qc_total_count,statistics_note
+E05,PLD3_mCherry_reporter_control,9,8,39,2.4930164755102817,3.605008034883342,0.12438066152926984,971.6666666666666,9,9,tiny pilot; not enough independent replicates for inferential statistics
+F05,PLD3_TMEM106B_mCherry_primary,9,8,39,3.0133242561943514,24.167939077558973,0.5667328635401727,220.0,9,9,tiny pilot; not enough independent replicates for inferential statistics

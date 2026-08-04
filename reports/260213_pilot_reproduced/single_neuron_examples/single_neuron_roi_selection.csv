@@ -1,0 +1,3 @@
+well,roi_id,x_start,y_start,width,height,centroid_x,centroid_y,component_area_pixels,max_centroid_distance_pixels,selection_channel,selection_note
+E05,single_neuron_candidate_stable_auto,2180,124,256,256,2307.62887923091,251.54910283438304,372,47.32158044756251,488,automatic compact foreground component selected for nearest centroid consistency across aligned days; manual same-neuron review recommended
+F05,single_neuron_candidate_stable_auto,1436,496,256,256,1564.0123615365444,624.3113033108388,420,58.0504162929207,488,automatic compact foreground component selected for nearest centroid consistency across aligned days; manual same-neuron review recommended

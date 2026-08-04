@@ -67,6 +67,12 @@ registration:
     method: phase_cross_correlation
     upsample_factor: 10
     max_shift_pixels: 500
+    # Temporal reference mode for the batch/pilot aligners. NOTE: the run_260213_* scripts read
+    # these from the CLI (--ref-mode / --anchor-corr-thresh / --min-post-correlation), NOT from
+    # this YAML. Documented here for discoverability until the CLI path is unified.
+    # ref_mode: to_first          # to_first (register every day to day 0) | anchored
+    # anchor_corr_thresh: 0.10    # anchored: re-anchor when post-corr to the anchor drops below this
+    # min_post_correlation: 0.07  # QC gate: fail a timepoint below this post-registration correlation
   roi_registration:
     method: phase_cross_correlation
     upsample_factor: 20

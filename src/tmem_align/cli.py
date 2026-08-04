@@ -5,9 +5,11 @@ from pathlib import Path
 import click
 import pandas as pd
 
+import numpy as np
+
 from .config import ensure_dirs, load_config, load_plate_map, load_roi_annotations, validate_config as validate
 from .export_zarr import export_ome_zarr
-from .quantify import quantify_puncta_vs_diffuse
+from .preprocess import calculate_ic_fields_by_timepoint
 from .register import register_file_to_reference
 from .roi import build_roi_timeseries, roi_from_table
 from .stitch import stitch_folder_to_ometiff
@@ -76,6 +78,25 @@ def extract_nd2_command(
     click.echo(f"Wrote {out}")
 
 
+@main.command("compute-ic-fields")
+@click.argument("plate_dir")
+@click.option("--output", default=None, help="Output .npz path (default: <plate_dir>/ic_fields.npz).")
+@click.option("--sample-fraction", type=float, default=0.25, show_default=True)
+@click.option("--workers", type=int, default=None, help="Parallel processes (default: one per timepoint).")
+def compute_ic_fields_command(plate_dir: str, output: str | None, sample_fraction: float, workers: int | None) -> None:
+    """Compute per-timepoint illumination correction fields for a plate and save as .npz."""
+    plate_path = Path(plate_dir)
+    out = Path(output) if output else plate_path / "ic_fields.npz"
+    try:
+        ic_fields = calculate_ic_fields_by_timepoint(plate_path, sample_fraction=sample_fraction, n_workers=workers)
+    except Exception as exc:
+        raise click.ClickException(str(exc)) from exc
+    np.savez_compressed(out, **ic_fields)
+    click.echo(f"Wrote {out} ({len(ic_fields)} timepoints)")
+    for name, ic in sorted(ic_fields.items()):
+        click.echo(f"  {name}: shape={ic.shape}, range=[{ic.min():.2f}, {ic.max():.2f}]")
+
+
 @main.command("validate-config")
 @click.argument("config_path")
 def validate_config_command(config_path: str) -> None:
@@ -124,6 +145,11 @@ def stitch_command(config_path: str, plate: str, well: str) -> None:
 @click.option("--well", required=True)
 @click.option("--reference-day", default=None)
 def register_well_command(config_path: str, plate: str, well: str, reference_day: str | None) -> None:
+    raise click.ClickException(
+        "register-well is not safe: it registers on a max-projection that includes the mCherry "
+        "channel, locking onto illumination instead of cells (500–1400 px garbage shifts, "
+        "post-corr ~0.005). Use run_260213_all_wells_batch.py with --ref-mode anchored instead."
+    )
     cfg = load_config(config_path)
     plate_map = load_plate_map(cfg)
     rows = plate_map[(plate_map["plate"] == plate) & (plate_map["well"] == well)].copy()
@@ -146,9 +172,9 @@ def register_well_command(config_path: str, plate: str, well: str, reference_day
         out = registered_root / f"{row['day']}_registered.ome.tif"
         if row["day"] == reference_day:
             # Registering reference to itself keeps naming consistent.
-            ref_out, shift = register_file_to_reference(ref_path, ref_path, out, 1, 0)
+            ref_out, shift, _ = register_file_to_reference(ref_path, ref_path, out, 1, 0)
         else:
-            ref_out, shift = register_file_to_reference(
+            ref_out, shift, _ = register_file_to_reference(
                 ref_path,
                 moving,
                 out,
@@ -200,6 +226,11 @@ def make_roi_stack_command(config_path: str, plate: str, well: str, roi_id: str)
 @click.option("--roi-id", required=True)
 @click.option("--phenotype-channel-index", type=int, default=None)
 def quantify_command(config_path: str, plate: str, well: str, roi_id: str, phenotype_channel_index: int | None) -> None:
+    import numpy as np
+
+    from .analysis.mcherry_metrics import MCherryMetricConfig, quantify_mcherry_timeseries
+    from .io import read_image
+
     cfg = load_config(config_path)
     roi_path = cfg.resolve("paths.interim_root") / "neuron_rois" / plate / f"Well_{well}" / roi_id / f"{roi_id}_registered_timeseries.ome.tif"
     if not roi_path.exists():
@@ -216,14 +247,24 @@ def quantify_command(config_path: str, plate: str, well: str, roi_id: str, pheno
                 "mCherry puncta/diffusion analysis is not valid for this well. "
                 "Use E/F wells or correct the plate map."
             )
+
+    arr = np.asarray(read_image(roi_path))
+    arr = np.squeeze(arr)
+    if arr.ndim == 2:
+        arr = arr[np.newaxis, np.newaxis, :, :]
+    elif arr.ndim == 3:
+        arr = arr[:, np.newaxis, :, :]
+
+    ch = phenotype_channel_index if phenotype_channel_index is not None else 0
+    mcherry_stack = arr[:, ch, :, :]
+
     qcfg = cfg.raw["quantification"]
-    df = quantify_puncta_vs_diffuse(
-        roi_path,
-        phenotype_channel_index=phenotype_channel_index,
-        min_size_pixels=int(qcfg.get("puncta_min_size_pixels", 6)),
+    config = MCherryMetricConfig(
         background_percentile=float(qcfg.get("diffuse_percentile_background", 20)),
-        threshold_method=str(qcfg.get("puncta_threshold_method", "otsu")),
+        min_puncta_area=int(qcfg.get("puncta_min_size_pixels", 6)),
+        puncta_sigma_small=float(qcfg.get("puncta_sigma", 1.0)),
     )
+    df = quantify_mcherry_timeseries(mcherry_stack, config=config)
     out = cfg.resolve("paths.processed_root") / "measurements" / f"{plate}_Well_{well}_{roi_id}_measurements.csv"
     out.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out, index=False)

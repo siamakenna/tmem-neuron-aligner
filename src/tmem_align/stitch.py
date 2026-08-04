@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 
 import numpy as np
-from skimage.registration import phase_cross_correlation
 from tqdm import tqdm
 
 from .io import find_images, normalize_to_2d, read_image, write_ome_tiff
@@ -46,11 +45,6 @@ def stitch_grid(
 
     weight[weight == 0] = 1
     return (canvas / weight).astype(tiles[0].dtype)
-
-
-def estimate_tile_shift(reference: np.ndarray, moving: np.ndarray, upsample_factor: int = 10) -> tuple[float, float]:
-    shift, _, _ = phase_cross_correlation(reference, moving, upsample_factor=upsample_factor)
-    return float(shift[0]), float(shift[1])
 
 
 def stitch_folder_to_ometiff(

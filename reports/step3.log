@@ -1,0 +1,252 @@
+=== Step 3: anchored canonical run ===
+Tue Jul 21 23:58:39 CDT 2026
+[7/192] C11 done
+[5/192] C09 done
+[2/192] C06 done
+[10/192] C14 done
+[4/192] C08 done
+[9/192] C13 done
+[1/192] C05 done
+[6/192] C10 done
+[8/192] C12 done
+[3/192] C07 done
+[13/192] C17 done
+[19/192] D07 done
+[11/192] C15 done
+[12/192] C16 done
+[14/192] C18 done
+[16/192] C20 done
+[17/192] D05 done
+[18/192] D06 done
+[15/192] C19 done
+[20/192] D08 done
+[21/192] D09 done
+[23/192] D11 done
+[28/192] D16 done
+[27/192] D15 done
+[22/192] D10 done
+[24/192] D12 done
+[25/192] D13 done
+[26/192] D14 done
+[29/192] D17 done
+[30/192] D18 done
+[31/192] D19 done
+[32/192] D20 done
+[35/192] E07 done
+[34/192] E06 done
+[39/192] E11 done
+[33/192] E05 done
+[38/192] E10 done
+[37/192] E09 done
+[36/192] E08 done
+[40/192] E12 done
+[41/192] E13 done
+[42/192] E14 done
+[43/192] E15 done
+[44/192] E16 done
+[48/192] E20 done
+[45/192] E17 done
+[47/192] E19 done
+[49/192] F05 done
+[46/192] E18 done
+[50/192] F06 done
+[51/192] F07 done
+[52/192] F08 done
+[53/192] F09 done
+[55/192] F11 done
+[54/192] F10 done
+[56/192] F12 done
+[58/192] F14 done
+[57/192] F13 done
+[60/192] F16 done
+[59/192] F15 done
+[61/192] F17 done
+[62/192] F18 done
+[65/192] G05 done
+[66/192] G06 done
+[67/192] G07 done
+[68/192] G08 done
+[69/192] G09 done
+[70/192] G10 done
+[63/192] F19 done
+[64/192] F20 done
+[71/192] G11 done
+[74/192] G14 done
+[72/192] G12 done
+[73/192] G13 done
+[75/192] G15 done
+[76/192] G16 done
+[77/192] G17 done
+[78/192] G18 done
+[79/192] G19 done
+[80/192] G20 done
+[81/192] H05 done
+[82/192] H06 done
+[83/192] H07 done
+[84/192] H08 done
+[85/192] H09 done
+[86/192] H10 done
+[88/192] H12 done
+[87/192] H11 done
+[89/192] H13 done
+[90/192] H14 done
+[91/192] H15 done
+[92/192] H16 done
+[93/192] H17 done
+[96/192] H20 done
+[94/192] H18 done
+[95/192] H19 done
+[97/192] I05 done
+[98/192] I06 done
+[99/192] I07 done
+[100/192] I08 done
+[101/192] I09 done
+[102/192] I10 done
+[103/192] I11 done
+[104/192] I12 done
+[106/192] I14 done
+[105/192] I13 done
+[107/192] I15 done
+[108/192] I16 done
+[109/192] I17 done
+[110/192] I18 done
+[112/192] I20 done
+[111/192] I19 done
+[113/192] J05 done
+[114/192] J06 done
+[115/192] J07 done
+[116/192] J08 done
+[117/192] J09 done
+[118/192] J10 done
+[119/192] J11 done
+[120/192] J12 done
+[121/192] J13 done
+[122/192] J14 done
+[123/192] J15 done
+[124/192] J16 done
+[125/192] J17 done
+[126/192] J18 done
+[129/192] K05 done
+[130/192] K06 done
+[127/192] J19 done
+[128/192] J20 done
+[132/192] K08 done
+[131/192] K07 done
+[133/192] K09 done
+[134/192] K10 done
+[135/192] K11 done
+[137/192] K13 done
+[136/192] K12 done
+[138/192] K14 done
+[139/192] K15 done
+[140/192] K16 done
+[141/192] K17 done
+[142/192] K18 done
+[143/192] K19 done
+[144/192] K20 done
+[145/192] L05 done
+[146/192] L06 done
+[147/192] L07 done
+[148/192] L08 done
+[149/192] L09 done
+[151/192] L11 done
+[150/192] L10 done
+[152/192] L12 done
+[153/192] L13 done
+[155/192] L15 done
+[154/192] L14 done
+[156/192] L16 done
+[157/192] L17 done
+[158/192] L18 done
+[159/192] L19 done
+[160/192] L20 done
+[161/192] M05 done
+[163/192] M07 done
+[162/192] M06 done
+[164/192] M08 done
+[165/192] M09 done
+[166/192] M10 done
+[167/192] M11 done
+[168/192] M12 done
+[169/192] M13 done
+[170/192] M14 done
+[172/192] M16 done
+[171/192] M15 done
+[173/192] M17 done
+[174/192] M18 done
+[175/192] M19 done
+[176/192] M20 done
+[177/192] N05 done
+[178/192] N06 done
+[179/192] N07 done
+[180/192] N08 done
+[181/192] N09 done
+[182/192] N10 done
+[183/192] N11 done
+[186/192] N14 done
+[185/192] N13 done
+[184/192] N12 done
+[187/192] N15 done
+[188/192] N16 done
+[189/192] N17 done
+[190/192] N18 done
+[192/192] N20 done
+[191/192] N19 done
+Wrote all-well batch outputs under /Users/pmihack/claire/tmem_2026/tmem-neuron-aligner/.claude/worktrees/understand-alignment/reports/260213_all_wells_anchored_final
+             summary_type                     condition  day  wells  observations  qc_pass  qc_total  mean_overlap_fraction  mean_diffuse_to_punctate_ratio  median_diffuse_to_punctate_ratio  mean_puncta_count
+          registration_qc PLD3_TMEM106B_mCherry_primary    8     48            48     48.0      48.0               1.000000                             NaN                               NaN                NaN
+          registration_qc PLD3_TMEM106B_mCherry_primary   12     48            48     48.0      48.0               0.938001                             NaN                               NaN                NaN
+          registration_qc PLD3_TMEM106B_mCherry_primary   16     48            48     48.0      48.0               0.974562                             NaN                               NaN                NaN
+          registration_qc PLD3_TMEM106B_mCherry_primary   20     48            48     48.0      48.0               0.940462                             NaN                               NaN                NaN
+          registration_qc PLD3_TMEM106B_mCherry_primary   25     48            48     48.0      48.0               0.967997                             NaN                               NaN                NaN
+          registration_qc PLD3_TMEM106B_mCherry_primary   29     48            48     48.0      48.0               0.975078                             NaN                               NaN                NaN
+          registration_qc PLD3_TMEM106B_mCherry_primary   32     48            48     48.0      48.0               0.828214                             NaN                               NaN                NaN
+          registration_qc PLD3_TMEM106B_mCherry_primary   36     48            48     48.0      48.0               0.920832                             NaN                               NaN                NaN
+          registration_qc PLD3_TMEM106B_mCherry_primary   39     48            48     48.0      48.0               0.735360                             NaN                               NaN                NaN
+          registration_qc      PLD3_TMEM106B_no_mCherry    8     48            48     48.0      48.0               1.000000                             NaN                               NaN                NaN
+          registration_qc      PLD3_TMEM106B_no_mCherry   12     48            48     48.0      48.0               0.931918                             NaN                               NaN                NaN
+          registration_qc      PLD3_TMEM106B_no_mCherry   16     48            48     48.0      48.0               0.972912                             NaN                               NaN                NaN
+          registration_qc      PLD3_TMEM106B_no_mCherry   20     48            48     48.0      48.0               0.932575                             NaN                               NaN                NaN
+          registration_qc      PLD3_TMEM106B_no_mCherry   25     48            48     48.0      48.0               0.967927                             NaN                               NaN                NaN
+          registration_qc      PLD3_TMEM106B_no_mCherry   29     48            48     48.0      48.0               0.974762                             NaN                               NaN                NaN
+          registration_qc      PLD3_TMEM106B_no_mCherry   32     48            48     48.0      48.0               0.820662                             NaN                               NaN                NaN
+          registration_qc      PLD3_TMEM106B_no_mCherry   36     48            48     48.0      48.0               0.913781                             NaN                               NaN                NaN
+          registration_qc      PLD3_TMEM106B_no_mCherry   39     48            48     48.0      48.0               0.736157                             NaN                               NaN                NaN
+          registration_qc PLD3_mCherry_reporter_control    8     48            48     48.0      48.0               1.000000                             NaN                               NaN                NaN
+          registration_qc PLD3_mCherry_reporter_control   12     48            48     48.0      48.0               0.934931                             NaN                               NaN                NaN
+          registration_qc PLD3_mCherry_reporter_control   16     48            48     48.0      48.0               0.973616                             NaN                               NaN                NaN
+          registration_qc PLD3_mCherry_reporter_control   20     48            48     48.0      48.0               0.936444                             NaN                               NaN                NaN
+          registration_qc PLD3_mCherry_reporter_control   25     48            48     48.0      48.0               0.967757                             NaN                               NaN                NaN
+          registration_qc PLD3_mCherry_reporter_control   29     48            48     48.0      48.0               0.974712                             NaN                               NaN                NaN
+          registration_qc PLD3_mCherry_reporter_control   32     48            48     48.0      48.0               0.824277                             NaN                               NaN                NaN
+          registration_qc PLD3_mCherry_reporter_control   36     48            48     48.0      48.0               0.917219                             NaN                               NaN                NaN
+          registration_qc PLD3_mCherry_reporter_control   39     48            48     48.0      48.0               0.737581                             NaN                               NaN                NaN
+          registration_qc          PLD3_only_no_mCherry    8     48            48     48.0      48.0               1.000000                             NaN                               NaN                NaN
+          registration_qc          PLD3_only_no_mCherry   12     48            48     48.0      48.0               0.929005                             NaN                               NaN                NaN
+          registration_qc          PLD3_only_no_mCherry   16     48            48     48.0      48.0               0.972214                             NaN                               NaN                NaN
+          registration_qc          PLD3_only_no_mCherry   20     48            48     48.0      48.0               0.928873                             NaN                               NaN                NaN
+          registration_qc          PLD3_only_no_mCherry   25     48            48     48.0      48.0               0.968155                             NaN                               NaN                NaN
+          registration_qc          PLD3_only_no_mCherry   29     48            48     48.0      48.0               0.975048                             NaN                               NaN                NaN
+          registration_qc          PLD3_only_no_mCherry   32     48            48     48.0      48.0               0.817045                             NaN                               NaN                NaN
+          registration_qc          PLD3_only_no_mCherry   36     48            48     48.0      48.0               0.910234                             NaN                               NaN                NaN
+          registration_qc          PLD3_only_no_mCherry   39     48            48     48.0      48.0               0.733751                             NaN                               NaN                NaN
+mcherry_valid_measurement PLD3_TMEM106B_mCherry_primary    8     48            48      NaN       NaN                    NaN                        3.160865                          3.141677         837.708333
+mcherry_valid_measurement PLD3_TMEM106B_mCherry_primary   12     48            48      NaN       NaN                    NaN                        4.602995                          4.586889         751.333333
+mcherry_valid_measurement PLD3_TMEM106B_mCherry_primary   16     48            48      NaN       NaN                    NaN                        4.653300                          4.648801         755.479167
+mcherry_valid_measurement PLD3_TMEM106B_mCherry_primary   20     48            48      NaN       NaN                    NaN                        5.009878                          5.024978         840.104167
+mcherry_valid_measurement PLD3_TMEM106B_mCherry_primary   25     48            48      NaN       NaN                    NaN                        6.763549                          6.778156         718.562500
+mcherry_valid_measurement PLD3_TMEM106B_mCherry_primary   29     48            48      NaN       NaN                    NaN                        5.913353                          5.885021        1024.208333
+mcherry_valid_measurement PLD3_TMEM106B_mCherry_primary   32     48            48      NaN       NaN                    NaN                        5.797363                          5.778360        1088.937500
+mcherry_valid_measurement PLD3_TMEM106B_mCherry_primary   36     48            48      NaN       NaN                    NaN                        5.865826                          5.843674        1145.916667
+mcherry_valid_measurement PLD3_TMEM106B_mCherry_primary   39     48            48      NaN       NaN                    NaN                        6.506865                          6.411427        1091.041667
+mcherry_valid_measurement PLD3_mCherry_reporter_control    8     48            48      NaN       NaN                    NaN                        2.479096                          2.476516         825.187500
+mcherry_valid_measurement PLD3_mCherry_reporter_control   12     48            48      NaN       NaN                    NaN                        3.030646                          3.019729         721.020833
+mcherry_valid_measurement PLD3_mCherry_reporter_control   16     48            48      NaN       NaN                    NaN                        2.967710                          2.997551         777.229167
+mcherry_valid_measurement PLD3_mCherry_reporter_control   20     48            48      NaN       NaN                    NaN                        3.300150                          3.335520         922.312500
+mcherry_valid_measurement PLD3_mCherry_reporter_control   25     48            48      NaN       NaN                    NaN                        4.221678                          4.205880         749.395833
+mcherry_valid_measurement PLD3_mCherry_reporter_control   29     48            48      NaN       NaN                    NaN                        3.783864                          3.820916        1031.833333
+mcherry_valid_measurement PLD3_mCherry_reporter_control   32     48            48      NaN       NaN                    NaN                        3.586487                          3.604557        1080.708333
+mcherry_valid_measurement PLD3_mCherry_reporter_control   36     48            48      NaN       NaN                    NaN                        3.537410                          3.551369        1139.416667
+mcherry_valid_measurement PLD3_mCherry_reporter_control   39     48            48      NaN       NaN                    NaN                        3.692149                          3.693976        1085.562500
+=== done ===
+Wed Jul 22 00:15:36 CDT 2026
