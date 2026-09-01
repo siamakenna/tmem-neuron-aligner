@@ -1,0 +1,5 @@
+neuron_id,expected_result,purpose
+J05_N015,PASS,positive reference for clean single-soma ROI
+N05_N011,PASS,positive reference for clean single-soma ROI
+F05_N025,FAIL_MULTI_SOMA,negative reference for multi-neuron contamination
+E05_N071,REVIEW_MASK_SIZE,reference for overly generous support
