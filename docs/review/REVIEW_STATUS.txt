@@ -1,0 +1,15 @@
+TMEM106B longitudinal neuron atlas - curated review set
+
+Status: READY FOR INTERNAL REVIEW
+
+The candidate atlas remains a screening resource.
+The curated phenotype videos were manually reviewed and were
+overarchingly consistent for identity, ROI placement, and phenotype display.
+
+Important interpretation notes:
+- 488 channel defines neuron identity and ROI geometry.
+- mCherry/561 does not drive tracking.
+- Puncta and diffuse panels are computational phenotype decompositions.
+- These measurements should not be interpreted as direct evidence of
+  lysosomal rupture.
+- Biological replication is based on the three matched well pairs.

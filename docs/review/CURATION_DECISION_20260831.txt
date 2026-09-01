@@ -1,0 +1,17 @@
+Manual review of representative top-ranked videos showed:
+
+- Tracking/crop centering is generally successful in the current top-25 set.
+- The main remaining failure mode is ROI/support purity, not center tracking.
+- Some fixed-support outlines are overly generous.
+- F05_N025 demonstrates multi-neuron contamination within one apparent ROI.
+- J05_N015 and N05_N011 are positive reference examples.
+- E05_N071 is a useful example of correct tracking with support geometry needing tightening.
+
+Next iteration:
+1. Preserve current v2 488 tracking anchors.
+2. Keep the 128x128 bounding box unchanged.
+3. Build a tighter single-soma identity core.
+4. Detect/reject likely multiple-soma ROIs.
+5. Use identity core + 1 px as the phenotype ROI.
+6. Render explicit raw-561 / puncta / diffuse panels.
+7. Quantify final phenotype only after manual single-neuron validation.
