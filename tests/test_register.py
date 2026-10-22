@@ -83,6 +83,37 @@ def test_apply_shift_round_trip():
     assert np.allclose(image[25:28, 25:28], restored[25:28, 25:28], atol=0.05)
 
 
+@pytest.mark.parametrize("shape", [(24, 28), (3, 24, 28), (2, 3, 24, 28)])
+@pytest.mark.parametrize("dtype", [np.float32, np.float64, np.uint16])
+@pytest.mark.parametrize("displacement", [(-4, 6), (0.5, -1.25)])
+def test_apply_shift_independent_plane_contract(shape, dtype, displacement):
+    image = np.random.default_rng(7).uniform(0, 60000, shape).astype(dtype)
+    before = image.copy()
+    actual = apply_shift(image, *displacement)
+    assert actual.shape == image.shape
+    assert actual.dtype == image.dtype
+    assert not np.shares_memory(actual, image)
+    np.testing.assert_array_equal(image, before)
+    # Independent oracle: apply SciPy's established 2D behavior to each plane.
+    for index in np.ndindex(shape[:-2]):
+        expected = ndi_shift(image[index], displacement, order=3, mode="constant", cval=0)
+        np.testing.assert_array_equal(actual[index], expected)
+
+
+@pytest.mark.parametrize("shape", [(3, 24, 28), (2, 3, 24, 28)])
+def test_apply_shift_other_planes_cannot_change_identity(shape):
+    image = np.zeros(shape, np.float32)
+    index = (2,) if len(shape) == 3 else (0, 2)
+    y, x = np.mgrid[:24, :28]
+    image[index] = np.exp(-((y - 12) ** 2 + (x - 14) ** 2) / 12)
+    changed = np.random.default_rng(8).uniform(0, 65535, shape).astype(np.float32)
+    changed[index] = image[index]
+    for displacement in [(-4, 6), (0.5, -1.25)]:
+        a = apply_shift(image, *displacement)
+        b = apply_shift(changed, *displacement)
+        np.testing.assert_array_equal(a[index], b[index])
+
+
 # --- anchored / masked temporal registration -------------------------------------------------
 
 _N = 128

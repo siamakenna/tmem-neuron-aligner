@@ -1,49 +1,46 @@
 # TMEM106B Neuron Aligner
 
-Longitudinal single-neuron tracking and mCherry phenotype analysis for the TMEM106B imaging pilot.
+Longitudinal neuron identity uses **488 only**. The **561/mCherry channel**
+supports phenotype measurement after identity and ROI geometry have been fixed.
 
-## Current analysis
+The current review snapshot adds portable software verification, inspectable
+processing stages, fixed longitudinal display limits and a manual-review export
+gate. It preserves the historical candidate atlas and registered crops.
 
-The workflow uses **488 morphology for neuron identity and tracking** and measures **561/mCherry independently as phenotype**.
+## Current instructions
 
-The current analysis is at the curated internal-review stage. The full automatic atlas is retained as a candidate-generation resource, while high-quality longitudinal tracks are visually reviewed before phenotype interpretation.
+Read [the implementation and scope guide](docs/audit_v1/IMPLEMENTATION.md).
+An extracted Claire handoff has top-level `CLAIRE_README.md` and `index.html`
+with exact environment, verification, review and return commands. These are the
+authoritative handoff instructions. A Git checkout is unnecessary for its runner.
 
-### Current curated workflow
+Current entry points:
 
-- 9 longitudinal visits: Days 8–39
-- 6 wells / 3 matched control–TMEM106B pairs
-- 128 × 128 neuron-centered crops
-- tight longitudinal 488 identity core
-- fixed phenotype ROI
-- explicit punctate vs. diffuse mCherry visualization
-- manual single-neuron QC
+- [Portable verification](scripts/run_claire_verification.py)
+- [Review workspace generation](scripts/build_review_workspace.py)
+- [Manual-review metric export](scripts/export_reviewed_metrics.py)
+- [Stage diagnostics](scripts/run_tmem_audit.py)
+- [Explicit-coordinate well assembly](scripts/assemble_tmem_well.py)
+- [Whole-well longitudinal registration](scripts/register_tmem_well.py)
 
-## Representative examples
+## Scientific scope
 
-### Clean longitudinal track — J05_N015
+The handoff includes three candidate examples across nine visits each:
+`J05_N015`, `N05_N011`, and the known multi-neuron exclusion `F05_N025`.
+Historical positive-reference labels do not constitute renewed approval.
+All three are from TMEM106B wells and cannot establish a control comparison.
 
-![J05_N015](docs/figures/J05_N015_audit_montage.png)
+The biological replicate structure is three matched well pairs: E05/F05,
+I05/J05, and M05/N05. Individual neurons provide measurements within wells and
+do not increase the number of independent biological replicates.
 
-### Clean longitudinal track — N05_N011
-
-![N05_N011](docs/figures/N05_N011_audit_montage.png)
-
-### Known QC exclusion — F05_N025
-
-![F05_N025](docs/figures/F05_N025_qc_montage.png)
-
-F05_N025 remains centered but contains more than one neuron within the phenotype ROI and is retained as a QC example.
-
-## Documentation
-
-See:
-
-**[Curated Review — September 1, 2026](docs/CURATED_REVIEW_20260901.md)**
-
-for experimental design, QC history, phenotype definitions, representative images, interpretation guardrails, and current analysis status.
+Punctate and diffuse mCherry are a computational phenotype decomposition. They
+do not establish rupture, fibrils, or another specific mechanism.
 
 ## Data policy
 
-Large microscopy files, registered TIFF stacks, and MP4 review files are intentionally excluded from Git.
-
-This repository contains code, analysis parameters, compact QC records, and representative figures required to document and reproduce the workflow.
+Large ND2 images, registered TIFF stacks, and MP4 reviews remain in the data
+layer. The source and handoff contain code, configuration, compact fixtures,
+diagnostics, exact fingerprints and clearly labeled verification evidence.
+Original acquisition tile geometry and independently reviewed physical
+calibration require their supporting inputs.
