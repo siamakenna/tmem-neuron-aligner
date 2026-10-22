@@ -1,0 +1,13 @@
+{
+  "schema_version": "tmem.display_review.v1",
+  "neuron_ids": ["J05_N015", "N05_N011", "F05_N025"],
+  "preserve_saved_reference_luts": true,
+  "reference_lut": {"source": "reference_bbox", "low_percentile": 1.0, "high_percentile": 99.6},
+  "candidate_lut": {"source": "roi_fixed", "low_percentile": 1.0, "high_percentile": 99.6},
+  "bbox_policy": "Existing 488-derived 128x128 geometry; LUTs constrain display intensity only",
+  "ic_policy": "Raw registered reference; empirical IC is not adopted",
+  "known_exclusions": {
+    "F05_N025": "Historical multi-neuron ROI contamination; automated soma-screen PASS cannot override exclusion"
+  },
+  "biological_pairs": [["E05", "F05"], ["I05", "J05"], ["M05", "N05"]]
+}

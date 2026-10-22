@@ -53,12 +53,22 @@ def register_translation(
 
 
 def apply_shift(image: np.ndarray, dy: float, dx: float) -> np.ndarray:
+    """Shift YX planes independently, preserving channel/time independence.
+
+    Cubic spline prefiltering over a full stack can couple rounding across
+    nonspatial axes even when those axes have zero displacement.
+    """
     arr = np.asarray(image)
+    if arr.ndim < 2:
+        raise ValueError("apply_shift requires at least two spatial dimensions")
     if arr.ndim == 2:
-        shift_vec = (dy, dx)
-    else:
-        shift_vec = (0,) * (arr.ndim - 2) + (dy, dx)
-    return ndi_shift(arr, shift=shift_vec, order=3, mode="constant", cval=0).astype(arr.dtype)
+        return ndi_shift(arr, shift=(dy, dx), order=3, mode="constant", cval=0).astype(arr.dtype)
+    shifted = np.empty_like(arr)
+    for index in np.ndindex(arr.shape[:-2]):
+        shifted[index] = ndi_shift(
+            arr[index], shift=(dy, dx), order=3, mode="constant", cval=0
+        )
+    return shifted
 
 
 def register_file_to_reference(
