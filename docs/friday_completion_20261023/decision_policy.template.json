@@ -1,0 +1,13 @@
+{
+  "schema_version": "tmem.analysis_decisions.v1",
+  "evidence_type": "REAL_ACCEPTED",
+  "excluded_neuron_ids": {
+    "F05_N025": "Current exclusion: multiple-neuron ROI; import original decision evidence",
+    "N05_N011": "Current user-supplied exclusion; import newer reviewed identity evidence"
+  },
+  "technical_only_neuron_ids": ["J05_N015"],
+  "pending_neuron_ids": [],
+  "pending_identity_resolution": ["N012 packet identity and source", "three flagged N05 pair identities and review status"],
+  "packet_exclusions": {"N012": {"neuron_id": null, "source_reference": ""}},
+  "evidence_files": []
+}

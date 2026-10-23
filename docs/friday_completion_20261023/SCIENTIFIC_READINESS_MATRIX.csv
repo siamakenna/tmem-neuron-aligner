@@ -1,0 +1,17 @@
+milestone,status,evidence_reference,validation_scope,missing_input,next_action
+Mac baseline Python tests,COMPLETE — prior verification only,User report 2026-10-22,340 repository tests and 49 subtests; not repeated,Private log and environment identifiers for archival link,Retain existing records
+Node review interface,COMPLETE — prior verification only,User report 2026-10-22 and tests/audit_v1/check_review_ui.js,Generated-script Node DOM check; no Safari claim,Private command/version/log identifiers,Retain completed result
+Matched-well analysis software,COMPLETE — independently verified,tests/audit_v1/test_matched_analysis.py,Synthetic evidence-bound integration and rejection cases,None for software,Supply final accepted bundles and cohort policy
+Plotting software,COMPLETE — independently verified,tests/audit_v1/test_scientific_figures.py,Synthetic examples and plot/input invariants,None for demonstrated software,Render real figures after accepted data validation
+Real matched-well comparison,READY FOR REAL DATA,MATCHED_WELL_ANALYSIS_README.md,Descriptive only; wells/pairs are biological replicates,Accepted matched exports plus source review evidence and cohort ledger,Run analysis CLI
+Real-neuron registration accuracy,BLOCKED — missing input,FIGURE_DATA_REQUIREMENTS.md,Synthetic software correctness does not establish real accuracy,Reviewed real reference landmarks and source frames,Validate on original inputs
+Human segmentation accuracy,BLOCKED — manual review,FIGURE_DATA_REQUIREMENTS.md,Construction truth is not human annotation,Independent reviewed masks and boundary cases,Supply annotations and compare
+Same-neuron identity,BLOCKED — manual review,REVIEW_GATE_VALIDATION_AND_PENDING_DECISIONS.md,488 structure and numeric QC alone are insufficient,Completed identity and ROI review,Complete all required judgments
+J05 retained technical rows,COMPLETE — prior verification only,Current user instruction,Nine fixed-region technical rows only,Qualifying biological acceptance and cohort,Keep technical-only classification
+F05 and N011 exclusions,COMPLETE — prior verification only,Current user instruction,Current exclusions preserved; older positive references do not override,Original private decision packets for binding,Import source evidence without reclassification
+N012 packet,BLOCKED — missing input,SANITIZED_AI_REVIEW_SUMMARY.md,Current packet excluded for Day12 QC; full ID unresolved,Exact packet identity and decision evidence,Import and bind excluded identity
+Three flagged N05 pairs,BLOCKED — manual review,SANITIZED_AI_REVIEW_SUMMARY.md,No invented identities or approvals,Exact identities and completed review,Resolve in private decision policy
+Real stitching and calibration,BLOCKED — missing input,ACQUISITION_EVIDENCE_INTAKE.md,Synthetic assembly does not validate acquisition geometry,Original tiles stage geometry orientation calibration and coverage,Complete intake and real assembly checks
+Survival,BLOCKED — missing input,FIGURE_DATA_REQUIREMENTS.md,No disappearance-to-death inference,Confirmed fate entry events loss reasons and censoring evidence,Prepare and review fate dataset before implementing survival
+Rupture or fibril mechanism,BLOCKED — missing input,COLLABORATOR_HANDOFF.md,561 redistribution is computational phenotype only,Orthogonal biological validation,Discuss assays with PI
+John older dataset adaptation,READY FOR REAL DATA,COLLABORATOR_HANDOFF.md,Method transfer plan only,Channel axis time geometry and calibration inventory,Create new source coordinate and review evidence

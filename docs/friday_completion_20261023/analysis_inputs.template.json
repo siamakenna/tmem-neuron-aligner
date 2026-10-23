@@ -1,0 +1,8 @@
+{
+  "schema_version": "tmem.matched_analysis_inputs.v1",
+  "evidence_type": "REAL_ACCEPTED",
+  "measurement_units": {"intensity": "ADU", "area": "px2"},
+  "cohort_status_csv": "cohort_status.csv",
+  "decision_policy": "decision_policy.json",
+  "bundles": []
+}
