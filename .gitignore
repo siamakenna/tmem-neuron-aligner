@@ -30,3 +30,8 @@ data/processed/**
 .DS_Store
 .vscode/
 .idea/
+
+# Independent completion work products (source and compact reports are tracked)
+.pipeline/
+.venv-friday/
+outputs/friday_independent_completion/

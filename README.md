@@ -9,6 +9,12 @@ gate. It preserves the historical candidate atlas and registered crops.
 
 ## Current instructions
 
+The [Friday analysis and collaborator handoff](docs/friday_completion_20261023/README.md)
+adds evidence-checked matched-well summaries and clearly labeled synthetic
+figure examples. Actual biological comparisons still require accepted data
+from the matched wells and the current review decisions. The completed Mac
+baseline is preserved as prior verification; only new additions were retested.
+
 Read [the implementation and scope guide](docs/audit_v1/IMPLEMENTATION.md).
 An extracted Claire handoff has top-level `CLAIRE_README.md` and `index.html`
 with exact environment, verification, review and return commands. These are the

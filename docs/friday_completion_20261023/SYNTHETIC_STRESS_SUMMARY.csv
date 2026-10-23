@@ -1,0 +1,5 @@
+case_id,evidence_type,scope,execution_status,alignment_error_px,target_mask_iou,puncta_detected,limitation
+completed_mac_stress_suite,SYNTHETIC,Prior baseline,Not rerun per user instruction,,,,See existing private validation records; no invented per-case results
+new_registration_plot,SYNTHETIC_EXAMPLE,Plotting integration,Generated with production alignment on known displacement,0.0,,,Not real-neuron accuracy; known displacement dy4 dx-6; estimated shift dy-4 dx6
+new_segmentation_plot,SYNTHETIC_EXAMPLE,Plotting integration,Generated with production mask and construction-truth comparison,,0.46880907372400754,,Neighbor contamination is visible; not human annotation accuracy
+new_phenotype_plot,SYNTHETIC_EXAMPLE,Plotting integration,Generated with production puncta and diffuse supports,,,3,Three-puncta benchmark only; no mechanistic or biological inference

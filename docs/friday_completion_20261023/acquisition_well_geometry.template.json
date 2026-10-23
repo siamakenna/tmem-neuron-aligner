@@ -1,0 +1,13 @@
+{
+  "well": null,
+  "geometry_id": "",
+  "orientation_validated": false,
+  "coordinate_evidence": "",
+  "coordinate_convention": "tile top-left, final image pixels; y down, x right",
+  "stage_origin_xy_um": null,
+  "stage_xy_to_image_yx": null,
+  "pixel_size_um": null,
+  "channel_order": ["405", "561", "488"],
+  "canvas_yx": [0, 0],
+  "expected_tile_ids": []
+}
