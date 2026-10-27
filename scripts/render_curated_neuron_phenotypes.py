@@ -8,7 +8,8 @@ For each requested neuron:
 1. Reconstruct the nine 128x128 crops from the stored v2 anchor coordinates.
 2. Recompute 488-only local masks at those fixed anchors.
 3. Build a TIGHT identity core from a >=60% longitudinal consensus, with no dilation.
-4. Build a phenotype ROI as identity core + 1 px dilation.
+4. Build a phenotype ROI using the requested dilation (renderer CLI default1px;
+   audit/stage-diagnostic configuration uses2px). Record the resolved setting.
 5. Run an explicit second-soma screen on the longitudinal median 488 reference.
 6. Quantify background-corrected 561/mCherry inside the phenotype ROI.
 7. Detect puncta with the existing DoG sigma1-sigma3 method.
@@ -41,7 +42,9 @@ from scipy.ndimage import binary_fill_holes, gaussian_filter
 from skimage import filters, measure, morphology
 from skimage.feature import peak_local_max
 
-from make_soma_anchored_bbox_movies_v2 import robust01, segment_neuron_in_box, square_bounds
+from make_soma_anchored_bbox_movies_v2 import (
+    SegmentationTraceError, robust01, segment_neuron_in_box, square_bounds,
+)
 
 DAYS_DEFAULT = [8, 12, 16, 20, 25, 29, 32, 36, 39]
 
@@ -133,21 +136,86 @@ def keep_component_near_center(mask: np.ndarray, reference: np.ndarray | None = 
     return max(scored, key=lambda z: z[0])[1]
 
 
+class CuratedTraceError(RuntimeError):
+    """Evidence-writing failures must not become invalid biological masks."""
+
+
+def _curated_trace(trace, prefix, suffix, image=None, *, channel="488", parents=(),
+                   why="", parameters=None, details=None, status="executed"):
+    """Optional evidence observer; quantitative callers receive the same results."""
+    if trace is None:
+        return None
+    from tmem_align.audit_v1.stage_trace import capture
+    try:
+        return capture(trace, f"{prefix}_{suffix}", image, axes="YX", channel=channel,
+                       parents=parents, why=why, parameters=parameters,
+                       details=details, status=status)
+    except Exception as error:
+        raise CuratedTraceError(f"Could not record curated evidence {prefix}_{suffix}: {error}") from error
+
+
 def build_tight_identity_core(local_masks: np.ndarray, valid_mask: np.ndarray,
-                              consensus_fraction: float, min_area: int, max_area: int):
+                              consensus_fraction: float, min_area: int, max_area: int, *,
+                              trace=None, trace_prefix: str = "identity_core"):
     candidates = local_masks[np.asarray(valid_mask, dtype=bool)]
+    input_stages = []
+    if trace is not None:
+        for i, mask in enumerate(local_masks):
+            suffix = f"input_{i:02d}"
+            _curated_trace(trace, trace_prefix, suffix, mask,
+                           why="Record each visit mask and its unchanged eligibility for longitudinal consensus.",
+                           details={"visit_index": i, "valid_488_mask": bool(valid_mask[i])})
+            if valid_mask[i]:
+                input_stages.append(f"{trace_prefix}_{suffix}")
     if len(candidates) < 3:
+        _curated_trace(trace, trace_prefix, "failure", status="failed",
+                       parents=tuple(input_stages),
+                       why="The existing minimum of three valid 488 masks is not met.",
+                       details={"valid_masks": len(candidates), "minimum_valid_masks": 3})
         raise RuntimeError(f"Need >=3 valid 488 masks for tight consensus; found {len(candidates)}")
     required = max(3, int(math.ceil(float(consensus_fraction) * len(candidates))))
     count = candidates.sum(axis=0)
+    _curated_trace(trace, trace_prefix, "vote_count", count,
+                   parents=tuple(input_stages),
+                   why="Count valid 488 masks supporting each pixel in the crop.",
+                   parameters={"consensus_fraction": float(consensus_fraction),
+                               "valid_mask_count": len(candidates), "required_mask_count": required},
+                   details={"array_role": "support_count", "count_max": len(candidates),
+                            "display_range": [0, len(candidates)]})
     core = count >= required
+    _curated_trace(trace, trace_prefix, "consensus", core,
+                   parents=(f"{trace_prefix}_vote_count",),
+                   why="Apply the unchanged longitudinal support threshold before morphology.",
+                   parameters={"required_mask_count": required})
     core = morphology.closing(core, morphology.disk(1))
+    _curated_trace(trace, trace_prefix, "closed", core,
+                   parents=(f"{trace_prefix}_consensus",),
+                   why="Close one-pixel gaps in the consensus identity support.",
+                   parameters={"closing_disk_radius_px": 1})
     core = binary_fill_holes(core)
+    _curated_trace(trace, trace_prefix, "holes_filled", core,
+                   parents=(f"{trace_prefix}_closed",),
+                   why="Fill enclosed holes in the consensus support.")
     core = morphology.remove_small_objects(core.astype(bool), max_size=24)
+    _curated_trace(trace, trace_prefix, "small_objects_removed", core,
+                   parents=(f"{trace_prefix}_holes_filled",),
+                   why="Remove consensus fragments of at most 24 pixels.",
+                   parameters={"remove_small_objects_max_size_px": 24})
     core = keep_component_near_center(core, reference=candidates[0])
+    _curated_trace(trace, trace_prefix, "selected_component", core,
+                   parents=(f"{trace_prefix}_small_objects_removed",),
+                   why="Select the existing center/prior-overlap-scored component; the first valid mask is the reference.")
     core = binary_fill_holes(core)
+    _curated_trace(trace, trace_prefix, "core", core,
+                   parents=(f"{trace_prefix}_selected_component",),
+                   why="The final undilated 488 identity core is the unchanged input to phenotype ROI construction.",
+                   parameters={"min_area_px": int(min_area), "max_area_px": int(max_area)})
     area = int(core.sum())
     if area < min_area or area > max_area:
+        _curated_trace(trace, trace_prefix, "failure", status="failed",
+                       parents=(f"{trace_prefix}_core",),
+                       why="The unchanged core-area gate rejected the proposed consensus support.",
+                       details={"area_px": area, "minimum_area_px": int(min_area), "maximum_area_px": int(max_area)})
         raise RuntimeError(
             f"Tight identity-core area {area} outside [{min_area}, {max_area}] "
             f"at consensus {required}/{len(candidates)}"
@@ -166,7 +234,8 @@ def _disk_values(image: np.ndarray, y: float, x: float, radius: float, threshold
 
 def screen_secondary_soma(reference488: np.ndarray, *, search_radius: float,
                           min_distance: int, peak_ratio_threshold: float,
-                          area_ratio_threshold: float, score_threshold: float) -> SomaScreen:
+                          area_ratio_threshold: float, score_threshold: float,
+                          trace=None, trace_prefix: str = "secondary_soma") -> SomaScreen:
     """Conservative second-soma review screen on the longitudinal median 488 crop.
 
     Peaks are detected in a smoothed, robustly normalized 488 reference. The target
@@ -176,13 +245,29 @@ def screen_secondary_soma(reference488: np.ndarray, *, search_radius: float,
     to the primary soma.
     """
     ref = np.asarray(reference488, dtype=np.float32)
+    _curated_trace(trace, trace_prefix, "reference_488", ref,
+                   why="The existing secondary-soma screen receives the caller's normalized 488 reference; no 561 pixels enter this screen.",
+                   details={"array_role": "normalized_intensity", "normalization_applied_here": False})
     smooth = gaussian_filter(ref, sigma=2.0)
+    _curated_trace(trace, trace_prefix, "smoothed", smooth,
+                   parents=(f"{trace_prefix}_reference_488",),
+                   why="Smooth the supplied 488 reference before peak and local-support comparisons.",
+                   parameters={"gaussian_sigma_px": 2.0}, details={"array_role": "normalized_intensity"})
     h, w = smooth.shape
     cy, cx = (h - 1) / 2.0, (w - 1) / 2.0
     yy, xx = np.ogrid[:h, :w]
     search = (yy - cy) ** 2 + (xx - cx) ** 2 <= float(search_radius) ** 2
+    _curated_trace(trace, trace_prefix, "search_region", search,
+                   parents=(f"{trace_prefix}_smoothed",),
+                   why="Restrict candidate peaks to the existing circle around the crop center.",
+                   parameters={"search_radius_px": float(search_radius)},
+                   details={"center_yx_px": [cy, cx]})
     vals = smooth[search]
     if vals.size < 100:
+        _curated_trace(trace, trace_prefix, "failure", status="failed",
+                       parents=(f"{trace_prefix}_search_region",),
+                       why="The existing secondary-soma search contains fewer than 100 pixels.",
+                       details={"search_pixels": int(vals.size), "minimum_search_pixels": 100})
         raise RuntimeError("Secondary-soma search region too small")
 
     try:
@@ -198,9 +283,22 @@ def screen_secondary_soma(reference488: np.ndarray, *, search_radius: float,
         exclude_border=False,
         labels=search.astype(np.uint8),
     )
+    detected_peak_count = len(peaks)
     if len(peaks) == 0:
         # The crop center itself is the fallback target location.
         peaks = np.array([[int(round(cy)), int(round(cx))]], dtype=int)
+    if trace is not None:
+        peak_markers = np.zeros(smooth.shape, dtype=bool)
+        peak_markers[peaks[:, 0], peaks[:, 1]] = True
+        _curated_trace(trace, trace_prefix, "peak_candidates", peak_markers,
+                       parents=(f"{trace_prefix}_smoothed", f"{trace_prefix}_search_region"),
+                       why="Preserve the actual local-maximum candidates and identify the center fallback when no peak was detected.",
+                       parameters={"minimum_peak_distance_px": int(min_distance),
+                                   "absolute_peak_threshold": peak_thr, "peak_threshold_percentile": 82},
+                       details={"detected_peak_count": detected_peak_count,
+                                "candidate_peak_yx_px": peaks.tolist(),
+                                "crop_center_fallback_used": detected_peak_count == 0,
+                                "otsu_or_fallback_threshold": otsu})
 
     # Primary = strongest peak close to the tracked center; if none is close,
     # use the nearest peak. This does not alter the stored tracking anchor.
@@ -218,28 +316,74 @@ def screen_secondary_soma(reference488: np.ndarray, *, search_radius: float,
     pval = float(smooth[int(py), int(px)])
     bg = float(np.percentile(vals, 45))
     common_thr = bg + 0.35 * max(pval - bg, 1e-6)
-    parea = int(_disk_values(smooth, py, px, 12.0, common_thr).sum())
+    primary_support = _disk_values(smooth, py, px, 12.0, common_thr)
+    parea = int(primary_support.sum())
     parea = max(parea, 1)
+    if trace is not None:
+        primary_marker = np.zeros(smooth.shape, dtype=bool)
+        primary_marker[int(py), int(px)] = True
+        _curated_trace(trace, trace_prefix, "primary_peak", primary_marker,
+                       parents=(f"{trace_prefix}_peak_candidates",),
+                       why="The strongest peak within 18 pixels of crop center is primary; if none is close, the nearest peak is used.",
+                       parameters={"primary_near_center_radius_px": 18},
+                       details={"primary_index": primary_idx, "primary_yx_px": [py, px],
+                                "primary_value": pval, "stored_tracking_anchor_changed": False})
+        _curated_trace(trace, trace_prefix, "primary_support", primary_support,
+                       parents=(f"{trace_prefix}_primary_peak", f"{trace_prefix}_smoothed"),
+                       why="Count the actual 12-pixel disk support above a shared intensity threshold around the primary peak.",
+                       parameters={"support_disk_radius_px": 12.0, "common_intensity_threshold": common_thr,
+                                   "background_percentile": 45, "primary_contrast_fraction": 0.35},
+                       details={"background_value": bg, "support_area_px": int(primary_support.sum()),
+                                "denominator_area_with_minimum_one": parea})
 
     best = None
+    best_index = None
+    candidate_records = [] if trace is not None else None
     for k, (syi, sxi) in enumerate(peaks):
         if k == primary_idx:
             continue
         sy, sx = float(syi), float(sxi)
         dist = float(np.hypot(sy - py, sx - px))
         if dist < float(min_distance) or dist > float(search_radius):
+            if candidate_records is not None:
+                candidate_records.append({"peak_index": k, "peak_yx_px": [sy, sx],
+                    "distance_to_primary_px": dist, "eligible": False,
+                    "reason": "distance outside the existing min_distance..search_radius interval"})
+                _curated_trace(trace, trace_prefix, f"candidate_{k:02d}_support", status="skipped",
+                               parents=(f"{trace_prefix}_peak_candidates", f"{trace_prefix}_primary_peak"),
+                               why="The secondary candidate is outside the unchanged permitted distance interval.",
+                               parameters={"distance_range_px": [int(min_distance), float(search_radius)]},
+                               details=candidate_records[-1])
             continue
         sval = float(smooth[syi, sxi])
         peak_ratio = max(0.0, (sval - bg) / max(pval - bg, 1e-6))
-        sarea = int(_disk_values(smooth, sy, sx, 12.0, common_thr).sum())
+        secondary_support = _disk_values(smooth, sy, sx, 12.0, common_thr)
+        sarea = int(secondary_support.sum())
         area_ratio = float(sarea / parea)
         score = float(peak_ratio * math.sqrt(max(area_ratio, 0.0)))
         candidate = (score, peak_ratio, area_ratio, dist, sy, sx)
+        if candidate_records is not None:
+            candidate_records.append({"peak_index": k, "peak_yx_px": [sy, sx],
+                "distance_to_primary_px": dist, "eligible": True, "secondary_peak_value": sval,
+                "primary_support_area_px": parea, "secondary_support_area_px": sarea,
+                "peak_ratio": peak_ratio, "area_ratio": area_ratio, "score": score})
+            _curated_trace(trace, trace_prefix, f"candidate_{k:02d}_support", secondary_support,
+                           parents=(f"{trace_prefix}_peak_candidates", f"{trace_prefix}_primary_support"),
+                           why="Apply the same disk/intensity threshold to a secondary peak and compute the actual peak-ratio times square-root-area-ratio score.",
+                           parameters={"support_disk_radius_px": 12.0, "common_intensity_threshold": common_thr},
+                           details=candidate_records[-1])
         if best is None or candidate[0] > best[0]:
             best = candidate
+            best_index = k
 
     if best is None:
-        return SomaScreen(True, 0.0, math.nan, 0.0, 0.0, py, px, math.nan, math.nan, int(len(peaks)))
+        result = SomaScreen(True, 0.0, math.nan, 0.0, 0.0, py, px, math.nan, math.nan, int(len(peaks)))
+        _curated_trace(trace, trace_prefix, "selected_secondary", status="skipped",
+                       parents=(f"{trace_prefix}_primary_support",),
+                       why="No secondary peak satisfies the existing spatial criteria; an automated screen pass does not establish exclusive ROI ownership.",
+                       details={"candidate_scores": candidate_records, "screen_result": vars(result),
+                                "scientific_acceptance_granted": False, "roi_ownership_validated": False})
+        return result
 
     score, peak_ratio, area_ratio, dist, sy, sx = best
     fail = bool(
@@ -247,34 +391,90 @@ def screen_secondary_soma(reference488: np.ndarray, *, search_radius: float,
         and peak_ratio >= peak_ratio_threshold
         and area_ratio >= area_ratio_threshold
     )
-    return SomaScreen(
+    result = SomaScreen(
         not fail, float(score), float(dist), float(area_ratio), float(peak_ratio),
         py, px, sy, sx, int(len(peaks))
     )
+    if trace is not None:
+        secondary_marker = np.zeros(smooth.shape, dtype=bool)
+        secondary_marker[int(sy), int(sx)] = True
+        _curated_trace(trace, trace_prefix, "selected_secondary", secondary_marker,
+                       parents=(f"{trace_prefix}_candidate_{best_index:02d}_support",),
+                       why="The highest-scoring eligible secondary peak is screened against all three unchanged thresholds; this flag cannot approve ROI ownership.",
+                       parameters={"score_threshold": float(score_threshold),
+                                   "peak_ratio_threshold": float(peak_ratio_threshold),
+                                   "area_ratio_threshold": float(area_ratio_threshold)},
+                       details={"candidate_scores": candidate_records, "screen_result": vars(result),
+                                "scientific_acceptance_granted": False, "roi_ownership_validated": False})
+    return result
 
 
 def quantify_phenotype(mcherry: np.ndarray, roi: np.ndarray, background_exclusion: int,
-                       puncta_min_size: int):
+                       puncta_min_size: int, *, trace=None, trace_prefix: str = "phenotype"):
+    _curated_trace(trace, trace_prefix, "raw_561", mcherry, channel="561",
+                   why="561 enters phenotype calculations after the supplied 488-derived ROI has been fixed.")
+    _curated_trace(trace, trace_prefix, "fixed_roi", roi, channel="488",
+                   why="Preserve the supplied phenotype support; 561 never alters this mask.",
+                   details={"roi_geometry_modified": False})
     exclusion = morphology.dilation(roi, morphology.disk(int(background_exclusion)))
+    _curated_trace(trace, trace_prefix, "background_exclusion", exclusion, channel="561",
+                   parents=(f"{trace_prefix}_fixed_roi",),
+                   why="Exclude a dilated ROI neighborhood from the local background estimate.",
+                   parameters={"dilation_radius_px": int(background_exclusion)})
     bg_region = ~exclusion
     if int(bg_region.sum()) < 50:
         bg_region = ~roi
+    _curated_trace(trace, trace_prefix, "background_support", bg_region, channel="561",
+                   parents=(f"{trace_prefix}_background_exclusion",),
+                   why="Use outside the dilated ROI, falling back to outside the ROI when support is smaller than 50 pixels.",
+                   parameters={"minimum_background_support_before_fallback_px": 50})
     background = float(np.median(mcherry[bg_region])) if np.any(bg_region) else 0.0
     corrected = np.clip(mcherry.astype(np.float32) - background, 0, None)
+    _curated_trace(trace, trace_prefix, "background_corrected", corrected, channel="561",
+                   parents=(f"{trace_prefix}_raw_561", f"{trace_prefix}_background_support"),
+                   why="Subtract the local median and clip negative 561 residuals to zero.",
+                   parameters={"local_background_median_561": background})
 
     dog = gaussian_filter(corrected, 1.0) - gaussian_filter(corrected, 3.0)
+    _curated_trace(trace, trace_prefix, "dog", dog, channel="561",
+                   parents=(f"{trace_prefix}_background_corrected",),
+                   why="The existing sigma 1 minus sigma 3 response enhances localized 561 foci.",
+                   parameters={"gaussian_sigmas_px": [1.0, 3.0]}, details={"array_role": "dog_response"})
     vals = dog[roi]
     if vals.size == 0:
+        _curated_trace(trace, trace_prefix, "failure", status="failed", channel="561",
+                       parents=(f"{trace_prefix}_fixed_roi",),
+                       why="No561 pixels are available inside the supplied phenotype ROI.")
         raise RuntimeError("Phenotype ROI is empty")
     med = float(np.median(vals))
     mad = float(np.median(np.abs(vals - med)))
     robust_sigma = 1.4826 * mad
     dog_thr = max(med + 4.0 * robust_sigma, float(np.percentile(vals, 97.5)))
     puncta = (dog > dog_thr) & roi
+    _curated_trace(trace, trace_prefix, "puncta_candidates", puncta, channel="561",
+                   parents=(f"{trace_prefix}_dog", f"{trace_prefix}_fixed_roi"),
+                   why="Threshold the DoG response only within the fixed ROI.",
+                   parameters={"dog_threshold": dog_thr, "robust_sigma_multiplier": 4.0,
+                               "roi_percentile": 97.5, "comparison": ">"})
     puncta = morphology.remove_small_objects(puncta, max_size=max(0, int(puncta_min_size) - 1))
+    _curated_trace(trace, trace_prefix, "puncta_filtered", puncta, channel="561",
+                   parents=(f"{trace_prefix}_puncta_candidates",),
+                   why="Keep puncta meeting the existing minimum size.",
+                   parameters={"puncta_min_size_px": int(puncta_min_size)})
     labels = measure.label(puncta)
+    _curated_trace(trace, trace_prefix, "puncta_labels", labels, channel="561",
+                   parents=(f"{trace_prefix}_puncta_filtered",),
+                   why="Label surviving puncta for count, area and intensity calculations.",
+                   details={"array_role": "component_labels"})
     props = measure.regionprops(labels, intensity_image=corrected)
     diffuse_mask = roi & ~puncta
+    _curated_trace(trace, trace_prefix, "diffuse_support", diffuse_mask, channel="561",
+                   parents=(f"{trace_prefix}_fixed_roi", f"{trace_prefix}_puncta_filtered"),
+                   why="Partition the fixed ROI into disjoint punctate and diffuse supports.")
+    if trace is not None:
+        _curated_trace(trace, trace_prefix, "diffuse_intensity", corrected * diffuse_mask, channel="561",
+                       parents=(f"{trace_prefix}_background_corrected", f"{trace_prefix}_diffuse_support"),
+                       why="Display the intensity residual assigned to diffuse support; this is not a biological fibril or rupture classifier.")
 
     area = int(roi.sum())
     total = float(corrected[roi].sum(dtype=np.float64))
@@ -302,7 +502,8 @@ def quantify_phenotype(mcherry: np.ndarray, roi: np.ndarray, background_exclusio
 
 
 def reconstruct_masks(boxes: np.ndarray, track_rows: pd.DataFrame, alignment_channel: int,
-                      bbox_size: int, segmentation_min_area: int):
+                      bbox_size: int, segmentation_min_area: int, *, trace=None,
+                      trace_prefix: str = "longitudinal_segmentation"):
     masks = []
     seg_valid = []
     seg_meta = []
@@ -323,6 +524,7 @@ def reconstruct_masks(boxes: np.ndarray, track_rows: pd.DataFrame, alignment_cha
             seg, meta = segment_neuron_in_box(
                 f488, local_ay, local_ax, bbox_size, segmentation_min_area,
                 ref_area=ref_area, prior_mask=prior, prior_source=prior_source,
+                trace=trace, trace_prefix=f"{trace_prefix}_visit_{i:02d}",
             )
             area = int(meta["segmentation_area"])
             if i == 0:
@@ -338,12 +540,25 @@ def reconstruct_masks(boxes: np.ndarray, track_rows: pd.DataFrame, alignment_cha
             )
             if ok:
                 prev_valid_mask = seg.copy()
+            _curated_trace(trace, trace_prefix, f"visit_{i:02d}_qc", seg.astype(bool),
+                           parents=(f"{trace_prefix}_visit_{i:02d}_mask",),
+                           why="Apply the unchanged tracking, area-ratio, centroid-distance and border-contact gates.",
+                           parameters={"minimum_area_px": int(segmentation_min_area),
+                                       "area_ratio_range": [0.30, 2.5], "maximum_centroid_offset_px": 24.0},
+                           details={"valid_488_mask": ok, "tracking_valid_inherited": tracking_ok,
+                                    "reference_area_ratio": float(ratio) if np.isfinite(ratio) else None,
+                                    "border_touch": bool(meta["segmentation_border_touch"])})
             masks.append(seg.astype(bool))
             seg_valid.append(ok)
             seg_meta.append({"adaptive_area": area, "adaptive_valid_recomputed": ok,
                              "adaptive_centroid_offset": float(meta["segmentation_centroid_offset_from_anchor"]),
                              "adaptive_method": meta.get("segmentation_method", "")})
+        except (SegmentationTraceError, CuratedTraceError):
+            raise
         except Exception as exc:
+            _curated_trace(trace, trace_prefix, f"visit_{i:02d}_qc_failure", status="failed",
+                           why="The existing reconstruction fallback returns an empty, invalid mask after a segmentation exception.",
+                           details={"valid_488_mask": False, "reason": str(exc), "visit_index": i})
             masks.append(np.zeros((bbox_size, bbox_size), dtype=bool))
             seg_valid.append(False)
             seg_meta.append({"adaptive_area": 0, "adaptive_valid_recomputed": False,

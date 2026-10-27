@@ -157,6 +157,9 @@ def preprocess_image(
     ic_field: np.ndarray | None = None,
     background_radius: int | None = None,
     darkfield: np.ndarray | float | None = None,
+    *,
+    trace=None,
+    trace_prefix: str = "preprocess",
 ) -> np.ndarray:
     """Apply illumination correction and optional background subtraction.
 
@@ -170,22 +173,103 @@ def preprocess_image(
         ic_field: Illumination correction field (2D/CYX). None to skip IC.
         background_radius: Rolling ball radius. None to skip background subtraction.
         darkfield: Camera-offset darkfield (scalar or 2D/CYX). None to skip.
+        trace: Optional StageTrace-compatible recorder. Each actual YX plane is
+            saved separately; display previews never replace quantitative inputs.
+        trace_prefix: Unique filename-safe prefix when recording several frames.
 
     Returns:
-        Preprocessed uint16 image.
+        Preprocessed uint16 image, or the unchanged input for a complete no-op.
+
+    This entry point rejects invalid correction fields before processing. The
+    lower-level legacy ``apply_ic_field`` retains its historical zero-field
+    fallback; a supplied zero field is not accepted here as physical evidence.
     """
-    if ic_field is None and darkfield is None and background_radius is None:
-        return image
+    a = _validate_preprocess_inputs(image, ic_field, darkfield, background_radius)
+    if trace is not None:
+        import re
+        if not isinstance(trace_prefix, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", trace_prefix):
+            raise ValueError("trace_prefix must be a plain filename-safe identifier")
+        raw_ids = _trace_preprocess_planes(
+            trace, trace_prefix, "00_before_ic", a, shape=a.shape,
+            why="Preserve the exact input pixels before darkfield or flatfield correction.",
+            parameters={"input_axes": {2: "YX", 3: "CYX", 4: "TCYX"}[a.ndim]},
+        )
+    else:
+        raw_ids = None
+
+    noop = ic_field is None and darkfield is None and background_radius is None
+    parts = {} if trace is not None else None
 
     if ic_field is not None or darkfield is not None:
-        result = _apply_ic_field_float(image, ic_field, darkfield)
+        with np.errstate(over="ignore", divide="ignore", invalid="ignore"):
+            result = _apply_ic_field_float(a, ic_field, darkfield, _trace_parts=parts)
     else:
-        result = np.asarray(image, dtype=np.float64)
+        result = np.asarray(a, dtype=np.float64)
+    if not np.isfinite(result).all():
+        raise ValueError("Preprocessing overflow produced nonfinite float pixels; check the input, darkfield and flatfield gain")
+
+    if trace is not None:
+        dark_ids = _trace_preprocess_planes(
+            trace, trace_prefix, "01_dark_subtracted_float",
+            parts.get("dark_subtracted") if darkfield is not None else None,
+            shape=a.shape, parents=raw_ids,
+            why="Subtract the supplied camera offset in float and clamp negative residuals to zero.",
+            parameters={"formula": "max(raw - darkfield, 0)"},
+            status="executed" if darkfield is not None else "skipped",
+            details={"reason": "Supplied darkfield applied" if darkfield is not None else "No darkfield supplied"},
+        )
+        field_ids = _trace_preprocess_planes(
+            trace, trace_prefix, "02_ic_field", parts.get("flatfield"),
+            shape=a.shape,
+            why="Retain the actual divisor, with broadcasting explicit for each plane.",
+            parameters={"units": "relative gain", "supplied_shape": list(np.shape(ic_field)) if ic_field is not None else None},
+            status="executed" if ic_field is not None else "skipped",
+            details={"array_role": "illumination_field", "reason": "Supplied flatfield; provenance must identify its source" if ic_field is not None else "No flatfield supplied; IC is not asserted"},
+        )
+        ic_ids = _trace_preprocess_planes(
+            trace, trace_prefix, "03_after_ic_float", result if ic_field is not None else None,
+            shape=a.shape, parents=(dark_ids, field_ids),
+            why="Divide dark-corrected pixels by the supplied flatfield without intermediate quantization.",
+            parameters={"formula": "max(raw - darkfield, 0) / flatfield" if darkfield is not None else "raw / flatfield"},
+            status="executed" if ic_field is not None else "skipped",
+            details={"reason": "Supplied flatfield applied" if ic_field is not None else "No flatfield supplied; downstream uses the available raw/dark-corrected pixels"},
+        )
 
     if background_radius is not None:
-        result = _background_float(result, background_radius)
+        before_background = result
+        result = _background_float(result, int(background_radius))
+    else:
+        before_background = None
 
-    return _quantize(result)
+    if trace is not None:
+        background_ids = _trace_preprocess_planes(
+            trace, trace_prefix, "04_background_estimate",
+            before_background - result if before_background is not None else None,
+            shape=a.shape, parents=ic_ids,
+            why="Expose the background removed by this exact rolling-ball execution, without running the filter again.",
+            parameters={"radius_px": background_radius, "units": "stored intensity units"},
+            status="executed" if background_radius is not None else "skipped",
+            details={"reason": "Derived as the actual float input minus output" if background_radius is not None else "No background radius supplied"},
+        )
+        final_float_ids = _trace_preprocess_planes(
+            trace, trace_prefix, "05_after_background_float",
+            result if background_radius is not None else None,
+            shape=a.shape, parents=(ic_ids, background_ids),
+            why="Retain the actual nonnegative background-subtracted pixels before rounding.",
+            parameters={"radius_px": background_radius},
+            status="executed" if background_radius is not None else "skipped",
+            details={"reason": "Rolling-ball subtraction applied" if background_radius is not None else "Background subtraction not requested"},
+        )
+
+    output = image if noop else _quantize(result)
+    if trace is not None:
+        _trace_preprocess_planes(
+            trace, trace_prefix, "06_downstream_input", output,
+            shape=a.shape, parents=final_float_ids,
+            why="Record the exact array handed to downstream processing.",
+            parameters={"quantization": "none (complete no-op)" if noop else "rint then clip [0,65535], once", "noop": noop},
+        )
+    return output
 
 
 def calculate_ic_field_for_well(
@@ -349,6 +433,73 @@ def _resolve_ic_field(image_path: Path, ic_fields: dict[str, np.ndarray]) -> np.
 # ---------------------------------------------------------------------------
 
 
+def _validate_preprocess_inputs(image, flatfield, darkfield, background_radius):
+    """Validate named image axes rather than allow accidental shape expansion."""
+    a = np.asarray(image)
+    if (a.ndim not in (2, 3, 4) or not a.size or 0 in a.shape
+            or a.dtype.kind not in "buif" or not np.isfinite(a).all()):
+        raise ValueError("preprocess_image requires finite nonempty YX, CYX, or TCYX pixels")
+    if background_radius is not None and (
+            isinstance(background_radius, (bool, np.bool_))
+            or not isinstance(background_radius, (int, np.integer))
+            or background_radius < 1):
+        raise ValueError("background_radius must be a positive integer in pixels")
+    for name, field in (("flatfield", flatfield), ("darkfield", darkfield)):
+        if field is None:
+            continue
+        f = np.asarray(field)
+        if f.dtype.kind not in "buif" or not f.size or not np.isfinite(f).all():
+            raise ValueError(f"{name} must contain finite real values")
+        with np.errstate(over="ignore", under="ignore", invalid="ignore"):
+            calculated = np.asarray(f, dtype=np.float64)
+        if not np.isfinite(calculated).all():
+            raise ValueError(f"{name} must remain finite in the float64 calculation")
+        if name == "flatfield" and np.any(calculated <= 0):
+            raise ValueError("flatfield must be strictly positive; zero/negative gains are invalid")
+        valid = (f.ndim == 0
+                 or (f.ndim == 2 and f.shape == a.shape[-2:])
+                 or (f.ndim == 3 and a.ndim >= 3 and f.shape == a.shape[-3:]))
+        if not valid:
+            raise ValueError(f"{name} must be scalar, matching YX, or matching CYX; got {f.shape} for {a.shape}")
+    return a
+
+
+def _trace_preprocess_planes(
+    trace, prefix, step, array, *, shape, parents=None, why, parameters=None,
+    status="executed", details=None,
+):
+    """Emit one immutable observer copy per actual YX plane, with explicit axes."""
+    from tmem_align.audit_v1.stage_trace import capture
+
+    # A broadcast divisor is a view; it is expanded only plane by plane when
+    # copying to the observer, not into a second full quantitative image stack.
+    values = np.broadcast_to(np.asarray(array), shape) if array is not None else None
+    leading = shape[:-2]
+    out = {}
+    for index in np.ndindex(leading):
+        if len(shape) == 2:
+            suffix, channel = "", "unspecified"
+            plane_details = {"source_axes": "YX", "time_index": None, "channel_index": None}
+        else:
+            ci = index[-1]
+            n_channels = shape[-3]
+            channel = ("405", "561", "488")[ci] if n_channels == 3 else f"C{ci}"
+            ti = index[0] if len(shape) == 4 else None
+            suffix = (f"_t{ti:03d}" if ti is not None else "") + f"_c{ci:02d}"
+            plane_details = {"source_axes": "TCYX" if len(shape) == 4 else "CYX",
+                             "time_index": ti, "channel_index": ci,
+                             "channel_mapping": "C0=405,C1=561,C2=488" if n_channels == 3 else "Generic C indices; wavelength assignment not asserted"}
+        name = f"{prefix}_{step}{suffix}"
+        parent_maps = parents if isinstance(parents, tuple) else (parents,)
+        parent_ids = tuple(mapping[index] for mapping in parent_maps if mapping is not None)
+        record_details = dict(plane_details, **(details or {}))
+        capture(trace, name, values[index].copy() if values is not None else None,
+                axes="YX", channel=channel, parents=parent_ids, why=why,
+                parameters=parameters, status=status, details=record_details)
+        out[index] = name
+    return out
+
+
 def _quantize(arr: np.ndarray) -> np.ndarray:
     """Round to nearest integer and clip to uint16 range. The ONLY quantization step."""
     return np.clip(np.rint(arr), 0, 65535).astype(np.uint16)
@@ -375,6 +526,8 @@ def _apply_ic_field_float(
     image: np.ndarray,
     ic_field: np.ndarray | None,
     darkfield: np.ndarray | float | None,
+    *,
+    _trace_parts: dict | None = None,
 ) -> np.ndarray:
     """Float IC core: ``(image - darkfield) / ic_field`` with no quantization."""
     img = np.asarray(image, dtype=np.float64)
@@ -382,6 +535,8 @@ def _apply_ic_field_float(
     if darkfield is not None:
         dark = _broadcast_like(np.asarray(darkfield, dtype=np.float64), img)
         img = np.clip(img - dark, 0, None)
+    if _trace_parts is not None:
+        _trace_parts["dark_subtracted"] = img
 
     if ic_field is None:
         return img
@@ -389,6 +544,8 @@ def _apply_ic_field_float(
     field = np.array(ic_field, dtype=np.float64)  # copy so we don't mutate caller
     field[field == 0] = 1
     field = _broadcast_like(field, img)
+    if _trace_parts is not None:
+        _trace_parts["flatfield"] = field
     return img / field
 
 

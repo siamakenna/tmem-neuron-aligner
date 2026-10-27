@@ -172,20 +172,39 @@ def auto_day8_anchor(frame488: np.ndarray, radius: int):
     return refine_peak_center(smooth, int(py), int(px))
 
 
-def make_template(frame488: np.ndarray, anchor_y: float, anchor_x: float, size: int):
+def make_template(frame488: np.ndarray, anchor_y: float, anchor_x: float, size: int, *,
+                  trace=None, trace_prefix: str = "template"):
     norm = gaussian_filter(robust01(frame488), sigma=1.0)
     y0, y1, x0, x1 = square_bounds(anchor_y, anchor_x, size, *norm.shape)
     template = norm[y0:y1, x0:x1].copy()
+    _segmentation_trace(trace, trace_prefix, "raw_crop", frame488[y0:y1, x0:x1],
+                        why="The Day 8 488 crop supplies the fixed tracking template.",
+                        parameters={"anchor_yx_px": [float(anchor_y), float(anchor_x)], "template_size_px": int(size)},
+                        details={"bounds_y0_y1_x0_x1": [y0, y1, x0, x1]})
+    _segmentation_trace(trace, trace_prefix, "normalized_smoothed", template,
+                        parents=(f"{trace_prefix}_raw_crop",),
+                        why="Existing whole-frame robust normalization and smoothing precede cropping.",
+                        parameters={"normalization_percentiles": [2, 99.7], "gaussian_sigma_px": 1.0},
+                        details={"array_role": "normalized_intensity"})
     # zero-center reduces sensitivity to day-to-day global intensity offsets
     template -= float(template.mean())
+    _segmentation_trace(trace, trace_prefix, "mean_subtracted", template,
+                        parents=(f"{trace_prefix}_normalized_smoothed",),
+                        why="Zero centering reduces sensitivity to global intensity offsets.",
+                        details={"array_role": "signed_response"})
     sd = float(template.std())
     if sd > 1e-6:
         template /= sd
+    _segmentation_trace(trace, trace_prefix, "template", template.astype(np.float32),
+                        parents=(f"{trace_prefix}_mean_subtracted",),
+                        why="The existing standard-deviation-scaled template is passed unchanged to matching.",
+                        details={"standard_deviation_before_scaling": sd, "scaling_applied": bool(sd > 1e-6),
+                                 "array_role": "signed_response"})
     return template.astype(np.float32)
 
 
 def track_anchor(frame488: np.ndarray, template: np.ndarray, ref_y: float, ref_x: float,
-                 search_radius: int):
+                 search_radius: int, *, trace=None, trace_prefix: str = "tracking"):
     norm = gaussian_filter(robust01(frame488), sigma=1.0)
     th, tw = template.shape
     hy, hx = th // 2, tw // 2
@@ -195,13 +214,46 @@ def track_anchor(frame488: np.ndarray, template: np.ndarray, ref_y: float, ref_x
     x0 = max(0, int(round(ref_x)) - search_radius - hx)
     x1 = min(w, int(round(ref_x)) + search_radius + hx + 1)
     search = norm[y0:y1, x0:x1]
+    _segmentation_trace(trace, trace_prefix, "template", template,
+                        why="Match the supplied fixed 488 template; 561 is not consulted.",
+                        parameters={"reference_anchor_yx_px": [float(ref_y), float(ref_x)],
+                                    "search_radius_px": int(search_radius)},
+                        details={"array_role": "signed_response"})
+    _segmentation_trace(trace, trace_prefix, "raw_search", frame488[y0:y1, x0:x1],
+                        parents=(f"{trace_prefix}_template",),
+                        why="Inspect only the actual bounded search window around the reference anchor.",
+                        details={"bounds_y0_y1_x0_x1": [y0, y1, x0, x1]})
+    _segmentation_trace(trace, trace_prefix, "normalized_search", search,
+                        parents=(f"{trace_prefix}_raw_search",),
+                        why="The actual matcher input uses existing whole-frame robust normalization and smoothing.",
+                        parameters={"normalization_percentiles": [2, 99.7], "gaussian_sigma_px": 1.0},
+                        details={"array_role": "normalized_intensity"})
     if search.shape[0] < th or search.shape[1] < tw:
+        _segmentation_trace(trace, trace_prefix, "failure", status="failed",
+                            parents=(f"{trace_prefix}_normalized_search",),
+                            why="The bounded search is smaller than the template; matching returns the original anchor and an undefined score.",
+                            details={"search_shape": list(search.shape), "template_shape": list(template.shape),
+                                     "returned_anchor_yx_px": [float(ref_y), float(ref_x)], "match_score": None})
         return float(ref_y), float(ref_x), math.nan
     corr = feature.match_template(search, template, pad_input=False)
+    _segmentation_trace(trace, trace_prefix, "correlation", corr,
+                        parents=(f"{trace_prefix}_template", f"{trace_prefix}_normalized_search"),
+                        why="Record normalized template-match correlation at every tested search location.",
+                        details={"array_role": "correlation", "correlation_coordinates": "template top-left position within bounded search"})
     iy, ix = np.unravel_index(np.nanargmax(corr), corr.shape)
     score = float(corr[iy, ix])
     cy = float(y0 + iy + (th - 1) / 2.0)
     cx = float(x0 + ix + (tw - 1) / 2.0)
+    if trace is not None:
+        winner = np.zeros(corr.shape, dtype=bool)
+        winner[iy, ix] = True
+        _segmentation_trace(trace, trace_prefix, "chosen_peak", winner,
+                            parents=(f"{trace_prefix}_correlation",),
+                            why="The existing maximum-correlation location determines the diagnostic candidate anchor; it does not establish identity.",
+                            details={"correlation_peak_yx": [int(iy), int(ix)],
+                                     "candidate_anchor_yx_px": [cy, cx], "match_score": score,
+                                     "search_origin_yx_px": [y0, x0], "template_shape_yx": [th, tw],
+                                     "stored_anchor_overwritten": False, "scientific_acceptance_granted": False})
     return cy, cx, score
 
 
@@ -222,17 +274,61 @@ def translate_mask(mask: np.ndarray, dy: float, dx: float) -> np.ndarray:
                      mode="constant", cval=0, prefilter=False).astype(bool)
 
 
+class SegmentationTraceError(RuntimeError):
+    """Evidence-writing failure, never a scientific segmentation rejection."""
+
+
+def _segmentation_trace(trace, prefix, suffix, image=None, *, parents=(), why="",
+                        parameters=None, details=None, status="executed"):
+    """Optional observer; no display array is returned to scientific code."""
+    if trace is None:
+        return None
+    from tmem_align.audit_v1.stage_trace import capture
+    try:
+        return capture(trace, f"{prefix}_{suffix}", image, axes="YX", channel="488",
+                       parents=parents, why=why, parameters=parameters, details=details,
+                       status=status)
+    except Exception as error:
+        raise SegmentationTraceError(f"Could not record segmentation/tracking evidence {prefix}_{suffix}: {error}") from error
+
+
+def _segmentation_number(value):
+    """JSON representation for an explicitly undefined diagnostic score."""
+    return float(value) if np.isfinite(value) else None
+
+
 def _candidate_from_binary(binary: np.ndarray, smooth: np.ndarray, sy: float, sx: float,
-                           ref_area: int | None, prior_core: np.ndarray | None):
+                           ref_area: int | None, prior_core: np.ndarray | None, *,
+                           trace=None, trace_prefix="segmentation_candidate"):
     """Return the best connected component near the soma anchor for one threshold."""
     binary = morphology.remove_small_objects(binary.astype(bool), max_size=39)
+    _segmentation_trace(trace, trace_prefix, "small_objects_removed", binary,
+                        parents=(f"{trace_prefix}_threshold",),
+                        why="Remove connected foreground objects of at most 39 pixels before morphology.",
+                        parameters={"remove_small_objects_max_size_px": 39})
     binary = morphology.closing(binary, morphology.disk(1))
+    _segmentation_trace(trace, trace_prefix, "closed", binary,
+                        parents=(f"{trace_prefix}_small_objects_removed",),
+                        why="Close one-pixel gaps in the surviving 488 foreground.",
+                        parameters={"closing_disk_radius_px": 1})
     binary = binary_fill_holes(binary)
+    _segmentation_trace(trace, trace_prefix, "holes_filled", binary,
+                        parents=(f"{trace_prefix}_closed",),
+                        why="Fill enclosed foreground holes before connected-component labeling.")
     labels = measure.label(binary)
+    _segmentation_trace(trace, trace_prefix, "components", labels,
+                        parents=(f"{trace_prefix}_holes_filled",),
+                        why="Label the actual connected components evaluated for soma ownership.",
+                        details={"array_role": "component_labels", "component_count": int(labels.max())})
     if labels.max() == 0:
+        _segmentation_trace(trace, trace_prefix, "selection", status="skipped",
+                            parents=(f"{trace_prefix}_components",),
+                            why="No foreground component remains at this threshold.",
+                            details={"candidate_count": 0, "rejection": "empty_foreground"})
         return None
 
     candidates = []
+    candidate_records = [] if trace is not None else None
     for prop in measure.regionprops(labels, intensity_image=smooth):
         component = labels == prop.label
         area = int(prop.area)
@@ -245,6 +341,11 @@ def _candidate_from_binary(binary: np.ndarray, smooth: np.ndarray, sy: float, sx
         nearest = float(np.sqrt(np.min((ys - sy) ** 2 + (xs - sx) ** 2)))
         # A valid soma component must be close to the tracked 488 anchor.
         if nearest > 18.0 and centroid_offset > 30.0:
+            if candidate_records is not None:
+                candidate_records.append(dict(label=int(prop.label), area_px=area,
+                    centroid_yx=[cy, cx], nearest_anchor_distance_px=nearest,
+                    centroid_anchor_distance_px=centroid_offset,
+                    rejected=True, reason="nearest>18px and centroid>30px from tracked anchor"))
             continue
 
         border_touch = bool(component[0].any() or component[-1].any() or
@@ -265,18 +366,39 @@ def _candidate_from_binary(binary: np.ndarray, smooth: np.ndarray, sy: float, sx
         score = 2.0 * area_score + 1.5 * proximity_score + 2.5 * overlap_score
         if border_touch:
             score -= 1.5
+        if candidate_records is not None:
+            candidate_records.append(dict(label=int(prop.label), area_px=area,
+                centroid_yx=[cy, cx], nearest_anchor_distance_px=nearest,
+                centroid_anchor_distance_px=centroid_offset, border_touch=border_touch,
+                prior_overlap_fraction=_segmentation_number(overlap),
+                reference_area_ratio=_segmentation_number(ratio), area_score=area_score,
+                proximity_score=proximity_score, overlap_score=overlap_score,
+                component_score=score, rejected=False))
         candidates.append((score, component, area, cy, cx, centroid_offset,
                            border_touch, overlap, ratio))
 
     if not candidates:
+        _segmentation_trace(trace, trace_prefix, "selection", status="skipped",
+                            parents=(f"{trace_prefix}_components",),
+                            why="Every component is too far from the tracked soma anchor.",
+                            details={"candidate_count": 0, "components": candidate_records})
         return None
-    return max(candidates, key=lambda x: x[0])
+    selected = max(candidates, key=lambda x: x[0])
+    _segmentation_trace(trace, trace_prefix, "selection", selected[1],
+                        parents=(f"{trace_prefix}_components",),
+                        why="Select the highest existing area/proximity/prior-overlap score at this threshold.",
+                        parameters={"area_weight": 2.0, "proximity_weight": 1.5,
+                                    "overlap_weight": 2.5, "border_penalty": 1.5},
+                        details={"candidate_count": len(candidates), "components": candidate_records,
+                                 "selected_component_score": float(selected[0])})
+    return selected
 
 
 def segment_neuron_in_box(frame488: np.ndarray, anchor_y: float, anchor_x: float,
                           bbox_size: int, min_area: int, *, ref_area: int | None = None,
                           prior_mask: np.ndarray | None = None,
-                          prior_source: str = "none"):
+                          prior_source: str = "none", trace=None,
+                          trace_prefix: str = "segmentation"):
     """Locally adaptive 488 segmentation with a soma-centered spatial prior.
 
     Unlike v1, failure of a single Otsu/hysteresis threshold does not imply an empty
@@ -285,10 +407,35 @@ def segment_neuron_in_box(frame488: np.ndarray, anchor_y: float, anchor_x: float
     translated previous/Day-8 neuron mask, which prevents grabbing neighboring cells.
     """
     h, w = frame488.shape
+    _segmentation_trace(trace, trace_prefix, "raw_488", frame488,
+                        why="488 alone enters soma segmentation; 561 is not consulted.",
+                        parameters={"anchor_yx_px": [float(anchor_y), float(anchor_x)],
+                                    "bbox_size_px": int(bbox_size), "min_area_px": int(min_area),
+                                    "reference_area_px": ref_area, "prior_source": prior_source})
     y0, y1, x0, x1 = square_bounds(anchor_y, anchor_x, bbox_size, h, w)
     crop = frame488[y0:y1, x0:x1]
+    _segmentation_trace(trace, trace_prefix, "crop", crop,
+                        parents=(f"{trace_prefix}_raw_488",),
+                        why="Constrain segmentation to the stored-anchor spatial box.",
+                        details={"bounds_y0_y1_x0_x1": [y0, y1, x0, x1]})
     norm = robust01(crop)
+    _segmentation_trace(trace, trace_prefix, "normalized", norm,
+                        parents=(f"{trace_prefix}_crop",),
+                        why="Apply the existing2nd/99.7th-percentile segmentation normalization.",
+                        parameters={"normalization_percentiles": [2, 99.7]},
+                        details={"array_role": "normalized_intensity"})
     smooth = gaussian_filter(norm, sigma=1.1)
+    _segmentation_trace(trace, trace_prefix, "smoothed", smooth,
+                        parents=(f"{trace_prefix}_normalized",),
+                        why="Smooth488 noise before adaptive threshold and seed selection.",
+                        parameters={"gaussian_sigma_px": 1.1},
+                        details={"array_role": "normalized_intensity"})
+
+    def failed(reason, parent):
+        _segmentation_trace(trace, trace_prefix, "failure", status="failed",
+                            parents=(parent,), why=reason,
+                            details={"scientific_mask_valid": False, "reason": reason})
+        raise RuntimeError(reason)
 
     sy = float(anchor_y - y0)
     sx = float(anchor_x - x0)
@@ -301,27 +448,49 @@ def segment_neuron_in_box(frame488: np.ndarray, anchor_y: float, anchor_x: float
     xx0, xx1 = max(0, sxi - 18), min(bbox_size, sxi + 19)
     local = smooth[yy0:yy1, xx0:xx1]
     if local.size == 0:
-        raise RuntimeError("Empty 488 search region around soma anchor")
+        failed("Empty 488 search region around soma anchor", f"{trace_prefix}_smoothed")
     py, px = np.unravel_index(np.argmax(local), local.shape)
     seed_y, seed_x = yy0 + int(py), xx0 + int(px)
     seed_value = float(smooth[seed_y, seed_x])
+    if trace is not None:
+        seed_marker = np.zeros(crop.shape, dtype=bool)
+        seed_marker[seed_y, seed_x] = True
+        _segmentation_trace(trace, trace_prefix, "segmentation_seed", seed_marker,
+                            parents=(f"{trace_prefix}_smoothed",),
+                            why="The strongest local 488 peak seeds segmentation without moving the stored tracking anchor.",
+                            parameters={"seed_search_radius_px": 18},
+                            details={"seed_yx_in_crop": [seed_y, seed_x],
+                                     "seed_value": _segmentation_number(seed_value),
+                                     "tracking_anchor_unchanged": True})
     if not np.isfinite(seed_value) or seed_value <= 0.005:
-        raise RuntimeError("Insufficient local 488 signal at tracked soma anchor")
+        failed("Insufficient local 488 signal at tracked soma anchor", f"{trace_prefix}_smoothed")
 
     prior_core = None
     allowed = np.ones(crop.shape, dtype=bool)
     if prior_mask is not None and np.any(prior_mask):
         prior_core = prior_mask[y0:y1, x0:x1].astype(bool)
+        _segmentation_trace(trace, trace_prefix, "prior_core", prior_core,
+                            parents=(f"{trace_prefix}_crop",),
+                            why="Retain the actual previous-valid or Day 8 spatial prior used by segmentation.",
+                            details={"prior_source": prior_source})
         # Permit modest morphology change, but not expansion into the whole crop.
         allowed = morphology.dilation(prior_core, morphology.disk(12))
         # Always retain a small circle around the tracked soma, even if fractional
         # translations create a tiny gap in the prior.
         yy, xx = np.ogrid[:bbox_size, :bbox_size]
         allowed |= (yy - sy) ** 2 + (xx - sx) ** 2 <= 22 ** 2
+    else:
+        _segmentation_trace(trace, trace_prefix, "prior_core", status="skipped",
+                            parents=(f"{trace_prefix}_crop",),
+                            why="No nonempty488 spatial prior was supplied.", details={"prior_source": prior_source})
+    _segmentation_trace(trace, trace_prefix, "allowed_region", allowed,
+                        parents=(f"{trace_prefix}_smoothed", f"{trace_prefix}_prior_core"),
+                        why="Limit threshold candidates to the prior dilation plus the tracked-soma safety circle, or the crop when no prior exists.",
+                        parameters={"prior_dilation_radius_px": 12, "anchor_circle_radius_px": 22})
 
     positive = smooth[(smooth > 0.005) & allowed]
     if positive.size < 20:
-        raise RuntimeError("Insufficient 488 foreground in soma prior")
+        failed("Insufficient 488 foreground in soma prior", f"{trace_prefix}_allowed_region")
 
     thresholds = []
     try:
@@ -337,9 +506,17 @@ def segment_neuron_in_box(frame488: np.ndarray, anchor_y: float, anchor_x: float
 
     best = None
     best_thr = math.nan
-    for thr in thresholds:
+    winning_prefix = None
+    for threshold_index, thr in enumerate(thresholds):
         binary = (smooth >= thr) & allowed
-        cand = _candidate_from_binary(binary, smooth, sy, sx, ref_area, prior_core)
+        candidate_prefix = f"{trace_prefix}_candidate_{threshold_index:02d}"
+        _segmentation_trace(trace, candidate_prefix, "threshold", binary,
+                            parents=(f"{trace_prefix}_smoothed", f"{trace_prefix}_allowed_region"),
+                            why="Evaluate one of the existing local-intensity/seed-derived adaptive thresholds.",
+                            parameters={"threshold": float(thr), "comparison": ">=", "threshold_index": threshold_index,
+                                        "threshold_count": len(thresholds)})
+        cand = _candidate_from_binary(binary, smooth, sy, sx, ref_area, prior_core,
+                                     trace=trace, trace_prefix=candidate_prefix)
         if cand is None:
             continue
         score = cand[0]
@@ -350,9 +527,11 @@ def segment_neuron_in_box(frame488: np.ndarray, anchor_y: float, anchor_x: float
         if best is None or score > best[0]:
             best = (score,) + cand[1:]
             best_thr = thr
+            winning_prefix = candidate_prefix
 
     if best is None:
-        raise RuntimeError("No plausible 488 component near tracked soma anchor after adaptive fallback")
+        failed("No plausible 488 component near tracked soma anchor after adaptive fallback",
+               f"{trace_prefix}_allowed_region")
 
     _, target, area, cy_local, cx_local, centroid_offset_local, border_touch, overlap, ratio = best
     cy = float(y0 + cy_local)
@@ -361,6 +540,22 @@ def segment_neuron_in_box(frame488: np.ndarray, anchor_y: float, anchor_x: float
 
     full = np.zeros(frame488.shape, dtype=bool)
     full[y0:y1, x0:x1] = target
+    _segmentation_trace(trace, trace_prefix, "selected_component", target,
+                        parents=(f"{winning_prefix}_selection",),
+                        why="Choose the highest-scoring threshold candidate with the unchanged minimum-area discovery bonus.",
+                        parameters={"selected_threshold": float(best_thr), "min_area_discovery_bonus": 0.4},
+                        details={"area_px": int(area), "score_with_discovery_bonus": float(best[0]),
+                                 "crop_origin_yx_px": [y0, x0],
+                                 "centroid_offset_px": centroid_offset,
+                                 "border_touch": bool(border_touch),
+                                 "prior_overlap_fraction": _segmentation_number(overlap),
+                                 "reference_area_ratio": _segmentation_number(ratio)})
+    _segmentation_trace(trace, trace_prefix, "mask", full,
+                        parents=(f"{trace_prefix}_selected_component",),
+                        why="Place the selected crop component back into input-frame coordinates; this mask is not an approval.",
+                        details={"mask_area_px": int(area), "scientific_acceptance_granted": False,
+                                 "placement_bounds_y0_y1_x0_x1": [y0, y1, x0, x1],
+                                 "coordinate_system": "input_frame_pixel_yx"})
     return full, {
         "segmentation_area": int(area),
         "segmentation_centroid_y": cy,
