@@ -1,0 +1,341 @@
+{
+  "neuron_id": "E05_N006",
+  "trace_manifest_sha256": "f71cd816cb9cbbcb78679604905898da0ceca9e9bdc8c6b6a800b46e11c61822",
+  "trace_file_inventory_entries_verified": 9186,
+  "stage_status_counts": {
+    "unavailable": 4,
+    "executed": 3053,
+    "skipped": 4
+  },
+  "summary": {
+    "diagnostic_status": "diagnostic_complete_pending_review",
+    "software_execution_complete": true,
+    "neuron_id": "E05_N006",
+    "reviewed_or_accepted": false,
+    "original_anchors_and_master_unchanged": true,
+    "registration_reapplied": false,
+    "valid_488_visit_count": 9,
+    "valid_488_by_day": {
+      "8": true,
+      "12": true,
+      "16": true,
+      "20": true,
+      "25": true,
+      "29": true,
+      "32": true,
+      "36": true,
+      "39": true
+    },
+    "core_constructed": true,
+    "core_rejection": null,
+    "core_area_px": 248,
+    "secondary_soma_screen_performed": true,
+    "automated_secondary_soma_single_pass": true,
+    "secondary_soma_screen_is_informational_only": true,
+    "secondary_soma_screen_does_not_establish_ROI_ownership": true,
+    "phenotype_calculations_are_diagnostic_only": true,
+    "accepted_metrics_csv_written": false,
+    "real_accepted_ids": [],
+    "historical_ic_and_stitching_validated": false,
+    "tracking_diagnostics_recomputed": true,
+    "tracking_proposals_adopted": false,
+    "LUT_box_proposals_adopted": false,
+    "parameter_changes_adopted": false,
+    "what": "Expose the executed488 segmentation/core/ROI and561 phenotype calculations, plus independent tracking/parameter diagnostics.",
+    "why": "Locate the exact stage of wrong-object, boundary-ownership or unstable-mask failures before claiming an improvement.",
+    "finding": "The declared production calculations executed; identity, ROI ownership and scientific validity remain unapproved.",
+    "required_next_evidence": "Compare these source-bound outputs with the independently reviewed identity/boundary findings; never equate a stronger match or smaller ROI with acceptance.",
+    "software_execution_status": "completed",
+    "scientific_inference_ready": false,
+    "production_eligible": false
+  },
+  "tracking_proposals_by_radius": {
+    "40": [
+      {
+        "day": 8,
+        "search_radius_px": 40,
+        "displacement_from_stored_anchor_px": 0.8271054107386138,
+        "diagnostic_match_score": 0.9999999618798172,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 12,
+        "search_radius_px": 40,
+        "displacement_from_stored_anchor_px": 55.70008976653449,
+        "diagnostic_match_score": 0.7682277529931302,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 16,
+        "search_radius_px": 40,
+        "displacement_from_stored_anchor_px": 64.17554051194271,
+        "diagnostic_match_score": 0.7760480258934029,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 20,
+        "search_radius_px": 40,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.9547525418302223,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 25,
+        "search_radius_px": 40,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.7606987456408493,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 29,
+        "search_radius_px": 40,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.8649535884286457,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 32,
+        "search_radius_px": 40,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.8985963010889269,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 36,
+        "search_radius_px": 40,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.8582843839431371,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 39,
+        "search_radius_px": 40,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.8644445681306789,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      }
+    ],
+    "60": [
+      {
+        "day": 8,
+        "search_radius_px": 60,
+        "displacement_from_stored_anchor_px": 0.8271054107386138,
+        "diagnostic_match_score": 0.9999999527976349,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 12,
+        "search_radius_px": 60,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.9052059082057202,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 16,
+        "search_radius_px": 60,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.8773154491887941,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 20,
+        "search_radius_px": 60,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.9547525317525914,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 25,
+        "search_radius_px": 60,
+        "displacement_from_stored_anchor_px": 53.12720583655798,
+        "diagnostic_match_score": 0.852688413366923,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 29,
+        "search_radius_px": 60,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.8649535712456695,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 32,
+        "search_radius_px": 60,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.8985962911035146,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 36,
+        "search_radius_px": 60,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.8582843750605957,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 39,
+        "search_radius_px": 60,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.864444557515741,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      }
+    ],
+    "80": [
+      {
+        "day": 8,
+        "search_radius_px": 80,
+        "displacement_from_stored_anchor_px": 0.8271054107386138,
+        "diagnostic_match_score": 0.9999999580031679,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 12,
+        "search_radius_px": 80,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.9052059063707466,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 16,
+        "search_radius_px": 80,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.8773154579251543,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 20,
+        "search_radius_px": 80,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.9547525394253791,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 25,
+        "search_radius_px": 80,
+        "displacement_from_stored_anchor_px": 53.12720583655798,
+        "diagnostic_match_score": 0.8526884406614318,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 29,
+        "search_radius_px": 80,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.8649535811506819,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 32,
+        "search_radius_px": 80,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.8985962973884498,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 36,
+        "search_radius_px": 80,
+        "displacement_from_stored_anchor_px": 93.25502667416916,
+        "diagnostic_match_score": 0.8819346166547581,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      },
+      {
+        "day": 39,
+        "search_radius_px": 80,
+        "displacement_from_stored_anchor_px": 0.7071067811865476,
+        "diagnostic_match_score": 0.8644445612314685,
+        "diagnostic_score_pass": true,
+        "adopted": false
+      }
+    ]
+  },
+  "segmentation_sweep": [
+    {
+      "segmentation_min_area_px": 140,
+      "valid_visit_count": 9,
+      "core_constructed": true,
+      "core_area_px": 248,
+      "core_rejection": null,
+      "adopted": false,
+      "phenotype_used_to_select_setting": false
+    },
+    {
+      "segmentation_min_area_px": 180,
+      "valid_visit_count": 9,
+      "core_constructed": true,
+      "core_area_px": 248,
+      "core_rejection": null,
+      "adopted": false,
+      "phenotype_used_to_select_setting": false
+    },
+    {
+      "segmentation_min_area_px": 220,
+      "valid_visit_count": 8,
+      "core_constructed": true,
+      "core_area_px": 260,
+      "core_rejection": null,
+      "adopted": false,
+      "phenotype_used_to_select_setting": false
+    }
+  ],
+  "secondary_soma_screen": {
+    "status": "executed",
+    "single_soma_pass": true,
+    "secondary_soma_score": 0.0,
+    "secondary_soma_distance_px": null,
+    "secondary_soma_area_ratio": 0.0,
+    "secondary_peak_ratio": 0.0,
+    "primary_y": 65.0,
+    "primary_x": 64.0,
+    "secondary_y": null,
+    "secondary_x": null,
+    "n_candidate_peaks": 1,
+    "automated_flag_only": true,
+    "identity_or_ROI_ownership_approval_granted": false,
+    "parameters": {
+      "search_radius": 52.0,
+      "min_distance": 14,
+      "peak_ratio_threshold": 0.55,
+      "area_ratio_threshold": 0.3,
+      "score_threshold": 0.4
+    }
+  },
+  "input_array_sha256": "9a6e1c57f539a840cda5df55cef23a21669a713fe861b0efc89ce3744a2b53cc",
+  "source_code_sha256": {
+    "src/tmem_align/audit_v1/pipeline_diagnostics.py": "a4ce4c445171965969ce08867e3744d4eaa3c8a88199b21db5b3a6664b79a73e",
+    "src/tmem_align/audit_v1/stage_trace.py": "dddb6deaa79b06e4ee2fc61ee64988ac5d22f1fc100ff1ff52d869ef9d07a241",
+    "src/tmem_align/audit_v1/visualization.py": "dde07d6ae717508f08564bf7b831f921ca41d6bd12272b2b28f6e85f27f2425f",
+    "src/tmem_align/audit_v1/display.py": "091ac18b024941839e95d4103b9726939207c03d59a04b9fca97d67898e1feec",
+    "src/tmem_align/preprocess.py": "0298015bb12974a845d135dd7365370df1f109d6f2d6d1d6d8c22ccc6bcd5c59",
+    "src/tmem_align/register.py": "b4516582de1ce3304af7643c36cb90133b3747135e25e65f1d9420d88890922b",
+    "scripts/render_curated_neuron_phenotypes.py": "5e85c89ad781aa038a2055b0cab84e7a28a6b703de198e9fa49f201438bbe60d",
+    "scripts/make_soma_anchored_bbox_movies_v2.py": "1c9c8bd3c65b5f4cf7f15cfcc4949a1801fc560a0c98b86e40733ccbfb901791"
+  },
+  "measurement_release_authorized": false,
+  "real_accepted_ids": [],
+  "scientific_inference_ready": false
+}

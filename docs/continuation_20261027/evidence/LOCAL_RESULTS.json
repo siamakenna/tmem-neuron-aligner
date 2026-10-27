@@ -1,0 +1,580 @@
+{
+  "schema_version": "tmem.local_continuation_checkpoint.v1",
+  "date": "2026-10-27",
+  "budget_start_utc": "22:43:14",
+  "budget_deadline_utc": "23:43:14",
+  "source_base_commit": "a978ac54c943d5e28a01a4d92fa989b6e4760684",
+  "remote_main_inspected": "cbed28cef77826cd8a5b45b6520fa81b127b3bfa",
+  "continuation_branch": "continuation/six-well-local-20261027",
+  "input_package": {
+    "basename": "TMEM106B_COMPLETE_20261027_fad3f81a.zip",
+    "observed_sha256": "1858a919992f6372061993eb5e916de3fcf5f32e958f44dab7ae21929136c00d",
+    "external_SANDY_copy_not_mounted": true,
+    "external_checksum_not_supplied": true,
+    "package_hash_entries_verified_before_edits": 230,
+    "source_hash_entries_verified_before_edits": 222,
+    "missing_files": [],
+    "mismatched_files": [],
+    "code_snapshot_json_sha256": "474e66cbb37272a0f2a2992b8976a00ed1e1e487c7630a6dc196acfe5aede441"
+  },
+  "dataset": {
+    "verified": true,
+    "files": 7,
+    "bytes": 1985842849,
+    "master_rows": 3897,
+    "days": [
+      8,
+      12,
+      16,
+      20,
+      25,
+      29,
+      32,
+      36,
+      39
+    ],
+    "wells": [
+      "E05",
+      "F05",
+      "I05",
+      "J05",
+      "M05",
+      "N05"
+    ],
+    "master_sha256": "4d1a7c224cea385562492601859ac90fb29228070539ce13ca79598341d12390",
+    "stacks": {
+      "E05": {
+        "sha256": "b634b03190ef0265d0dcb0694d22ed7e19a38c8fb05a5fff082058ed38f4eb77",
+        "bytes": 327920050
+      },
+      "F05": {
+        "sha256": "76fe4abe0402f18ce78612df9afdedaff78cdbeade4b86869c219d95161388f5",
+        "bytes": 329609710
+      },
+      "I05": {
+        "sha256": "d694da72a213ca17fbc06707d91ddbe2031cfb5c2c72b890de435febad67f172",
+        "bytes": 332738632
+      },
+      "J05": {
+        "sha256": "e245aa934d4f25df8b4136b7defcc010f03dff0602ee61e76ce536466d086d53",
+        "bytes": 331475032
+      },
+      "M05": {
+        "sha256": "965ac26044e5dcc9d43aac218e56c497b6df5212d750150c16ee607d9ea9e9e4",
+        "bytes": 328316302
+      },
+      "N05": {
+        "sha256": "a15b764acb7b2dd93a9d5db2bb73d6429fdddef3d7e2ed5e90bafebaee2b9c61",
+        "bytes": 329526442
+      }
+    },
+    "registered_inputs_only": true
+  },
+  "fresh_local_verification": {
+    "python": "3.12.5",
+    "environment": {
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "scikit-image": "0.26.0",
+      "tifffile": "2026.10.15",
+      "pandas": "3.1.0",
+      "Pillow": "12.3.0",
+      "imageio": "2.38.1",
+      "matplotlib": "3.11.2",
+      "pytest": "9.2.0"
+    },
+    "portable_controls": {
+      "ordinary_tests": 58,
+      "subtests": 14,
+      "junit": {
+        "tests": 72,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "stage_verification": {
+      "ordinary_tests": 278,
+      "subtests": 92,
+      "junit_executions": 370,
+      "status": "passed",
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reporter_tests": {
+      "ordinary_tests": 15,
+      "junit": {
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "targeted_reporter_ruff": "passed",
+    "known_truth_example": {
+      "evidence_type": "SYNTHETIC_KNOWN_TRUTH_SOFTWARE_VERIFICATION",
+      "experimental_data": false,
+      "expected_shift_yx_px": [
+        -4,
+        6
+      ],
+      "observed_shift_yx_px": [
+        -4,
+        6
+      ],
+      "max_IC_rounding_error_adu": 1.2137641906738281,
+      "gallery": "synthetic_IC_alignment/index.html",
+      "trace_verified": true
+    },
+    "historical_Biowulf_counts_are_separate": {
+      "ordinary_tests": 278,
+      "subtests": 92
+    }
+  },
+  "panel": {
+    "status": "completed_pending_scientific_review",
+    "elapsed_seconds": 875.748,
+    "workers": 2,
+    "requested_tracks_per_well": 2,
+    "seed": "portable-20261027",
+    "selection_basis": "Identifier hashing and exact nine frozen visits; no 561 values, outcome ranking, or tracking-validity optimization",
+    "selected_neuron_ids": [
+      "E05_N057",
+      "F05_N005",
+      "I05_N052",
+      "J05_N029",
+      "M05_N009",
+      "N05_N010",
+      "E05_N066",
+      "F05_N061",
+      "I05_N006",
+      "J05_N028",
+      "M05_N022",
+      "N05_N022"
+    ],
+    "excluded_documented_ids": [
+      "E05_N006",
+      "E05_N033",
+      "E05_N071",
+      "F05_N007",
+      "F05_N008",
+      "F05_N024",
+      "F05_N025",
+      "F05_N037",
+      "F05_N038",
+      "F05_N051",
+      "I05_N023",
+      "I05_N037",
+      "I05_N042",
+      "I05_N049",
+      "I05_N059",
+      "J05_N004",
+      "J05_N015",
+      "J05_N026",
+      "M05_N019",
+      "M05_N042",
+      "M05_N059",
+      "M05_N067",
+      "N05_N011",
+      "N05_N012",
+      "N05_N034",
+      "N05_N036",
+      "N05_N048"
+    ],
+    "eligible_counts_after_exclusions": {
+      "E05": 86,
+      "F05": 65,
+      "I05": 71,
+      "J05": 60,
+      "M05": 75,
+      "N05": 49
+    },
+    "execution_counts": {
+      "software_completed": 12,
+      "failed": 0,
+      "timeout": 0,
+      "deferred_budget": 0
+    },
+    "diagnostic_counts": {
+      "diagnostic_rejected": 6,
+      "diagnostic_complete_pending_review": 6
+    },
+    "completed_well_coverage": {
+      "E05": 2,
+      "F05": 2,
+      "I05": 2,
+      "J05": 2,
+      "M05": 2,
+      "N05": 2
+    },
+    "valid_primary_488_visits": 91,
+    "track_visits": 108,
+    "master_and_configuration_unchanged": true,
+    "configuration_sha256": "89a2442d42b9afeedeaadb5b1c8d861de2e477ecae9f2c4c756e7a9485a39ad5",
+    "stage_status_counts": {
+      "executed": 39099,
+      "failed": 6,
+      "skipped": 60,
+      "unavailable": 48
+    },
+    "recorded_stage_failures": [
+      {
+        "neuron_id": "N05_N022",
+        "stage": "primary_segmentation_visit_08_failure",
+        "reason": "Insufficient local 488 signal at tracked soma anchor"
+      },
+      {
+        "neuron_id": "N05_N022",
+        "stage": "primary_segmentation_visit_08_qc_failure",
+        "reason": "The existing reconstruction fallback returns an empty, invalid mask after a segmentation exception."
+      },
+      {
+        "neuron_id": "N05_N022",
+        "stage": "sensitivity_area_0140_visit_08_failure",
+        "reason": "Insufficient local 488 signal at tracked soma anchor"
+      },
+      {
+        "neuron_id": "N05_N022",
+        "stage": "sensitivity_area_0140_visit_08_qc_failure",
+        "reason": "The existing reconstruction fallback returns an empty, invalid mask after a segmentation exception."
+      },
+      {
+        "neuron_id": "N05_N022",
+        "stage": "sensitivity_area_0220_visit_08_failure",
+        "reason": "Insufficient local 488 signal at tracked soma anchor"
+      },
+      {
+        "neuron_id": "N05_N022",
+        "stage": "sensitivity_area_0220_visit_08_qc_failure",
+        "reason": "The existing reconstruction fallback returns an empty, invalid mask after a segmentation exception."
+      }
+    ],
+    "cases": [
+      {
+        "neuron_id": "E05_N057",
+        "execution_status": "software_completed",
+        "diagnostic_status": "diagnostic_rejected",
+        "valid_488_visit_count": 7,
+        "invalid_days": [
+          32,
+          39
+        ],
+        "core_area_px": 429,
+        "automated_secondary_soma_single_pass": true,
+        "minimum_ROI_support_by_primary_mask_among_valid_visits": 0.6169844020797227,
+        "ROI_support_is_agreement_not_ownership": true,
+        "trace_manifest_sha256": "7895141039a7f89d293f17fbbf89aab8602e1288ff580c14e601ac051eae5673",
+        "elapsed_seconds": 182.639
+      },
+      {
+        "neuron_id": "F05_N005",
+        "execution_status": "software_completed",
+        "diagnostic_status": "diagnostic_complete_pending_review",
+        "valid_488_visit_count": 9,
+        "invalid_days": [],
+        "core_area_px": 284,
+        "automated_secondary_soma_single_pass": true,
+        "minimum_ROI_support_by_primary_mask_among_valid_visits": 0.5196078431372549,
+        "ROI_support_is_agreement_not_ownership": true,
+        "trace_manifest_sha256": "5756b3d4c6c84127c932e4686804a0e4ad670c7fdb930d21a627df7418f6d241",
+        "elapsed_seconds": 183.827
+      },
+      {
+        "neuron_id": "I05_N052",
+        "execution_status": "software_completed",
+        "diagnostic_status": "diagnostic_complete_pending_review",
+        "valid_488_visit_count": 9,
+        "invalid_days": [],
+        "core_area_px": 269,
+        "automated_secondary_soma_single_pass": true,
+        "minimum_ROI_support_by_primary_mask_among_valid_visits": 0.4960835509138381,
+        "ROI_support_is_agreement_not_ownership": true,
+        "trace_manifest_sha256": "2e788c3dd0ecf393fe564b53de43a4f8d298967361a785ce9f25b837c78d426a",
+        "elapsed_seconds": 128.842
+      },
+      {
+        "neuron_id": "J05_N029",
+        "execution_status": "software_completed",
+        "diagnostic_status": "diagnostic_rejected",
+        "valid_488_visit_count": 5,
+        "invalid_days": [
+          16,
+          29,
+          32,
+          36
+        ],
+        "core_area_px": 534,
+        "automated_secondary_soma_single_pass": true,
+        "minimum_ROI_support_by_primary_mask_among_valid_visits": 0.5769230769230769,
+        "ROI_support_is_agreement_not_ownership": true,
+        "trace_manifest_sha256": "cee90c9854d6b24aef7a97eca0a2fec1b30a34578ecbe8ad65079f7f6767d55d",
+        "elapsed_seconds": 125.382
+      },
+      {
+        "neuron_id": "M05_N009",
+        "execution_status": "software_completed",
+        "diagnostic_status": "diagnostic_complete_pending_review",
+        "valid_488_visit_count": 9,
+        "invalid_days": [],
+        "core_area_px": 413,
+        "automated_secondary_soma_single_pass": true,
+        "minimum_ROI_support_by_primary_mask_among_valid_visits": 0.6112115732368897,
+        "ROI_support_is_agreement_not_ownership": true,
+        "trace_manifest_sha256": "1953526ec9b2af95274bc5072ef96657a19299395e2ad96879c0673885c4320c",
+        "elapsed_seconds": 132.458
+      },
+      {
+        "neuron_id": "N05_N010",
+        "execution_status": "software_completed",
+        "diagnostic_status": "diagnostic_complete_pending_review",
+        "valid_488_visit_count": 9,
+        "invalid_days": [],
+        "core_area_px": 420,
+        "automated_secondary_soma_single_pass": true,
+        "minimum_ROI_support_by_primary_mask_among_valid_visits": 0.5761245674740484,
+        "ROI_support_is_agreement_not_ownership": true,
+        "trace_manifest_sha256": "ac7e1674504f917bea2e2826dcbe40fe60a00e8a2cbd14a2b5f1ef32a58ab29d",
+        "elapsed_seconds": 136.061
+      },
+      {
+        "neuron_id": "E05_N066",
+        "execution_status": "software_completed",
+        "diagnostic_status": "diagnostic_rejected",
+        "valid_488_visit_count": 6,
+        "invalid_days": [
+          16,
+          20,
+          25
+        ],
+        "core_area_px": 1764,
+        "automated_secondary_soma_single_pass": true,
+        "minimum_ROI_support_by_primary_mask_among_valid_visits": 0.5463172164482603,
+        "ROI_support_is_agreement_not_ownership": true,
+        "trace_manifest_sha256": "e9c5e4d0116fe6737f6efa7a6428f2fc1de840fa9fff80f93b245540ccadc780",
+        "elapsed_seconds": 143.568
+      },
+      {
+        "neuron_id": "F05_N061",
+        "execution_status": "software_completed",
+        "diagnostic_status": "diagnostic_rejected",
+        "valid_488_visit_count": 7,
+        "invalid_days": [
+          16,
+          20
+        ],
+        "core_area_px": 226,
+        "automated_secondary_soma_single_pass": true,
+        "minimum_ROI_support_by_primary_mask_among_valid_visits": 0.2538860103626943,
+        "ROI_support_is_agreement_not_ownership": true,
+        "trace_manifest_sha256": "6ea9a1b1f10c65d37d7dfd6fc1ab7dda681fac84e14221ecf86b26729298f98f",
+        "elapsed_seconds": 141.056
+      },
+      {
+        "neuron_id": "I05_N006",
+        "execution_status": "software_completed",
+        "diagnostic_status": "diagnostic_complete_pending_review",
+        "valid_488_visit_count": 9,
+        "invalid_days": [],
+        "core_area_px": 267,
+        "automated_secondary_soma_single_pass": true,
+        "minimum_ROI_support_by_primary_mask_among_valid_visits": 0.41604010025062654,
+        "ROI_support_is_agreement_not_ownership": true,
+        "trace_manifest_sha256": "8836efc412b80ce57ed1550b0b6eaae9860d31e64eb241f21f1e042b04037d61",
+        "elapsed_seconds": 141.675
+      },
+      {
+        "neuron_id": "J05_N028",
+        "execution_status": "software_completed",
+        "diagnostic_status": "diagnostic_rejected",
+        "valid_488_visit_count": 4,
+        "invalid_days": [
+          12,
+          16,
+          29,
+          36,
+          39
+        ],
+        "core_area_px": 943,
+        "automated_secondary_soma_single_pass": true,
+        "minimum_ROI_support_by_primary_mask_among_valid_visits": 0.695447409733124,
+        "ROI_support_is_agreement_not_ownership": true,
+        "trace_manifest_sha256": "614498a0bdb147ebe77855ee18f5b90c099462bb5a17adbde9aa48f5c93eedc1",
+        "elapsed_seconds": 144.647
+      },
+      {
+        "neuron_id": "M05_N022",
+        "execution_status": "software_completed",
+        "diagnostic_status": "diagnostic_complete_pending_review",
+        "valid_488_visit_count": 9,
+        "invalid_days": [],
+        "core_area_px": 318,
+        "automated_secondary_soma_single_pass": true,
+        "minimum_ROI_support_by_primary_mask_among_valid_visits": 0.6085106382978723,
+        "ROI_support_is_agreement_not_ownership": true,
+        "trace_manifest_sha256": "b5a177c98a52d5fcec469fe3fb961e32870696ca0ecd16c7af991c3b0f960c51",
+        "elapsed_seconds": 146.516
+      },
+      {
+        "neuron_id": "N05_N022",
+        "execution_status": "software_completed",
+        "diagnostic_status": "diagnostic_rejected",
+        "valid_488_visit_count": 8,
+        "invalid_days": [
+          39
+        ],
+        "core_area_px": 341,
+        "automated_secondary_soma_single_pass": true,
+        "minimum_ROI_support_by_primary_mask_among_valid_visits": 0.4625267665952891,
+        "ROI_support_is_agreement_not_ownership": true,
+        "trace_manifest_sha256": "65e95e5312399d8a24af8a975477491f3e1421b810935e5f9d588cee6cf0615b",
+        "elapsed_seconds": 131.108
+      }
+    ]
+  },
+  "same_panel_comparison": {
+    "primary_segmentation_min_area_px": 180,
+    "primary_diagnostic_search_radius_px": 60,
+    "area_sensitivity": {
+      "140": {
+        "valid_visits": 91,
+        "all_nine_valid_cases": 6,
+        "defined_mask_IoU_visits": 107,
+        "minimum_mask_IoU_vs_primary": 0.088098016336056,
+        "median_mask_IoU_vs_primary": 1,
+        "core_area_px_by_case": {
+          "E05_N057": 429,
+          "F05_N005": 284,
+          "I05_N052": 244,
+          "J05_N029": 464,
+          "M05_N009": 413,
+          "N05_N010": 420,
+          "E05_N066": 1764,
+          "F05_N061": 226,
+          "I05_N006": 267,
+          "J05_N028": 1388,
+          "M05_N022": 318,
+          "N05_N022": 341
+        }
+      },
+      "180": {
+        "valid_visits": 91,
+        "all_nine_valid_cases": 6,
+        "defined_mask_IoU_visits": 107,
+        "minimum_mask_IoU_vs_primary": 1,
+        "median_mask_IoU_vs_primary": 1,
+        "core_area_px_by_case": {
+          "E05_N057": 429,
+          "F05_N005": 284,
+          "I05_N052": 269,
+          "J05_N029": 534,
+          "M05_N009": 413,
+          "N05_N010": 420,
+          "E05_N066": 1764,
+          "F05_N061": 226,
+          "I05_N006": 267,
+          "J05_N028": 943,
+          "M05_N022": 318,
+          "N05_N022": 341
+        }
+      },
+      "220": {
+        "valid_visits": 97,
+        "all_nine_valid_cases": 7,
+        "defined_mask_IoU_visits": 107,
+        "minimum_mask_IoU_vs_primary": 0.14562458249833,
+        "median_mask_IoU_vs_primary": 1,
+        "core_area_px_by_case": {
+          "E05_N057": 642,
+          "F05_N005": 326,
+          "I05_N052": 282,
+          "J05_N029": 522,
+          "M05_N009": 413,
+          "N05_N010": 420,
+          "E05_N066": 1764,
+          "F05_N061": 226,
+          "I05_N006": 278,
+          "J05_N028": 928,
+          "M05_N022": 318,
+          "N05_N022": 362
+        }
+      }
+    },
+    "tracking_radius_sensitivity": {
+      "40": {
+        "visits_differing_from_primary_over_20px": 25,
+        "maximum_departure_from_frozen_anchor_px": 108.89674007976548,
+        "threshold_is_descriptive_only": true
+      },
+      "60": {
+        "visits_differing_from_primary_over_20px": 0,
+        "maximum_departure_from_frozen_anchor_px": 87.26110244547682,
+        "threshold_is_descriptive_only": true
+      },
+      "80": {
+        "visits_differing_from_primary_over_20px": 21,
+        "maximum_departure_from_frozen_anchor_px": 133.61324784616232,
+        "threshold_is_descriptive_only": true
+      }
+    },
+    "independent_labels_supplied": false,
+    "accuracy_improvement_established": false,
+    "proposals_adopted": false
+  },
+  "review": {
+    "actual_488_case_sheets_inspected": 12,
+    "independent_review_completed": false,
+    "large_contact_sheets": 24,
+    "blank_annotation_rows": 108,
+    "manifest_hashes_unchanged_after_report": true
+  },
+  "production_source_hashes": {
+    "src/tmem_align/audit_v1/pipeline_diagnostics.py": "a4ce4c445171965969ce08867e3744d4eaa3c8a88199b21db5b3a6664b79a73e",
+    "src/tmem_align/audit_v1/stage_trace.py": "dddb6deaa79b06e4ee2fc61ee64988ac5d22f1fc100ff1ff52d869ef9d07a241",
+    "src/tmem_align/audit_v1/visualization.py": "dde07d6ae717508f08564bf7b831f921ca41d6bd12272b2b28f6e85f27f2425f",
+    "src/tmem_align/audit_v1/display.py": "091ac18b024941839e95d4103b9726939207c03d59a04b9fca97d67898e1feec",
+    "src/tmem_align/preprocess.py": "0298015bb12974a845d135dd7365370df1f109d6f2d6d1d6d8c22ccc6bcd5c59",
+    "src/tmem_align/register.py": "b4516582de1ce3304af7643c36cb90133b3747135e25e65f1d9420d88890922b",
+    "scripts/render_curated_neuron_phenotypes.py": "5e85c89ad781aa038a2055b0cab84e7a28a6b703de198e9fa49f201438bbe60d",
+    "scripts/make_soma_anchored_bbox_movies_v2.py": "1c9c8bd3c65b5f4cf7f15cfcc4949a1801fc560a0c98b86e40733ccbfb901791"
+  },
+  "production_source_hashes_consistent_across_all_cases": true,
+  "portable_source_sha256": {
+    "requirements-portable.txt": "42e7dc87ccdf110f49da72ff6e60227b0c64499604209ba51a2dc885aa6d0648",
+    "scripts/finish_portable_session.py": "5dea3d0c73fe74caae80069333cf3fb608a8377f1686c5a4f4362ab5d30b277e",
+    "scripts/prepare_portable_dataset.py": "6393f3f1dcf438ac1c6520e81d1e56f318a4c0678291b9d4ce9c6a89537892b5",
+    "scripts/report_portable_panel.py": "f56484e4109ae9d4a64d94a1c472e4b69c92060659fcb28b013402e5e2383f17",
+    "scripts/run_portable_benchmark.py": "bfe3d07454613bbfa6e6a47c5a822b282c4d5721a72ada33a490d91c57e83fb3",
+    "scripts/summarize_stage_evidence.py": "18854cbd9e50720586350182766104abd6f1c8400e1dccaccda66aa51b56048f",
+    "tests/audit_v1/test_portable_benchmark.py": "80ee68e12ef1cd193fec25a7331563b2bcb094679acf8be2ada826406048cbf9",
+    "tests/audit_v1/test_portable_dataset.py": "39bf5cbd05852cdbade6cbec5d9311a4f38d3002f0f688bf8f7f0f77131bf569",
+    "tests/audit_v1/test_portable_panel_report.py": "ca81eff19bdbdc41c1416007ecc3c331e5c904f23ce85ceb3b4cecab513d371c",
+    "tests/audit_v1/test_portable_session.py": "fa8e0a9d974892f27fbec0520bc39bb901d9e58c0a4e0b6c552ac944e69e17b1",
+    "tests/audit_v1/test_stage_evidence.py": "a8ee84af9b3c225d64b4f59edea73f01eb44ed2fba37e71c4fd4cdd4cdceee4d"
+  },
+  "local_evidence_sha256": {
+    "portable-controls.log": "7396c09aabc947903089023c4898a3932df8fa9b94f270da5a3b50e54d9bd8f6",
+    "portable-controls.xml": "b5ea9d89c7b7c6282c1d0ad2261175a515eedb9d35042984ab51e45189f21674",
+    "panel-report-tests.log": "e1775867ed883bcb9659d608c1864c408e09eb6b9e29ffa8e40a287078254e03",
+    "panel-report-tests.xml": "7159a81572429c3dabe0339242bfc9b852acd0e87526aec800ed9718b25ce384",
+    "panel-report-lint.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "verification-local/unit.log": "8a2e97278760dcae2f9fad8c9b4e39938761bec152f8f5a1ed26ebbf7b5a149f",
+    "verification-local/unit.xml": "6cd3030b012fd036be47af65e5b7b8f9ddf895ab95088e70aefd6ba6b193aa32",
+    "verification-local/integration.log": "d602a4dd658323c6f43a3a4b1e5e2d171e52bcaa3ec162da4aef3f9233caedee",
+    "verification-local/integration.xml": "7090ea125797ff4da6cc7cf08127de71cdc3af9ca703e24478ca0fd5cf4ac235",
+    "verification-local/verification_status.json": "9c27b1741c93fd874ba67e4918bc24f4f4da7f3fcf844402f94f806c08e96f15",
+    "environment-freeze.txt": "d26b562580e1f6d5663c2c06becf2c7c1ec0b21fd2a65280a7b7ec2a28facffa",
+    "environment-check.log": "e359db68349979c075c90fc213a111543bf48d4de8516adce4bf35dc104a09b6",
+    "benchmark-local/benchmark_summary.json": "94058b617e1840df7b642ebc2ef33470cd636df9112c30de862c7aa5a5657d64",
+    "review-local/panel_summary.json": "09397c80d4fdf34ce30640722ebee1aee53945c1b2f809a0b3efaba87123bcfa"
+  },
+  "real_accepted_ids": [],
+  "scientific_inference_ready": false,
+  "historical_real_image_IC_stitching_alignment_validated": false,
+  "remaining_blockers": [
+    "Independent 488 identity and ROI-ownership labels for the frozen panel",
+    "Matching raw detector images and correction-field provenance; original tile/registration evidence",
+    "All-nine-visit review/acceptance gates and an eligible matched-well cohort"
+  ],
+  "images_arrays_environments_and_galleries_committed": false
+}

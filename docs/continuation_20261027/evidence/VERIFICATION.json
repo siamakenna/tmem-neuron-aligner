@@ -1,0 +1,40 @@
+{
+  "phases": {
+    "unit": {
+      "tests_passed": 55,
+      "subtests_passed": 31,
+      "counted_executions": 86,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "pytest_reported_seconds": 0.89
+    },
+    "integration": {
+      "tests_passed": 223,
+      "subtests_passed": 61,
+      "counted_executions": 284,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "pytest_reported_seconds": 30.09
+    }
+  },
+  "tests_passed": 278,
+  "subtests_passed": 92,
+  "known_truth_example": {
+    "evidence_type": "SYNTHETIC_KNOWN_TRUTH_SOFTWARE_VERIFICATION",
+    "experimental_data": false,
+    "expected_shift_yx_px": [
+      -4,
+      6
+    ],
+    "observed_shift_yx_px": [
+      -4.0,
+      6.0
+    ],
+    "max_IC_rounding_error_adu": 1.2137641906738281,
+    "gallery": "synthetic_IC_alignment/index.html",
+    "trace_verified": true
+  },
+  "scope": "Recorded software verification, not experimental validation"
+}

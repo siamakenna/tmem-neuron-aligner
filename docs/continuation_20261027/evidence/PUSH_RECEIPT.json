@@ -1,0 +1,15 @@
+{
+  "status": "pushed_verified",
+  "commit": "a978ac54c943d5e28a01a4d92fa989b6e4760684",
+  "branch": "diagnostics/stage-trace-20261027_n9oz6u94",
+  "remote_url": "https://github.com/siamakenna/tmem-neuron-aligner/tree/diagnostics/stage-trace-20261027_n9oz6u94",
+  "payload_sha256": "d2d0e8f73815268826fe12893d889e0cc81568d9300905ef893100c8acc68919",
+  "verified_tasks": [
+    "verification",
+    "E05_N006",
+    "F05_N007",
+    "J05_N015"
+  ],
+  "real_accepted_ids": [],
+  "scientific_inference_ready": false
+}

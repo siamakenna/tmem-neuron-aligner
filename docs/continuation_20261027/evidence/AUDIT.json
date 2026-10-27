@@ -1,0 +1,102 @@
+{
+  "schema_version": "tmem.portable_evidence.v1",
+  "source_zip_sha256": "297e049cb7db0e6d93446a86dc7cdb9a83f53b910233ebc11e8f9c99ba0819bd",
+  "source_zip_bytes": 82965406,
+  "outer_entries_verified": 35,
+  "task_archives": {
+    "verification": {
+      "sha256": "17daf4acae834b2053f08c7d438ad5efcd76aa4a4f2a5d453626dd06f848f185",
+      "bytes": 483446,
+      "internal_entries_verified": 160
+    },
+    "E05_N006": {
+      "sha256": "844c34cd3897ac3ef7e9d9ec734dc4a017e70f3e4589b662782d958dc83caed8",
+      "bytes": 30733045,
+      "internal_entries_verified": 9191
+    },
+    "F05_N007": {
+      "sha256": "5c55854ae7ba6fd54d017fcec979e332dbc096c91938ebca9e3b7671a30370d8",
+      "bytes": 31940584,
+      "internal_entries_verified": 9875
+    },
+    "J05_N015": {
+      "sha256": "9f6825a0510529ae3dd3beef67eb3b1d3d5e33228385edcc77ab2e83f00ddd04",
+      "bytes": 32001158,
+      "internal_entries_verified": 9941
+    }
+  },
+  "base_commit": "cbed28cef77826cd8a5b45b6520fa81b127b3bfa",
+  "payload_sha256": "d2d0e8f73815268826fe12893d889e0cc81568d9300905ef893100c8acc68919",
+  "recorded_push_receipt": {
+    "status": "pushed_verified",
+    "commit": "a978ac54c943d5e28a01a4d92fa989b6e4760684",
+    "branch": "diagnostics/stage-trace-20261027_n9oz6u94",
+    "remote_url": "https://github.com/siamakenna/tmem-neuron-aligner/tree/diagnostics/stage-trace-20261027_n9oz6u94",
+    "payload_sha256": "d2d0e8f73815268826fe12893d889e0cc81568d9300905ef893100c8acc68919",
+    "verified_tasks": [
+      "verification",
+      "E05_N006",
+      "F05_N007",
+      "J05_N015"
+    ],
+    "real_accepted_ids": [],
+    "scientific_inference_ready": false
+  },
+  "push_scope": "Returned command and receipt; not an independent live GitHub query",
+  "verification": {
+    "phases": {
+      "unit": {
+        "tests_passed": 55,
+        "subtests_passed": 31,
+        "counted_executions": 86,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "pytest_reported_seconds": 0.89
+      },
+      "integration": {
+        "tests_passed": 223,
+        "subtests_passed": 61,
+        "counted_executions": 284,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "pytest_reported_seconds": 30.09
+      }
+    },
+    "tests_passed": 278,
+    "subtests_passed": 92,
+    "known_truth_example": {
+      "evidence_type": "SYNTHETIC_KNOWN_TRUTH_SOFTWARE_VERIFICATION",
+      "experimental_data": false,
+      "expected_shift_yx_px": [
+        -4,
+        6
+      ],
+      "observed_shift_yx_px": [
+        -4.0,
+        6.0
+      ],
+      "max_IC_rounding_error_adu": 1.2137641906738281,
+      "gallery": "synthetic_IC_alignment/index.html",
+      "trace_verified": true
+    },
+    "scope": "Recorded software verification, not experimental validation"
+  },
+  "diagnostic_cases": [
+    "E05_N006",
+    "F05_N007",
+    "J05_N015"
+  ],
+  "track_visits": 27,
+  "executed_stage_records": 9633,
+  "real_accepted_ids": [],
+  "scientific_inference_ready": false,
+  "limitations": [
+    "Repeated stage outputs do not increase biological sample size.",
+    "Registered inputs cannot validate historical raw IC, stitching or alignment.",
+    "Correlation and segmentation-validity flags do not establish identity or ROI ownership.",
+    "Archive checksums establish internal consistency, not independent authenticity.",
+    "Scheduler elapsed and queue times were not included."
+  ]
+}
