@@ -28,3 +28,11 @@ The owner subsequently authorized a **software-only squash merge of PR #9** afte
 Public technical aggregates are intentionally limited to the user-declared checkpoint counts. Detailed historical receipts and case observations were preserved byte-for-byte privately before replacing public copies with fingerprint references. See [PRIVACY_AUDIT.md](PRIVACY_AUDIT.md). A normal cleanup commit does not erase earlier public commits.
 
 See [SCIENTIFIC_RELEASE_BLOCKERS.md](SCIENTIFIC_RELEASE_BLOCKERS.md) for remaining gates.
+
+## Verified merge and next software phase
+
+PR #9 was owner-authorized and **squash-merged** at `e5997e0f9c42af13057d2a5f498b380a688bb391`; merged GitHub state and remote SHA were verified. Local main was fast-forwarded from the actual remote base, with its previous imported source-base pointer preserved as an archive branch. Merged CLI help, original panel reconstruction and blank source-bound review validation passed. No biological acceptance was implied.
+
+The separate branch `feature/review-reconciliation-readiness-20261028` adds a private read-only adapter between genuine diagnostic annotations and existing v6/export/cohort/figure contracts. It preserves original human fields and all QC, compares exact 488 pixels/core/ROI and frozen parameters, and blocks premature final/561 reads. It reports missing evidence without converting decisions or creating accepted metrics. See [RECONCILIATION_README.md](RECONCILIATION_README.md).
+
+The real blank-input reconciliation produced per-neuron/visit/well/pair readiness and a figure-prerequisite report: zero existing accepted exports, zero eligible matched pairs, no real plots, treatment effects or survival results. All 108 human decisions and 17 failed gates remain. Final post-fix cross-integration of the new adapter plus existing review/export/analysis/figure contracts passed: **135 tests +10 subtests**, zero failures/errors/skips. Focused reconciliation/privacy controls passed: **53 tests**. Independent read-only review returned SHIP after two evidence-binding fixes; final bundles must be target-only and cohort inputs must match their exact reconciled paths and unchanged fingerprints. Scoped Ruff and the 12-file publication audit passed. These software checks do not establish tracking accuracy or biological acceptance.

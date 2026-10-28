@@ -21,3 +21,7 @@ The explicit historical policy replaces dynamic documentation scanning. Any futu
 Private receipt references in evidence/ preserve historical fingerprints; detailed originals are outside Git. Inspect private readiness summaries rather than publishing source-specific measurements, reviewer records or images.
 
 Current primary QC remains 91/108; 17 failed gates, six diagnostic rejections, six pending review, zero accepted. Area220 remains unadopted sensitivity, not improved accuracy. No production geometry or exporter acceptance rule changed. Independent labels, raw IC/alignment evidence and accepted matched-well eligibility remain blockers.
+
+PR #9 is now verified squash-merged at `e5997e0f9c42af13057d2a5f498b380a688bb391`; post-merge smoke checks passed. The next source branch implements the private reconciliation adapter; see [RECONCILIATION_README.md](RECONCILIATION_README.md). Inspect actual GitHub/branch state before assuming its follow-up PR is merged. Do not repeat the completed full regression, benchmark, stack transfer, gallery or blank reports merely to reproduce them.
+
+Next human action remains opening the existing offline workspace and reviewing all 108 visits. After genuine saved annotations, use the reconciliation command with a new private output directory and supply authentic final/cohort evidence only when it exists. No reclassification or geometry rescue is authorized merely by software completion.
