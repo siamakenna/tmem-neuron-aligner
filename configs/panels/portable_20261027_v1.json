@@ -1,0 +1,197 @@
+{
+  "schema_version": "tmem.panel_selection.v1",
+  "version": "portable-20261027.v1",
+  "seed": "portable-20261027",
+  "tracks_per_well": 2,
+  "days": [
+    8,
+    12,
+    16,
+    20,
+    25,
+    29,
+    32,
+    36,
+    39
+  ],
+  "wells": [
+    "E05",
+    "F05",
+    "I05",
+    "J05",
+    "M05",
+    "N05"
+  ],
+  "algorithm": "sha256(seed|neuron_id), ascending per well, rank-first round robin",
+  "eligibility": [
+    "Exactly nine original days and time_index0..8",
+    "Finite unchanged 488-derived anchors",
+    "Original tracking_valid true AND false flags retained; no validity optimization",
+    "No 561 values or outcome ranking"
+  ],
+  "historical_exclusions": [
+    {
+      "neuron_id": "E05_N006",
+      "reason": "Historical regression/technical/excluded case",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "E05_N033",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "E05_N071",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "F05_N007",
+      "reason": "Historical regression/technical/excluded case",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "F05_N008",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "F05_N024",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "F05_N025",
+      "reason": "Historical regression/technical/excluded case",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "F05_N037",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "F05_N038",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "F05_N051",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "I05_N023",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "I05_N037",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "I05_N042",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "I05_N049",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "I05_N059",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "J05_N004",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "J05_N015",
+      "reason": "Historical regression/technical/excluded case",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "J05_N026",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "M05_N019",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "M05_N042",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "M05_N059",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "M05_N067",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "N05_N011",
+      "reason": "Historical regression/technical/excluded case",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "N05_N012",
+      "reason": "Historical regression/technical/excluded case",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "N05_N034",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "N05_N036",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    },
+    {
+      "neuron_id": "N05_N048",
+      "reason": "Previously documented diagnostic example; not a biological exclusion judgment",
+      "provenance": "Frozen original October27 benchmark exclusion roster; source checkpoint4a8109e"
+    }
+  ],
+  "input_sha256": {
+    "master": "4d1a7c224cea385562492601859ac90fb29228070539ce13ca79598341d12390",
+    "E05": "b634b03190ef0265d0dcb0694d22ed7e19a38c8fb05a5fff082058ed38f4eb77",
+    "F05": "76fe4abe0402f18ce78612df9afdedaff78cdbeade4b86869c219d95161388f5",
+    "I05": "d694da72a213ca17fbc06707d91ddbe2031cfb5c2c72b890de435febad67f172",
+    "J05": "e245aa934d4f25df8b4136b7defcc010f03dff0602ee61e76ce536466d086d53",
+    "M05": "965ac26044e5dcc9d43aac218e56c497b6df5212d750150c16ee607d9ea9e9e4",
+    "N05": "a15b764acb7b2dd93a9d5db2bb73d6429fdddef3d7e2ed5e90bafebaee2b9c61"
+  },
+  "configuration_sha256": "89a2442d42b9afeedeaadb5b1c8d861de2e477ecae9f2c4c756e7a9485a39ad5",
+  "selected_neuron_ids": [
+    "E05_N057",
+    "F05_N005",
+    "I05_N052",
+    "J05_N029",
+    "M05_N009",
+    "N05_N010",
+    "E05_N066",
+    "F05_N061",
+    "I05_N006",
+    "J05_N028",
+    "M05_N022",
+    "N05_N022"
+  ],
+  "tracking_validity_preserved": true,
+  "biological_acceptance_granted": false,
+  "held_out_claimed": false,
+  "original_benchmark_summary_sha256": "94058b617e1840df7b642ebc2ef33470cd636df9112c30de862c7aa5a5657d64"
+}

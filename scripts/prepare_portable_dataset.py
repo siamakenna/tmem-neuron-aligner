@@ -11,6 +11,7 @@ import csv
 import hashlib
 import io
 import json
+import os
 from pathlib import Path, PurePosixPath
 import re
 import stat
@@ -22,14 +23,8 @@ WELLS = ("E05", "F05", "I05", "J05", "M05", "N05")
 DAYS = [8, 12, 16, 20, 25, 29, 32, 36, 39]
 CHANNELS = ["405", "561", "488"]
 MASTER_SHA256 = "4d1a7c224cea385562492601859ac90fb29228070539ce13ca79598341d12390"
-DEFAULT_MASTER = Path(
-    "/data/rodriguezmak/tmem106b/processed/multi_neuron_atlas_v2/"
-    "all_neurons_longitudinal_master.csv"
-)
-SOURCE_ROOTS = (
-    Path("/data/rodriguezmak/tmem106b/processed"),
-    Path("/vf/users/rodriguezmak/tmem106b/processed"),
-)
+DEFAULT_MASTER = Path(os.environ.get("TMEM_SOURCE_MASTER", "master.csv"))
+SOURCE_ROOTS = tuple(Path(p) for p in os.environ.get("TMEM_SOURCE_ROOTS", "").split(os.pathsep) if p)
 
 
 def _snapshot(path: Path):
@@ -193,10 +188,12 @@ def main(argv=None):
     mode.add_argument("--remote-manifest", action="store_true")
     mode.add_argument("--verify-local", metavar="DATASET_DIR", type=Path)
     parser.add_argument("--master", type=Path, default=DEFAULT_MASTER)
+    parser.add_argument("--source-root", action="append", type=Path,
+                        help="Explicit allowed source root; repeat as needed (remote inventory only)")
     parser.add_argument("--out", type=Path, help="Write JSON to a NEW path instead of stdout")
     args = parser.parse_args(argv)
     try:
-        result = (build_remote_manifest(args.master) if args.remote_manifest
+        result = (build_remote_manifest(args.master, allowed_roots=args.source_root or SOURCE_ROOTS) if args.remote_manifest
                   else verify_local_dataset(args.verify_local))
         data = json.dumps(result, indent=2, sort_keys=True) + "\n"
         if args.out:

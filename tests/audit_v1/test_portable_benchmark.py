@@ -109,12 +109,26 @@ class PortableBenchmarkTests(unittest.TestCase):
     def fake_case(self, nid, files, out, config, timeout):
         return dict(neuron_id=nid, status="software_completed", diagnostics=dict(valid_488_visit_count=9, core_area_px=100))
 
+    def policy(self, dataset, config, count=1):
+        _, files, rows = runner.load_dataset(dataset)
+        exclusions = runner.FIXED_EXCLUSIONS
+        selected = runner.select_panel(rows, count, exclusions)[0]
+        path = self.root / "frozen.json"
+        path.write_text(json.dumps(dict(schema_version="tmem.panel_selection.v1", version="CONTROL.v1",
+            seed="portable-20261027", tracks_per_well=count, days=list(runner.DAYS), wells=list(runner.WELLS),
+            tracking_validity_preserved=True, biological_acceptance_granted=False,
+            historical_exclusions=[dict(neuron_id=n, reason="CONTROL historical exclusion", provenance="CONTROL policy") for n in sorted(exclusions)],
+            input_sha256={k:v["sha256"] for k,v in files.items()},
+            configuration_sha256=runner.sha256(config), selected_neuron_ids=selected)))
+        return path
+
     def test_complete_execution_preserves_no_scientific_acceptance(self):
         dataset = self.dataset()
         config = self.root / "config.json"
         config.write_text("{}")
         result = runner.execute(dataset, self.root / "output", minutes=1, tracks_per_well=1,
-                                config=config, case_runner=self.fake_case)
+                                config=config, case_runner=self.fake_case,
+                                selection_manifest=self.policy(dataset, config))
         self.assertEqual(result["status"], "completed_pending_scientific_review")
         self.assertEqual(result["execution_counts"], {"software_completed": 6})
         self.assertTrue(result["all_requested_wells_represented"])
@@ -133,7 +147,8 @@ class PortableBenchmarkTests(unittest.TestCase):
                 raise RuntimeError("deliberate CONTROL failure")
             return self.fake_case(nid, *args)
         result = runner.execute(dataset, self.root / "output", minutes=1, tracks_per_well=1,
-                                config=config, case_runner=mixed)
+                                config=config, case_runner=mixed,
+                                selection_manifest=self.policy(dataset, config))
         self.assertEqual(result["status"], "partial_or_blocked")
         self.assertEqual(result["execution_counts"], {"failed": 1, "software_completed": 5})
         self.assertTrue(result["all_selected_wells_represented"])
@@ -151,7 +166,8 @@ class PortableBenchmarkTests(unittest.TestCase):
             return self.fake_case(nid, *args)
         # Remaining budget <1 second means no case is launched, by design.
         result = runner.execute(dataset, self.root / "output", minutes=.001, tracks_per_well=1,
-                                config=config, case_runner=slow)
+                                config=config, case_runner=slow,
+                                selection_manifest=self.policy(dataset, config))
         self.assertEqual(called, [])
         self.assertEqual(result["execution_counts"], {"deferred_budget": 6})
 
@@ -181,8 +197,42 @@ class PortableBenchmarkTests(unittest.TestCase):
         marker = output / "keep"
         marker.write_text("original")
         with self.assertRaises(FileExistsError):
-            runner.execute(dataset, output, config=config, case_runner=self.fake_case)
+            runner.execute(dataset, output, config=config, case_runner=self.fake_case,
+                           selection_manifest=self.policy(dataset, config, 2))
         self.assertEqual(marker.read_text(), "original")
+
+    def test_documentation_cannot_change_execution_selection(self):
+        dataset=self.dataset(); config=self.root/"config.json"; config.write_text("{}")
+        policy=self.policy(dataset,config)
+        with patch.object(runner,"mentioned_ids",side_effect=AssertionError("Must not scan docs")):
+            first=runner.execute(dataset,self.root/"one",minutes=.001,tracks_per_well=1,
+                config=config,case_runner=self.fake_case,selection_manifest=policy)
+            (self.root/"new.md").write_text("Every selected ID: "+str(first["selected_neuron_ids"]))
+            second=runner.execute(dataset,self.root/"two",minutes=.001,tracks_per_well=1,
+                config=config,case_runner=self.fake_case,selection_manifest=policy)
+        self.assertEqual(first["selected_neuron_ids"],second["selected_neuron_ids"])
+
+    def test_manifest_tampering_and_unversioned_exclusion_changes_rejected(self):
+        dataset=self.dataset(); config=self.root/"config.json"; config.write_text("{}")
+        path=self.policy(dataset,config); original=json.loads(path.read_text())
+        _,files,rows=runner.load_dataset(dataset)
+        for field,value in [("seed","different"),("selected_neuron_ids",[]),
+                            ("historical_exclusions",[]),("input_sha256",{})]:
+            policy={**original,field:value}; path.write_text(json.dumps(policy))
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                runner.frozen_selection(path,files,rows,count=1,seed="portable-20261027")
+        path.write_text(json.dumps(original))
+        with self.assertRaises(ValueError):
+            runner.frozen_selection(path,files,rows,count=1,seed="portable-20261027",extra_exclusions=["E05_N101"])
+
+    def test_excluded_ids_never_silently_enter_selection(self):
+        dataset=self.dataset(); config=self.root/"config.json"; config.write_text("{}")
+        path=self.policy(dataset,config); policy=json.loads(path.read_text())
+        forbidden = policy["selected_neuron_ids"][0]
+        policy["historical_exclusions"].append(dict(neuron_id=forbidden,reason="CONTROL",provenance="CONTROL"))
+        path.write_text(json.dumps(policy)); _,files,rows=runner.load_dataset(dataset)
+        with self.assertRaises(ValueError):
+            runner.frozen_selection(path,files,rows,count=1,seed="portable-20261027")
 
 
 if __name__ == "__main__":

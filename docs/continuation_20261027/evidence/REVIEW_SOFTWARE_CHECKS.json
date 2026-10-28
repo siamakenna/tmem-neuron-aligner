@@ -1,0 +1,31 @@
+{
+  "schema_version": "tmem.review_software_checks.v1",
+  "ordinary_tests": 98,
+  "subtests": 7,
+  "junit_executions": 105,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "scoped_ruff": "passed",
+  "node_syntax_and_UI_logic": "passed",
+  "browser_automation": "not_executed: local_file_URL_blocked_by_tool_policy",
+  "original_benchmark_rerun": false,
+  "unchanged_baseline_rerun": false,
+  "registered_stacks_reprocessed": false,
+  "frozen_panel_reconstructed": true,
+  "unreviewed_human_observations": 108,
+  "human_decisions_entered_by_codex": 0,
+  "real_accepted_ids": [],
+  "scientific_inference_ready": false,
+  "source_code_sha256": {
+    "src/tmem_align/audit_v1/diagnostic_review.py": "16d55bf65bd7667c900d1dd9b9fc3098487ec374201922040ea4ed3daf61e0ad",
+    "scripts/diagnostic_review.py": "ea0b1afee06c27bc0e7ba68f78f3da33f8e53f31481e6f0795c56f8ffb549694",
+    "scripts/diagnostic_review_ui.js": "a5a912bed3e74103acbccc3c4a6797f2bc09cc1df6d7d0799444744e51a0c904",
+    "scripts/run_portable_benchmark.py": "e5c8984e705cc2459472ff779411ba198517c516c71644a519bf69bffbdf8947",
+    "scripts/verify_frozen_panel.py": "1d4dc89cc53ef8bfde6cb0d9c0f1513d1e71f2718a43d30414bffa7f1690e9d2",
+    "scripts/audit_publication.py": "a8a589b2ce14d40a31889ded15b792771db741fd7c5b323715b90874c12f35b7",
+    "scripts/prepare_portable_dataset.py": "4c45d09bcb29745537933d8a47b53fd7e6faf0409ba4901ce657616771ebea57",
+    "scripts/finish_portable_session.py": "3ffd90f144516e34168c6a5115b895107506fee36324dbcfa82f587e280c0f6a"
+  },
+  "focused_junit_sha256": "616e4bffa58d8ca76eecc5626811070fa83bed41aaefa9743ccf6da95b493d79"
+}

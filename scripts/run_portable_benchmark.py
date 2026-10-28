@@ -27,6 +27,7 @@ WELLS = ("E05", "F05", "I05", "J05", "M05", "N05")
 DAYS = (8, 12, 16, 20, 25, 29, 32, 36, 39)
 ID_RE = re.compile(r"(?:E05|F05|I05|J05|M05|N05)_N\d{3}\b")
 FIXED_EXCLUSIONS = {"E05_N006", "F05_N007", "J05_N015", "F05_N025", "N05_N011", "N05_N012"}
+DEFAULT_SELECTION = ROOT / "configs" / "panels" / "portable_20261027_v1.json"
 
 
 def atomic_json(path, value):
@@ -102,7 +103,7 @@ def verify_frozen_dataset(root):
 
 
 def mentioned_ids(root=ROOT):
-    """Exclude documented examples; this is not an exhaustive review history."""
+    """Historical inventory helper only; never used by benchmark execution."""
     excluded = set(FIXED_EXCLUSIONS)
     for directory in (Path(root) / "docs", Path(root) / "configs"):
         if not directory.exists():
@@ -149,6 +150,31 @@ def select_panel(rows, count, exclusions, seed="portable-20261027"):
     # Round-robin order gives every well a first opportunity within the budget.
     selected = [eligible[well][rank] for rank in range(count) for well in WELLS if len(eligible[well]) > rank]
     return selected, {well: len(eligible[well]) for well in WELLS}, ineligible
+
+
+def frozen_selection(path, files, rows, *, count, seed, extra_exclusions=()):
+    """Reconstruct an explicitly declared panel, independent of prose changes."""
+    policy = json.loads(Path(path).read_text())
+    if (policy.get("schema_version") != "tmem.panel_selection.v1"
+            or not policy.get("version") or policy.get("days") != list(DAYS)
+            or policy.get("wells") != list(WELLS)
+            or policy.get("seed") != seed or policy.get("tracks_per_well") != count
+            or policy.get("tracking_validity_preserved") is not True
+            or policy.get("biological_acceptance_granted") is not False):
+        raise ValueError("Selection parameters require a matching versioned panel manifest")
+    records = policy.get("historical_exclusions", [])
+    exclusions = {r["neuron_id"] for r in records}
+    if (len(records) != len(exclusions) or not FIXED_EXCLUSIONS.issubset(exclusions)
+            or any(not r.get("reason") or not r.get("provenance") for r in records)
+            or not set(extra_exclusions).issubset(exclusions)):
+        raise ValueError("Exclusions require explicit provenance and a new manifest for changes")
+    expected = policy.get("input_sha256")
+    if expected != {k: v["sha256"] for k, v in files.items()}:
+        raise ValueError("Selection dataset/master checksum binding is stale")
+    selected, eligible, invalid = select_panel(rows, count, exclusions, seed)
+    if selected != policy.get("selected_neuron_ids") or len(selected) != count * len(WELLS):
+        raise ValueError("Frozen selection cannot be reconstructed from supplied master")
+    return policy, selected, eligible, invalid
 
 
 def compact_case(trace):
@@ -237,7 +263,8 @@ def _write_report(out, state):
 
 
 def execute(dataset, out, *, minutes=35.0, workers=2, tracks_per_well=2, case_timeout_minutes=12.0,
-            config=None, excluded_ids=(), seed="portable-20261027", case_runner=run_case):
+            config=None, excluded_ids=(), seed="portable-20261027", case_runner=run_case,
+            selection_manifest=DEFAULT_SELECTION):
     if not (math.isfinite(minutes) and 0 < minutes <= 55 and workers in {1, 2}
             and 1 <= tracks_per_well <= 10 and math.isfinite(case_timeout_minutes) and 0 < case_timeout_minutes <= 30):
         raise ValueError("Require minutes in (0,55], workers1..2, tracks-per-well1..10, and case timeout in (0,30]")
@@ -247,8 +274,12 @@ def execute(dataset, out, *, minutes=35.0, workers=2, tracks_per_well=2, case_ti
     config = Path(config or ROOT / "configs" / "tmem_stage_diagnostics.json").resolve()
     if not config.is_file():
         raise ValueError("Missing diagnostic configuration")
-    exclusions = mentioned_ids() | set(excluded_ids)
-    selected, eligible, ineligible = select_panel(rows, tracks_per_well, exclusions, seed)
+    policy, selected, eligible, ineligible = frozen_selection(
+        selection_manifest, files, rows, count=tracks_per_well, seed=seed,
+        extra_exclusions=excluded_ids)
+    exclusions = {r["neuron_id"] for r in policy["historical_exclusions"]}
+    if policy.get("configuration_sha256") != sha256(config):
+        raise ValueError("Frozen primary configuration has changed")
     out = Path(out).resolve()
     out.mkdir(parents=True, exist_ok=False)
     state = {
@@ -256,6 +287,8 @@ def execute(dataset, out, *, minutes=35.0, workers=2, tracks_per_well=2, case_ti
         "panel_scope": "deterministic diagnostic sample; prior-review history incomplete; not claimed held out",
         "selection_basis": "Identifier hashing and exact nine frozen visits; no 561 values, outcome ranking, or tracking-validity optimization",
         "seed": seed, "days": list(DAYS), "wells": list(WELLS),
+        "selection_manifest_sha256": sha256(selection_manifest),
+        "selection_manifest_version": policy["version"],
         "requested_tracks_per_well": tracks_per_well, "eligible_counts_after_exclusions": eligible,
         "excluded_documented_ids": sorted(exclusions), "invalid_visit_records": ineligible,
         "selected_neuron_ids": selected, "input_files": files,
@@ -326,12 +359,14 @@ def main(argv=None):
     parser.add_argument("--config", type=Path)
     parser.add_argument("--exclude-id", action="append", default=[])
     parser.add_argument("--seed", default="portable-20261027")
+    parser.add_argument("--selection-manifest", type=Path, default=DEFAULT_SELECTION)
     args = parser.parse_args(argv)
     try:
         verify_frozen_dataset(args.dataset)
         result = execute(args.dataset, args.out, minutes=args.minutes, workers=args.workers,
                          tracks_per_well=args.tracks_per_well, case_timeout_minutes=args.case_timeout_minutes,
-                         config=args.config, excluded_ids=args.exclude_id, seed=args.seed)
+                         config=args.config, excluded_ids=args.exclude_id, seed=args.seed,
+                         selection_manifest=args.selection_manifest)
     except Exception as error:
         parser.exit(2, "PORTABLE_BENCHMARK_BLOCKED: " + type(error).__name__ + ": " + str(error) + "\n")
     print("TMEM_PORTABLE_STATUS=" + result["status"])

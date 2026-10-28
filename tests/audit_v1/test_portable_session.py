@@ -52,9 +52,10 @@ class PortableSessionTests(unittest.TestCase):
         session = self.root / "session"
         session.mkdir()
         (session / "note.md").write_text("preserved")
-        for directory in ["private", ".git", ".venv", "__pycache__"]:
+        for directory in ["private", ".git", ".venv", ".venv-local", "private-review-support", ".ssh", "__pycache__"]:
             (session / directory).mkdir()
             (session / directory / "secret").write_text("must not travel")
+        (session / ".env").write_text("CONTROL_ONLY=must_not_travel")
         (session / "link").symlink_to(session / "note.md")
         archive, checksum = driver.make_archive(session)
         self.assertEqual(checksum, driver.digest(archive))
@@ -155,6 +156,25 @@ class PortableSessionTests(unittest.TestCase):
         actual = driver.subprocess.run(["git", "-C", str(repo), "rev-parse", "HEAD"],
             check=True, text=True, stdout=driver.subprocess.PIPE).stdout.strip()
         self.assertEqual(actual, commit)
+
+
+    def test_remote_transport_requires_explicit_safe_configuration(self):
+        with patch.object(driver, "REMOTE_USER", ""), patch.object(driver, "COMPUTE_HOST", ""):
+            with self.assertRaises(ValueError):
+                driver.remote_target()
+        with patch.object(driver, "REMOTE_USER", "control_user"), patch.object(driver, "COMPUTE_HOST", "compute.example.invalid"):
+            self.assertEqual(driver.remote_target(), "control_user@compute.example.invalid")
+        with patch.object(driver, "REMOTE_USER", "bad;command"):
+            with self.assertRaises(ValueError):
+                driver.remote_target("compute.example.invalid")
+
+    def test_remote_copy_rejects_traversal_and_shell_metacharacters(self):
+        session = driver.Session(self.root, 1)
+        with patch.object(session, "command") as command:
+            for path in ["relative/path", "/safe/../escape", "/safe/file;command"]:
+                with self.assertRaises(ValueError):
+                    session.copy("control", path, self.root / "output")
+            command.assert_not_called()
 
 
 if __name__ == "__main__":

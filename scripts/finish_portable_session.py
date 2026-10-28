@@ -27,8 +27,21 @@ import zipfile
 
 BASE = "a978ac54c943d5e28a01a4d92fa989b6e4760684"
 REPO_URL = "https://github.com/siamakenna/tmem-neuron-aligner.git"
-REMOTE_PYTHON = "/data/rodriguezmak/tmem106b/envs/tmem-audit-v1_0TX0IAS4/bin/python"
-PRIOR_RUN = "/data/rodriguezmak/tmem106b/processed/18_tmem_stage_implementation_20261027_n9oz6u94"
+REMOTE_PYTHON = os.environ.get("TMEM_REMOTE_PYTHON", "")
+PRIOR_RUN = os.environ.get("TMEM_PRIOR_RUN", "")
+REMOTE_ROOT = os.environ.get("TMEM_REMOTE_ROOT", "")
+REMOTE_USER = os.environ.get("TMEM_REMOTE_USER", "")
+COMPUTE_HOST = os.environ.get("TMEM_COMPUTE_HOST", "")
+TRANSFER_HOST = os.environ.get("TMEM_TRANSFER_HOST", COMPUTE_HOST)
+REMOTE_MASTER = os.environ.get("TMEM_SOURCE_MASTER", "")
+SOURCE_ROOTS = tuple(p for p in os.environ.get("TMEM_SOURCE_ROOTS", "").split(os.pathsep) if p)
+
+
+def remote_target(host=None):
+    host = host or COMPUTE_HOST
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+", REMOTE_USER) or not re.fullmatch(r"[A-Za-z0-9.-]+", host):
+        raise ValueError("Remote transfer requires explicit TMEM_REMOTE_USER and host configuration")
+    return REMOTE_USER + "@" + host
 PRIOR_ZIP = "TMEM106B_stage_implementation_results_20261027.zip"
 PRIOR_SHA = "297e049cb7db0e6d93446a86dc7cdb9a83f53b910233ebc11e8f9c99ba0819bd"
 CONTROL_TESTS = ["test_portable_dataset.py", "test_portable_benchmark.py",
@@ -93,7 +106,8 @@ def make_archive(session):
                          allowZip64=True) as archive:
         for path in sorted(session.rglob("*")):
             rel = path.relative_to(session)
-            if any(part in {".git", ".venv", "private", "__pycache__", ".pytest_cache"}
+            if any(part in {".git", ".env", ".ssh", "private", "__pycache__", ".pytest_cache"}
+                   or part.startswith((".venv", "private-"))
                    for part in rel.parts):
                 continue
             if path.is_symlink():
@@ -175,7 +189,7 @@ class Session:
             self.save()
             raise
 
-    def ssh(self, host="biowulf.nih.gov"):
+    def ssh(self, host=None):
         # macOS Unix socket paths are short; Downloads/session paths exceed the
         # platform limit once %C expands. Keep this temporary socket outside ZIPs.
         if self.socket_directory is None:
@@ -186,16 +200,18 @@ class Session:
                 "-o", "ControlPersist=300", "-o", "ControlPath=" + str(socket)]
 
     def remote(self, name, command, **kwargs):
-        return self.command(name, ["ssh", *self.ssh(), "rodriguezmak@biowulf.nih.gov",
+        return self.command(name, ["ssh", *self.ssh(), remote_target(),
                                    command], **kwargs)
 
     def copy(self, name, remote_path, local_path, **kwargs):
+        if not re.fullmatch(r"/[A-Za-z0-9_./-]+", remote_path) or ".." in Path(remote_path).parts:
+            raise ValueError("Remote transfer paths must be absolute without shell metacharacters or traversal")
         Path(local_path).parent.mkdir(parents=True, exist_ok=True)
         last_error = None
-        for attempt, host in enumerate(["helix.nih.gov", "helix.nih.gov", "biowulf.nih.gov"], 1):
+        for attempt, host in enumerate([TRANSFER_HOST, TRANSFER_HOST, COMPUTE_HOST], 1):
             try:
                 return self.command(name + f"_attempt{attempt}", ["scp", *self.ssh(),
-                    "rodriguezmak@" + host + ":" + remote_path, str(local_path)], **kwargs)
+                    remote_target(host) + ":" + remote_path, str(local_path)], **kwargs)
             except Exception as error:
                 last_error = error
                 if self.remaining() < 10:
@@ -250,7 +266,10 @@ def main(argv=None):
                 shutil.copytree(package, root / "private" / "package", dirs_exist_ok=True)
                 package = root / "private" / "package"
             sid = session.state["session_id"]
-            remote_dir = "/data/rodriguezmak/tmem106b/portable_20261027_" + sid
+            if not re.fullmatch(r"/[A-Za-z0-9_./-]+", REMOTE_ROOT) or ".." in Path(REMOTE_ROOT).parts or not REMOTE_PYTHON:
+                raise ValueError("Configure TMEM_REMOTE_ROOT and TMEM_REMOTE_PYTHON explicitly")
+            remote_target()
+            remote_dir = str(Path(REMOTE_ROOT) / ("portable_" + sid))
             session.state["remote_directory"] = remote_dir
             session.save()
             print("Publishing the portable code/notes checkpoint first. NIH password prompts may appear.", flush=True)
@@ -258,7 +277,7 @@ def main(argv=None):
             session.command("upload_helpers", ["scp", *session.ssh(),
                 str(package / "publish_remote.py"), str(package / "payload.json"),
                 str(package / "prepare_portable_dataset.py"),
-                "rodriguezmak@biowulf.nih.gov:" + remote_dir + "/"])
+                remote_target() + ":" + remote_dir + "/"])
             publish = " ".join(map(shlex.quote, [REMOTE_PYTHON, remote_dir + "/publish_remote.py",
                 "--session", remote_dir, "--payload", remote_dir + "/payload.json"]))
             receipt = json_receipt(session.remote("publish_code", publish, capture=True))
@@ -277,12 +296,15 @@ def main(argv=None):
                     str(root / "code.bundle"), str(repo)])
                 session.command("set_github_origin", ["git", "-C", str(repo), "remote", "set-url", "origin", REPO_URL])
             if not args.no_data:
+                if not REMOTE_MASTER or not SOURCE_ROOTS or not PRIOR_RUN:
+                    raise ValueError("Configure source master/allowed roots and prior evidence directory explicitly")
                 if shutil.disk_usage(root).free < 8 * 1024**3:
                     raise OSError("Code is pushed; six-well transfer deferred because less than 8 GiB is free")
                 print("Copying registered stacks from all six wells; no new cluster jobs will run.", flush=True)
                 remote_manifest = remote_dir + "/dataset_manifest.json"
                 command = " ".join(map(shlex.quote, [REMOTE_PYTHON, remote_dir + "/prepare_portable_dataset.py",
-                    "--remote-manifest", "--out", remote_manifest]))
+                    "--remote-manifest", "--master", REMOTE_MASTER, "--out", remote_manifest,
+                    *[item for source_root in SOURCE_ROOTS for item in ("--source-root", source_root)]]))
                 command = "if [ ! -f " + shlex.quote(remote_manifest) + " ]; then " + command + "; fi"
                 session.remote("describe_six_well_dataset", command, timeout=300)
                 session.copy("download_dataset_manifest", remote_manifest, dataset / "dataset_manifest.json")
@@ -293,7 +315,9 @@ def main(argv=None):
                         raise TimeoutError("Transfer stopped at budget; completed files are preserved")
                     relative = Path(entry["path"])
                     source = entry["source_path"]
-                    if relative.is_absolute() or ".." in relative.parts or not re.fullmatch(r"/(data/rodriguezmak|vf/users/rodriguezmak)/tmem106b/processed/[A-Za-z0-9_./-]+", source):
+                    if (relative.is_absolute() or ".." in relative.parts or not Path(source).is_absolute()
+                            or ".." in Path(source).parts or not SOURCE_ROOTS
+                            or not any(Path(source).is_relative_to(Path(root)) for root in SOURCE_ROOTS)):
                         raise ValueError("Unexpected dataset source or destination path")
                     target = dataset / relative
                     if target.is_file() and digest(target) == entry["sha256"]:
@@ -377,25 +401,21 @@ def main(argv=None):
         session.save()
         markdown = summary_markdown(session.state, dataset_status, benchmark_status)
         (root / "SESSION_RESULTS.md").write_text(markdown)
-        result_files = {
-            "docs/continuation_20261027/session/SESSION_RESULTS.json": record(session.state_path.read_bytes()),
-            "docs/continuation_20261027/session/SESSION_RESULTS.md": record(markdown.encode()),
-        }
-        verify_path = session.state.get("local_verification_path")
-        if verify_path and (root / verify_path / "verification_status.json").is_file():
-            result_files["docs/continuation_20261027/session/LOCAL_VERIFICATION.json"] = record(
-                (root / verify_path / "verification_status.json").read_bytes())
-        benchmark_path = session.state.get("benchmark_path")
-        if benchmark_path and (root / benchmark_path / "benchmark_summary.json").is_file():
-            result_files["docs/continuation_20261027/session/BENCHMARK_SUMMARY.json"] = record(
-                (root / benchmark_path / "benchmark_summary.json").read_bytes())
+        # Detailed state, paths, logs and image-derived case summaries stay private.
+        # Only an intentionally minimal aggregate may travel to the public repo.
+        public_summary = dict(dataset_status=dataset_status, benchmark_status=benchmark_status,
+            completed_without_recorded_errors=not errors, real_accepted_ids=[],
+            scientific_inference_ready=False,
+            detail_policy="Detailed source paths, environment records and cases retained privately")
+        result_files = {"docs/continuation_20261027/session/PUBLIC_SESSION_SUMMARY.json":
+                        record((json.dumps(public_summary, indent=2) + "\n").encode())}
         if not args.offline and session.state.get("push_receipt") and session.remaining() > 15:
             try:
                 result_payload = root / "private" / "result_payload.json"
                 write_json(result_payload, {"files": result_files})
                 remote_dir = session.state["remote_directory"]
                 session.command("upload_results_checkpoint", ["scp", *session.ssh(), str(result_payload),
-                    "rodriguezmak@biowulf.nih.gov:" + remote_dir + "/result_payload.json"], timeout=45)
+                    remote_target() + ":" + remote_dir + "/result_payload.json"], timeout=45)
                 command = " ".join(map(shlex.quote, [REMOTE_PYTHON, remote_dir + "/publish_remote.py",
                     "--session", remote_dir, "--append-results", remote_dir + "/result_payload.json"]))
                 final = json_receipt(session.remote("publish_results", command, capture=True, timeout=60))
@@ -453,9 +473,9 @@ def main(argv=None):
         if sys.platform == "darwin":
             subprocess.run(["open", "-R", str(transfer or root)], check=False)
         if session.socket_directory:
-            for host in ["biowulf.nih.gov", "helix.nih.gov"]:
+            for host in {COMPUTE_HOST, TRANSFER_HOST}:
                 try:
-                    subprocess.run(["ssh", *session.ssh(), "-O", "exit", "rodriguezmak@" + host],
+                    subprocess.run(["ssh", *session.ssh(), "-O", "exit", remote_target(host)],
                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=5, check=False)
                 except Exception:
                     pass
