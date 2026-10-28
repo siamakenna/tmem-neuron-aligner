@@ -43,7 +43,12 @@ def has_private_review(value):
     return (
         isinstance(schema, str)
         and schema.startswith(
-            ("tmem.diagnostic_review.", "tmem.manual_review.", "tmem.rendered_review.")
+            (
+                "tmem.diagnostic_review.",
+                "tmem.manual_review.",
+                "tmem.rendered_review.",
+                "tmem.review_reconciliation.",
+            )
         )
         or bool(value.get("reviewer") or value.get("reviewed_at"))
         or "source_files" in value

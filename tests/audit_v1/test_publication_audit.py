@@ -64,3 +64,7 @@ def test_nested_final_reviewer_records_and_duplicate_keys_blocked():
         "docs/record.json", json.dumps({"schema_version": "tmem.manual_review.v2"}).encode()
     )
     assert audit.inspect_blob("docs/record.json", b'{"reviewer":"CONTROL","reviewer":""}')
+    assert audit.inspect_blob(
+        "docs/readiness.json",
+        json.dumps({"schema_version": "tmem.review_reconciliation.v1"}).encode(),
+    )

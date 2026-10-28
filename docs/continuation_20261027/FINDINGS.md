@@ -23,3 +23,9 @@ No tracking/segmentation accuracy, contamination rate or identity-switch frequen
 Selection is now bound to an explicit versioned roster/seed/input checksums/selected order, rather than arbitrary Markdown contents. The historical panel is not called held out.
 
 Private source-specific receipts are represented publicly by their original hashes. Public aggregates above are retained deliberately for checkpoint continuity, not simply because they are small. No reviewer records, galleries, arrays, raw data, environments or detailed logs belong in the PR.
+
+## Readiness adapter verification — 2026-10-28
+
+The private blank-sheet reconciliation preserves 12 diagnostic candidates and all 108 observations: six QC-blocked tracks, six pending review, 17 inherited failed visit gates, no human-completed observations, no verified accepted exports, and no cohort-eligible neurons. All three matched pairs remain unavailable; no treatment, survival, or accepted phenotype output was created. These are readiness counts, not new biological results.
+
+Independent software review found and prompted fixes for same-ID cohort evidence substitution and shared final bundles reading unreviewed neighbors. The adapter now requires target-only final configurations/exports and exact unchanged source/render/review/export bindings before cohort phenotype reads. This is a conservative compatibility restriction, not an alteration of existing biological classifications or measurement geometry. Genuine target-only v6 evidence and independent human decisions remain missing locally. Original data, benchmark, gallery and diagnostic review workspace were not rewritten.
