@@ -34,4 +34,12 @@ data/processed/**
 # Independent completion work products (source and compact reports are tracked)
 .pipeline/
 .venv-friday/
+.venv*/
+private*/
+review-local/
+review-workspace*/
+benchmark-local/
+*annotations*.json
+*annotations*.csv
+*review-validation*.json
 outputs/friday_independent_completion/

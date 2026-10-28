@@ -1,0 +1,34 @@
+flowchart TD
+    entry["Choose a declared input route"]
+    entry --> raw["Raw reference and moving CYX images"]
+    entry --> registered["Already registered TCYX stack and atlas CSV"]
+
+    raw --> rawcheck["Validate finite pixels, channels, axes and correction shapes"]
+    rawcheck --> before["Save input before IC"]
+    before --> dark["Supplied darkfield subtraction in float; otherwise skipped"]
+    dark --> field["Supplied detector-coordinate flatfield division; otherwise skipped"]
+    field --> background["Requested rolling-ball background; otherwise skipped"]
+    background --> quantize["Save float intermediates; round and clip once for downstream pixels"]
+    quantize --> estimate["Estimate moving-to-reference translation from 488 only"]
+    estimate --> warp["Apply one shift per moving YX plane; save support and before/after"]
+    warp --> rawreview["Two-image diagnostic; no nine-visit identity claim"]
+
+    registered --> regcheck["Require nine visits and three declared channels"]
+    regcheck --> historical["Historical IC, stitching and registration unavailable from this input"]
+    historical --> crop["Use stored registered anchors and 128-pixel boxes; no IC or rewarp"]
+    crop --> template["488 template, bounded search, correlation and candidate anchor"]
+    crop --> segmentation["488 normalization, seed, prior and each adaptive threshold"]
+    segmentation --> morphology["Small-object removal, closing, hole fill and component labels"]
+    morphology --> selected["Record scores, selected mask and validity or failure"]
+    selected --> consensus["Valid-mask votes, consensus, morphology and tight identity core"]
+    consensus --> fixedroi["Preserve fixed 488-derived phenotype ROI"]
+    fixedroi --> phenotype["561 background, DoG, puncta and diffuse residual"]
+    selected --> sensitivity["Declared minimum-area and search-radius grids; alternatives unadopted"]
+
+    rawreview --> record["Numeric arrays, hashes, I/O, parameters, purpose and stage states"]
+    template --> record
+    phenotype --> record
+    sensitivity --> record
+    record --> preview["Fixed LUT previews and optional 488 viewing-box proposal"]
+    preview --> verify["Verify finalized manifest and inspect HTML stage gallery"]
+    verify --> boundary["Execution evidence only; no geometry adoption or accepted metrics"]

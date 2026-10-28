@@ -1,0 +1,8 @@
+{
+  "schema_version": "tmem.public_receipt_reference.v1",
+  "original_private_receipt_sha256": "cf1e11277e5f8e6da61593a4de41ce957c9fb50a1721e3d58085597837382742",
+  "detail_policy": "Original exact image-derived/source-specific evidence preserved privately; not public reviewer evidence",
+  "private_copy": "private-review-support-20261027/original-public-receipts/J05_N015.json",
+  "scientific_inference_ready": false,
+  "real_accepted_ids": []
+}

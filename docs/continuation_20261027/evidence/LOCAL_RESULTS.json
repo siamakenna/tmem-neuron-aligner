@@ -1,0 +1,36 @@
+{
+  "schema_version": "tmem.public_receipt_reference.v1",
+  "original_private_receipt_sha256": "bd1f74ac40f65d2e5b9459d1af464c44f3a4f5e4c3c060dd657187acb8f80fb8",
+  "detail_policy": "Original exact image-derived/source-specific evidence preserved privately; not public reviewer evidence",
+  "private_copy": "private-review-support-20261027/original-public-receipts/LOCAL_RESULTS.json",
+  "scientific_inference_ready": false,
+  "real_accepted_ids": [],
+  "checkpoint_commit": "4a8109ed28986c3449f98d4e70243438ad73f646",
+  "aggregate_public_checkpoint": {
+    "software_completed": 12,
+    "software_failed": 0,
+    "timeouts": 0,
+    "deferred": 0,
+    "primary_valid_visits": 91,
+    "total_visits": 108,
+    "failed_visit_gates_retained": 17,
+    "diagnostically_rejected": 6,
+    "pending_independent_review": 6,
+    "scientifically_accepted": 0
+  },
+  "fresh_recorded_tests": {
+    "portable": [
+      58,
+      14
+    ],
+    "stage": [
+      278,
+      92
+    ],
+    "reporter": [
+      15,
+      0
+    ]
+  },
+  "original_counts_unchanged": true
+}

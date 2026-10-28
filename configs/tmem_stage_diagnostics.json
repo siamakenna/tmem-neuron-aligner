@@ -1,0 +1,41 @@
+{
+  "schema_version": "tmem.stage_diagnostics.v1",
+  "bbox_size": 128,
+  "segmentation": {
+    "min_area": 180,
+    "consensus_fraction": 0.6,
+    "min_core_area": 80,
+    "max_core_area": 2500,
+    "phenotype_dilation": 2,
+    "background_exclusion": 8,
+    "puncta_min_size": 6
+  },
+  "tracking": {
+    "template_size": 41,
+    "search_radius": 60,
+    "min_score": 0.25
+  },
+  "secondary_soma": {
+    "search_radius": 52.0,
+    "min_distance": 14,
+    "peak_ratio_threshold": 0.55,
+    "area_ratio_threshold": 0.3,
+    "score_threshold": 0.4
+  },
+  "registration": {
+    "upsample_factor": 10,
+    "max_shift_pixels": 256.0,
+    "robust_preprocess": false,
+    "mask_percentile": 20.0
+  },
+  "sensitivity": {
+    "segmentation_min_area": [140, 180, 220],
+    "tracking_search_radius": [40, 60, 80]
+  },
+  "luts": {
+    "488": {"low": 0, "high": 4095, "color": "488"},
+    "561": {"low": 0, "high": 4095, "color": "561"},
+    "IC_field": {"low": 0.1, "high": 2.0, "color": "gray"}
+  },
+  "lut_box": {"padding": 2, "min_area": 20, "range_policy": "visible"}
+}
