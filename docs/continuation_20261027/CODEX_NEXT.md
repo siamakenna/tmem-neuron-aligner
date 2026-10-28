@@ -2,7 +2,7 @@
 
 The original benchmark and gallery are complete and preserved. Do not rerun the 12 cases, rehash/reprocess registered stacks, regenerate old galleries, repeat unchanged baseline verification, or fill in human decisions.
 
-Use the existing branch `continuation/six-well-local-20261027` and draft PR #9. Inspect Git/remote state before changes; preserve unrelated edits. Do not create another PR, remove draft status, merge or force-push.
+The owner now explicitly authorizes qualifying **software-only** PR #9 squash merge, followed by a separate tested readiness feature branch. Inspect Git/remote state and [SOFTWARE_RELEASE_20261028.md](SOFTWARE_RELEASE_20261028.md); do not assume a merge happened without its GitHub receipt. Preserve unrelated edits, do not force-push, and never interpret software merging as biological acceptance.
 
 Next human action from the repository:
 ```bash

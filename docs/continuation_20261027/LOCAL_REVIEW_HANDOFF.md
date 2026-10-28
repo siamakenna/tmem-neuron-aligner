@@ -26,4 +26,4 @@ REVIEW_PENDING, QC_BLOCKED, EVIDENCE_STALE, TECHNICAL_ONLY and EXCLUDED remain b
 
 Do not edit or bypass the existing review_gate.py, export_reviewed_metrics.py or matched_analysis.py contracts. Authentic final source/render fingerprints, all nine QC visits, separate later 561 phenotype review, exclusions, decision evidence and an eligible well-level cohort still apply. See [SCIENTIFIC_RELEASE_BLOCKERS.md](SCIENTIFIC_RELEASE_BLOCKERS.md).
 
-Nothing should merge automatically.
+The owner may authorize software-infrastructure merging after its software gates pass. This never approves biological measurements or supplies the missing human decisions.

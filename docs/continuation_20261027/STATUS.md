@@ -23,7 +23,7 @@ Missing raw detector images, correction fields/provenance, original tile placeme
 
 ## Publication and retained history
 
-Work remains on `continuation/six-well-local-20261027`, continuing verified commit `4a8109ed28986c3449f98d4e70243438ad73f646`. Only existing draft PR #9 is updated; it must remain draft and unmerged. The pre-change repository was clean and remote SHA matched.
+The owner subsequently authorized a **software-only squash merge of PR #9** after fresh verification. Human annotation is not a prerequisite for merging infrastructure; it remains required for scientific release. Fresh full regression at checkpoint `2e70f59ce09ba11b715bf337304c9cb6a37f0a9f` passed 616 tests plus 135 subtests, with zero failures/errors/skips. Additional isolated UI-state and future-panel-freezer tests passed; shared production processing was not changed. See [SOFTWARE_RELEASE_20261028.md](SOFTWARE_RELEASE_20261028.md). Merge state/SHA must be verified against GitHub, not inferred from this note.
 
 Public technical aggregates are intentionally limited to the user-declared checkpoint counts. Detailed historical receipts and case observations were preserved byte-for-byte privately before replacing public copies with fingerprint references. See [PRIVACY_AUDIT.md](PRIVACY_AUDIT.md). A normal cleanup commit does not erase earlier public commits.
 
