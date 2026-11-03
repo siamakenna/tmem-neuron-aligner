@@ -13,6 +13,9 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_FILES = (
+    "src/tmem_align/audit_v1/actual_fov_figures.py",
+    "scripts/render_actual_fov_figures.py",
+    "tests/audit_v1/test_actual_fov_figures.py",
     "configs/tmem_stage_diagnostics.json",
     "scripts/make_stress_examples.py",
     "scripts/exercise_stress_pipeline.py",
@@ -201,7 +204,7 @@ cd "$tmem_repo"
 printf 'Results directory: %s\\n' "$tmem_run"
 # This command runs required unit checks before production integrations.
 "$tmem_python" scripts/verify_stage_pipeline.py --out "$tmem_run/verification"
-"$tmem_python" -m pytest -p no:napari -q tests/audit_v1/test_stress_variants.py tests/audit_v1/test_production_stress.py tests/audit_v1/test_stress_stage_guards.py tests/audit_v1/test_legacy_nd2_guards.py tests/audit_v1/test_original_nd2_well.py --junitxml="$tmem_run/stress_tests.xml"
+"$tmem_python" -m pytest -p no:napari -q tests/audit_v1/test_stress_variants.py tests/audit_v1/test_production_stress.py tests/audit_v1/test_stress_stage_guards.py tests/audit_v1/test_legacy_nd2_guards.py tests/audit_v1/test_original_nd2_well.py tests/audit_v1/test_actual_fov_figures.py --junitxml="$tmem_run/stress_tests.xml"
 "$tmem_python" scripts/make_stress_examples.py --out "$tmem_run/synthetic_truth"
 "$tmem_python" scripts/exercise_stress_pipeline.py --out "$tmem_run/production_responses"
 printf 'Synthetic software stress execution finished. Original-ND2 and independent image review remain required.\\nResults: %s\\n' "$tmem_run"

@@ -86,3 +86,12 @@ def test_path_free_acquisition_summary_publishable():
             {"schema_version": "tmem.source_coverage_summary.v1", "assemblies_verified_here": 0}
         ).encode(),
     )
+
+
+def test_actual_fov_private_manifest_not_publishable():
+    assert audit.inspect_blob(
+        "docs/figures.json",
+        json.dumps(
+            {"schema_version": "tmem.actual_fov_figures.v1", "real_accepted_ids": []}
+        ).encode(),
+    )

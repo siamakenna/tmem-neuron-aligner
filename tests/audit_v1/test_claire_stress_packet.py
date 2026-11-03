@@ -44,6 +44,18 @@ class ClaireStressPacketTests(unittest.TestCase):
             declared = json.loads(z.read("DECLARED_PARAMETERS.json"))
             self.assertEqual(declared["configuration"], json.loads((ROOT / "configs/tmem_stage_diagnostics.json").read_text()))
 
+    def test_actual_fov_connections_are_bound_and_requested_for_execution(self):
+        result = packet.package(self.root / "figures-packet.zip")
+        with zipfile.ZipFile(result["path"]) as z:
+            provenance = json.loads(z.read("PROVENANCE.json"))
+            for name in ("src/tmem_align/audit_v1/actual_fov_figures.py",
+                         "scripts/render_actual_fov_figures.py",
+                         "tests/audit_v1/test_actual_fov_figures.py"):
+                self.assertIn(name, provenance["source_sha256"])
+                self.assertEqual(provenance["source_sha256"][name], packet.sha((ROOT / name).read_bytes()))
+            self.assertIn("tests/audit_v1/test_actual_fov_figures.py", z.read("RUN_STRESS.sh").decode())
+            self.assertEqual(provenance["delivery_status"], "prepared_not_sent")
+
     def test_run_order_and_real_source_limit_are_explicit(self):
         result = packet.package(self.root / "packet.zip")
         with zipfile.ZipFile(result["path"]) as z:
