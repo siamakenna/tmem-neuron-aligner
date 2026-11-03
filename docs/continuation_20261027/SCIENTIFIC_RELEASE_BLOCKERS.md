@@ -1,5 +1,7 @@
 # Scientific release blockers
 
+November 3 update: original ND2 containers are now locally accessible; the older missing-source statement below describes the portable-only checkpoint. Access does not establish raw-detector correction state, authentic flat/dark fields, channel settings, whole-well geometry/completeness, independent calibration or original transforms. All 54 target headers were inspected and one CYX extraction round-trip passed; 0/54 whole-well mosaics are independently validated. See [updated completion summary](../final_completion_20261102/FINAL_COMPLETION_STATUS.md). No scientific acceptance gate was cleared by this discovery.
+
 Software readiness is not biological acceptance. Original results remain 12 completed diagnostics, 91/108 primary valid visits, 17 retained failed gates, six diagnostic rejections, six pending independent review and zero accepted tracks.
 
 | Gate | Current state / required evidence |

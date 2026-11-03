@@ -1,4 +1,8 @@
 # TMEM106B continuation status
+
+## November 3 acquisition availability update
+
+Original local ND2 containers were located in a broader configured-project search. All 54 target filename-labeled fluorescence containers have genuine CYX headers; a pilot OME extraction preserved exact pixels. This supersedes the earlier portable-only input-availability assumption, not historical validation limits. Whole-well geometry/completeness, contradictory optical channel metadata, independent calibration, original correction state/fields and authentic human acceptance remain unresolved. Independently validated whole-well assemblies remain 0/54 and verified accepted neurons/matched pairs remain zero. See [final handoff summary](../final_completion_20261102/FINAL_COMPLETION_STATUS.md); detailed receipts and original-field registration comparisons are private. The 12-case benchmark was not repeated.
 ## Independent-review infrastructure checkpoint
 
 The October 27 calculations are preserved, not rerun: all six wells and nine visits; 12 completed diagnostic cases; no software failures, timeouts or deferred cases. Primary 488 QC remains 91/108 valid visits, with all 17 failed gates retained. Six tracks remain diagnostically rejected, six pending independent review, and zero scientifically accepted.
