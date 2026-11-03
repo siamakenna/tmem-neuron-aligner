@@ -68,3 +68,21 @@ def test_nested_final_reviewer_records_and_duplicate_keys_blocked():
         "docs/readiness.json",
         json.dumps({"schema_version": "tmem.review_reconciliation.v1"}).encode(),
     )
+
+
+@pytest.mark.parametrize(
+    "schema", ["tmem.acquisition_inventory.v1", "tmem.acquisition_declarations.v1"]
+)
+def test_private_acquisition_records_not_publishable(schema):
+    assert audit.inspect_blob(
+        "docs/inventory.json", json.dumps({"schema_version": schema}).encode()
+    )
+
+
+def test_path_free_acquisition_summary_publishable():
+    assert not audit.inspect_blob(
+        "docs/coverage.json",
+        json.dumps(
+            {"schema_version": "tmem.source_coverage_summary.v1", "assemblies_verified_here": 0}
+        ).encode(),
+    )
