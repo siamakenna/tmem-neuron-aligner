@@ -69,7 +69,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--days", type=int, nargs="+", default=[8, 12, 16])
     parser.add_argument("--channels", nargs="+", default=["488", "561"])
-    parser.add_argument("--max-sites", type=int, default=1)
+    parser.add_argument("--max-sites", type=int, choices=[1], default=1,
+                        help="Legacy single-observation loader; multi-position/time/Z ND2 inputs are rejected.")
     parser.add_argument("--max-read-bytes", type=int, default=2 * 1024**3)
     parser.add_argument("--limit-wells", type=int, default=None)
     parser.add_argument("--workers", type=int, default=1, help="Parallel workers (default 1 = sequential).")
@@ -385,7 +386,8 @@ def select_all_well_files(data_root: Path, days: list[int]) -> dict[str, list[di
         well = infer_well(path.name)
         if not well:
             continue
-        by_well.setdefault(well, {})[int(day)] = path
+        from tmem_align.audit_v1.nd2_contracts import add_unique_well_visit
+        add_unique_well_visit(by_well, well, day, path)
     selected: dict[str, list[dict[str, Any]]] = {}
     for well in sorted(by_well):
         if all(day in by_well[well] for day in days):

@@ -53,7 +53,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--experimental-well", default="F05")
     parser.add_argument("--channels", nargs="+", default=["488", "561"])
     parser.add_argument("--max-timepoints", type=int, default=3)
-    parser.add_argument("--max-sites", type=int, default=1)
+    parser.add_argument("--max-sites", type=int, choices=[1], default=1,
+                        help="Legacy single-observation loader; multi-position/time/Z ND2 inputs are rejected.")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--max-read-bytes", type=int, default=2 * 1024**3)
@@ -343,6 +344,8 @@ def load_nd2_cyx(path: Path, max_sites: int, max_read_bytes: int) -> dict[str, A
     import nd2  # type: ignore
 
     with nd2.ND2File(path) as image:
+        from tmem_align.audit_v1.nd2_contracts import require_legacy_single_observation
+        require_legacy_single_observation(image.sizes, max_sites)
         data = image.to_dask()
         axis_order = list(image.sizes.keys())
         selection: list[Any] = []
@@ -883,10 +886,11 @@ earliest available fluorescence timepoints: {", ".join(str(row["day"]) for row i
 
 ## Image Loading
 
-ND2 files were opened lazily with the Python `nd2` package. For this pilot, the first site/position
-was selected when a position axis was present, and arrays were standardized to `CYX`. Supported
-axis patterns include `YX`, `CYX`, `ZCYX`, and common time/position variants after selecting a
-single time/position and max-projecting Z when present.
+ND2 files were opened lazily with the Python `nd2` package and standardized to `CYX`.
+This legacy loader now requires singleton position, time and Z axes. Multiple positions,
+timepoints or Z planes are rejected before pixel access rather than silently selecting the
+first observation or projecting Z. Explicit multi-FOV processing uses the separately reviewed
+original-ND2 whole-well manifest. A single acquired field is not evidence of full-well coverage.
 
 ## Channel Selection
 

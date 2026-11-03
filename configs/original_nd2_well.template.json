@@ -1,0 +1,427 @@
+{
+  "schema_version": "tmem.original_nd2_well.v1",
+  "well": "E05",
+  "channel_mapping_evidence": "REPLACE_WITH_REVIEWED_CHANNEL_EVIDENCE",
+  "background_radius_px": null,
+  "max_canvas_pixels": 40000000,
+  "max_selected_read_bytes": 536870912,
+  "max_registration_input_gib": 2,
+  "geometry": {
+    "well": "E05",
+    "geometry_id": "REPLACE_WITH_REVIEWED_GEOMETRY_ID",
+    "orientation_validated": false,
+    "coordinate_evidence": "REPLACE_WITH_ACQUISITION_AND_ORIENTATION_EVIDENCE",
+    "coordinate_convention": "tile top-left in shared final image pixels; y down, x right",
+    "pixel_size_um": 0,
+    "channel_order": [
+      "405",
+      "561",
+      "488"
+    ],
+    "canvas_yx": [
+      0,
+      0
+    ],
+    "expected_tile_ids": [
+      "tile_A"
+    ]
+  },
+  "visits": [
+    {
+      "day": 8,
+      "ic": {
+        "coordinate_system": "detector",
+        "calibration_id": "REPLACE_WITH_DETECTOR_CALIBRATION_ID",
+        "provenance": "REPLACE_WITH_FIELD_SOURCE_AND_VALIDATION_EVIDENCE",
+        "flatfield_path": "calibration/day08_flatfield.npy",
+        "flatfield_sha256": "REPLACE_WITH_SHA256",
+        "darkfield_path": "calibration/day08_darkfield.npy",
+        "darkfield_sha256": "REPLACE_WITH_SHA256",
+        "channel_order": [
+          "405",
+          "561",
+          "488"
+        ]
+      },
+      "files": [
+        {
+          "path": "raw/day08_wellE05.nd2",
+          "sha256": "REPLACE_WITH_SHA256",
+          "time_index": 0,
+          "z_index": 0,
+          "max_project_z": false,
+          "source_channel_names": [
+            "REPLACE_EXACT_405_LABEL",
+            "REPLACE_EXACT_561_LABEL",
+            "REPLACE_EXACT_488_LABEL"
+          ],
+          "tiles": [
+            {
+              "position": 0,
+              "tile_id": "tile_A",
+              "y_px": 0,
+              "x_px": 0
+            }
+          ],
+          "channel_indices": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "day": 12,
+      "ic": {
+        "coordinate_system": "detector",
+        "calibration_id": "REPLACE_WITH_DETECTOR_CALIBRATION_ID",
+        "provenance": "REPLACE_WITH_FIELD_SOURCE_AND_VALIDATION_EVIDENCE",
+        "flatfield_path": "calibration/day12_flatfield.npy",
+        "flatfield_sha256": "REPLACE_WITH_SHA256",
+        "darkfield_path": "calibration/day12_darkfield.npy",
+        "darkfield_sha256": "REPLACE_WITH_SHA256",
+        "channel_order": [
+          "405",
+          "561",
+          "488"
+        ]
+      },
+      "files": [
+        {
+          "path": "raw/day12_wellE05.nd2",
+          "sha256": "REPLACE_WITH_SHA256",
+          "time_index": 0,
+          "z_index": 0,
+          "max_project_z": false,
+          "source_channel_names": [
+            "REPLACE_EXACT_405_LABEL",
+            "REPLACE_EXACT_561_LABEL",
+            "REPLACE_EXACT_488_LABEL"
+          ],
+          "tiles": [
+            {
+              "position": 0,
+              "tile_id": "tile_A",
+              "y_px": 0,
+              "x_px": 0
+            }
+          ],
+          "channel_indices": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "day": 16,
+      "ic": {
+        "coordinate_system": "detector",
+        "calibration_id": "REPLACE_WITH_DETECTOR_CALIBRATION_ID",
+        "provenance": "REPLACE_WITH_FIELD_SOURCE_AND_VALIDATION_EVIDENCE",
+        "flatfield_path": "calibration/day16_flatfield.npy",
+        "flatfield_sha256": "REPLACE_WITH_SHA256",
+        "darkfield_path": "calibration/day16_darkfield.npy",
+        "darkfield_sha256": "REPLACE_WITH_SHA256",
+        "channel_order": [
+          "405",
+          "561",
+          "488"
+        ]
+      },
+      "files": [
+        {
+          "path": "raw/day16_wellE05.nd2",
+          "sha256": "REPLACE_WITH_SHA256",
+          "time_index": 0,
+          "z_index": 0,
+          "max_project_z": false,
+          "source_channel_names": [
+            "REPLACE_EXACT_405_LABEL",
+            "REPLACE_EXACT_561_LABEL",
+            "REPLACE_EXACT_488_LABEL"
+          ],
+          "tiles": [
+            {
+              "position": 0,
+              "tile_id": "tile_A",
+              "y_px": 0,
+              "x_px": 0
+            }
+          ],
+          "channel_indices": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "day": 20,
+      "ic": {
+        "coordinate_system": "detector",
+        "calibration_id": "REPLACE_WITH_DETECTOR_CALIBRATION_ID",
+        "provenance": "REPLACE_WITH_FIELD_SOURCE_AND_VALIDATION_EVIDENCE",
+        "flatfield_path": "calibration/day20_flatfield.npy",
+        "flatfield_sha256": "REPLACE_WITH_SHA256",
+        "darkfield_path": "calibration/day20_darkfield.npy",
+        "darkfield_sha256": "REPLACE_WITH_SHA256",
+        "channel_order": [
+          "405",
+          "561",
+          "488"
+        ]
+      },
+      "files": [
+        {
+          "path": "raw/day20_wellE05.nd2",
+          "sha256": "REPLACE_WITH_SHA256",
+          "time_index": 0,
+          "z_index": 0,
+          "max_project_z": false,
+          "source_channel_names": [
+            "REPLACE_EXACT_405_LABEL",
+            "REPLACE_EXACT_561_LABEL",
+            "REPLACE_EXACT_488_LABEL"
+          ],
+          "tiles": [
+            {
+              "position": 0,
+              "tile_id": "tile_A",
+              "y_px": 0,
+              "x_px": 0
+            }
+          ],
+          "channel_indices": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "day": 25,
+      "ic": {
+        "coordinate_system": "detector",
+        "calibration_id": "REPLACE_WITH_DETECTOR_CALIBRATION_ID",
+        "provenance": "REPLACE_WITH_FIELD_SOURCE_AND_VALIDATION_EVIDENCE",
+        "flatfield_path": "calibration/day25_flatfield.npy",
+        "flatfield_sha256": "REPLACE_WITH_SHA256",
+        "darkfield_path": "calibration/day25_darkfield.npy",
+        "darkfield_sha256": "REPLACE_WITH_SHA256",
+        "channel_order": [
+          "405",
+          "561",
+          "488"
+        ]
+      },
+      "files": [
+        {
+          "path": "raw/day25_wellE05.nd2",
+          "sha256": "REPLACE_WITH_SHA256",
+          "time_index": 0,
+          "z_index": 0,
+          "max_project_z": false,
+          "source_channel_names": [
+            "REPLACE_EXACT_405_LABEL",
+            "REPLACE_EXACT_561_LABEL",
+            "REPLACE_EXACT_488_LABEL"
+          ],
+          "tiles": [
+            {
+              "position": 0,
+              "tile_id": "tile_A",
+              "y_px": 0,
+              "x_px": 0
+            }
+          ],
+          "channel_indices": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "day": 29,
+      "ic": {
+        "coordinate_system": "detector",
+        "calibration_id": "REPLACE_WITH_DETECTOR_CALIBRATION_ID",
+        "provenance": "REPLACE_WITH_FIELD_SOURCE_AND_VALIDATION_EVIDENCE",
+        "flatfield_path": "calibration/day29_flatfield.npy",
+        "flatfield_sha256": "REPLACE_WITH_SHA256",
+        "darkfield_path": "calibration/day29_darkfield.npy",
+        "darkfield_sha256": "REPLACE_WITH_SHA256",
+        "channel_order": [
+          "405",
+          "561",
+          "488"
+        ]
+      },
+      "files": [
+        {
+          "path": "raw/day29_wellE05.nd2",
+          "sha256": "REPLACE_WITH_SHA256",
+          "time_index": 0,
+          "z_index": 0,
+          "max_project_z": false,
+          "source_channel_names": [
+            "REPLACE_EXACT_405_LABEL",
+            "REPLACE_EXACT_561_LABEL",
+            "REPLACE_EXACT_488_LABEL"
+          ],
+          "tiles": [
+            {
+              "position": 0,
+              "tile_id": "tile_A",
+              "y_px": 0,
+              "x_px": 0
+            }
+          ],
+          "channel_indices": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "day": 32,
+      "ic": {
+        "coordinate_system": "detector",
+        "calibration_id": "REPLACE_WITH_DETECTOR_CALIBRATION_ID",
+        "provenance": "REPLACE_WITH_FIELD_SOURCE_AND_VALIDATION_EVIDENCE",
+        "flatfield_path": "calibration/day32_flatfield.npy",
+        "flatfield_sha256": "REPLACE_WITH_SHA256",
+        "darkfield_path": "calibration/day32_darkfield.npy",
+        "darkfield_sha256": "REPLACE_WITH_SHA256",
+        "channel_order": [
+          "405",
+          "561",
+          "488"
+        ]
+      },
+      "files": [
+        {
+          "path": "raw/day32_wellE05.nd2",
+          "sha256": "REPLACE_WITH_SHA256",
+          "time_index": 0,
+          "z_index": 0,
+          "max_project_z": false,
+          "source_channel_names": [
+            "REPLACE_EXACT_405_LABEL",
+            "REPLACE_EXACT_561_LABEL",
+            "REPLACE_EXACT_488_LABEL"
+          ],
+          "tiles": [
+            {
+              "position": 0,
+              "tile_id": "tile_A",
+              "y_px": 0,
+              "x_px": 0
+            }
+          ],
+          "channel_indices": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "day": 36,
+      "ic": {
+        "coordinate_system": "detector",
+        "calibration_id": "REPLACE_WITH_DETECTOR_CALIBRATION_ID",
+        "provenance": "REPLACE_WITH_FIELD_SOURCE_AND_VALIDATION_EVIDENCE",
+        "flatfield_path": "calibration/day36_flatfield.npy",
+        "flatfield_sha256": "REPLACE_WITH_SHA256",
+        "darkfield_path": "calibration/day36_darkfield.npy",
+        "darkfield_sha256": "REPLACE_WITH_SHA256",
+        "channel_order": [
+          "405",
+          "561",
+          "488"
+        ]
+      },
+      "files": [
+        {
+          "path": "raw/day36_wellE05.nd2",
+          "sha256": "REPLACE_WITH_SHA256",
+          "time_index": 0,
+          "z_index": 0,
+          "max_project_z": false,
+          "source_channel_names": [
+            "REPLACE_EXACT_405_LABEL",
+            "REPLACE_EXACT_561_LABEL",
+            "REPLACE_EXACT_488_LABEL"
+          ],
+          "tiles": [
+            {
+              "position": 0,
+              "tile_id": "tile_A",
+              "y_px": 0,
+              "x_px": 0
+            }
+          ],
+          "channel_indices": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "day": 39,
+      "ic": {
+        "coordinate_system": "detector",
+        "calibration_id": "REPLACE_WITH_DETECTOR_CALIBRATION_ID",
+        "provenance": "REPLACE_WITH_FIELD_SOURCE_AND_VALIDATION_EVIDENCE",
+        "flatfield_path": "calibration/day39_flatfield.npy",
+        "flatfield_sha256": "REPLACE_WITH_SHA256",
+        "darkfield_path": "calibration/day39_darkfield.npy",
+        "darkfield_sha256": "REPLACE_WITH_SHA256",
+        "channel_order": [
+          "405",
+          "561",
+          "488"
+        ]
+      },
+      "files": [
+        {
+          "path": "raw/day39_wellE05.nd2",
+          "sha256": "REPLACE_WITH_SHA256",
+          "time_index": 0,
+          "z_index": 0,
+          "max_project_z": false,
+          "source_channel_names": [
+            "REPLACE_EXACT_405_LABEL",
+            "REPLACE_EXACT_561_LABEL",
+            "REPLACE_EXACT_488_LABEL"
+          ],
+          "tiles": [
+            {
+              "position": 0,
+              "tile_id": "tile_A",
+              "y_px": 0,
+              "x_px": 0
+            }
+          ],
+          "channel_indices": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    }
+  ]
+}

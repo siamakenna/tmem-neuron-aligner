@@ -1,0 +1,31 @@
+{
+  "trace_integrity_verified": false,
+  "trace_input_kind": "no_trace_supplied",
+  "original_nd2_source_recorded": false,
+  "original_nd2_pipeline_validated": false,
+  "unavailable_categories": [
+    "Original ND2 read",
+    "Before IC",
+    "After IC",
+    "After background",
+    "Stitched well",
+    "Alignment / registered input",
+    "During segmentation",
+    "Selected segmentation",
+    "Tracking",
+    "Final core / ROI",
+    "Puncta / diffuse"
+  ],
+  "previews": [],
+  "schema_version": "tmem.graphic_flowcharts.v1",
+  "evidence_type": "WORKFLOW_DESIGN_WITH_OPTIONAL_VERIFIED_RECORDED_PREVIEWS",
+  "scientific_inference_ready": false,
+  "real_accepted_ids": [],
+  "script_sha256": "208eae93189841afbc63f7ef24b05eb699ae93251eb5ebbd1a4493a022ff4cc8",
+  "graphic_files": [
+    "original_ND2_to_well.svg",
+    "original_ND2_to_well.png",
+    "segmentation_tracking.svg",
+    "segmentation_tracking.png"
+  ]
+}
