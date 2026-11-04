@@ -102,3 +102,17 @@ def test_private_pi_presentation_manifest_not_publishable():
         "docs/presentation.json",
         json.dumps({"schema_version": "tmem.pi_presentation.v1", "accepted_ids": []}).encode(),
     )
+
+
+@pytest.mark.parametrize(
+    "schema",
+    [
+        "tmem.full_plate_audit.v1",
+        "tmem.well_checkpoint.v1",
+        "tmem.well_checkpoint.aggregate.v1",
+        "tmem.example_curation.v1",
+        "tmem.pi_presentation.v2",
+    ],
+)
+def test_new_private_receipts_not_publishable(schema):
+    assert audit.inspect_blob("docs/record.json", json.dumps({"schema_version": schema}).encode())

@@ -52,6 +52,11 @@ def has_private_review(value):
                 "tmem.acquisition_declarations.",
                 "tmem.actual_fov_figures.",
                 "tmem.pi_presentation.",
+                "tmem.full_plate_audit.",
+                "tmem.well_checkpoint.",
+                "tmem.example_curation.",
+                "tmem.plate_preflight.",
+                "tmem.checkpoint_quarantine.",
             )
         )
         or bool(value.get("reviewer") or value.get("reviewed_at"))

@@ -1,0 +1,45 @@
+{
+  "schema_version": "tmem.dataset_contract.v2",
+  "experiment_id": "SOFTWARE_FIXTURE_ONLY_SECOND_STUDY",
+  "processing_stage": "DECLARATION_ONLY_NOT_LEGACY_EXECUTION",
+  "source_identity_policy": "INDEPENDENT_SOURCE_MANIFEST_REQUIRED",
+  "source_lineage": {"experiment_id": "SOFTWARE_FIXTURE_ONLY_SECOND_STUDY", "plate_id": "example"},
+  "plate_id": "example",
+  "plate_shape": [
+    2,
+    3
+  ],
+  "wells": [
+    "A01",
+    "B03"
+  ],
+  "visits": [
+    0,
+    5
+  ],
+  "sites": [
+    "left",
+    "right"
+  ],
+  "channels": {
+    "alignment": "structural",
+    "phenotype": "reporter"
+  },
+  "expected_axes": "CYX",
+  "expected_dtype": "uint16",
+  "expected_shape": [
+    2,
+    32,
+    48
+  ],
+  "reporter_wells": [
+    "A01"
+  ],
+  "missing_visit_policy": "record_missing",
+  "coordinate_frame": "ORIGINAL_STORED_FIELD_NOT_ATLAS",
+  "calibration_refs": [],
+  "geometry_status": "COVERAGE_UNRESOLVED",
+  "optical_identity": "UNRESOLVED",
+  "targeted_pairs": [],
+  "frozen_processing_config": "configs/tmem_stage_diagnostics.json"
+}

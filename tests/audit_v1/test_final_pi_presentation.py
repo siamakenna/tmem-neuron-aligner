@@ -433,8 +433,9 @@ def test_executed_slot_missing_vs_recorded_no_view(private_project):
 
 def test_complete_constructed_deck_embedded_editable_and_private(private_project, tmp_path):
     out = tmp_path / "private-output"
+    declaration = explicit_curation(private_project)
     before = {p: pi.digest(p.read_bytes()) for p in private_project.rglob("*") if p.is_file()}
-    manifest = pi.generate(private_project, out)
+    manifest = pi.generate(private_project, out, declaration)
     prs = Presentation(out / (pi.NAME + ".pptx"))
     assert len(prs.slides) == 20
     assert abs(prs.slide_width / prs.slide_height - 16 / 9) < 0.000001
@@ -489,7 +490,7 @@ def test_complete_constructed_deck_embedded_editable_and_private(private_project
         p: pi.digest(p.read_bytes()) for p in private_project.rglob("*") if p.is_file()
     }
     with pytest.raises(ValueError, match="new private output"):
-        pi.generate(private_project, out)
+        pi.generate(private_project, out, declaration)
 
 
 def test_output_overlap_and_cli_invalid_source_rejected(tmp_path, capsys):
@@ -500,7 +501,41 @@ def test_output_overlap_and_cli_invalid_source_rejected(tmp_path, capsys):
     with pytest.raises(SystemExit) as error:
         pi.main(["--project", str(project), "--out", str(tmp_path / "private")])
     assert error.value.code == 2
-    assert "PRESENTATION_BLOCKED" in capsys.readouterr().err
+    assert "--curation" in capsys.readouterr().err
+
+
+def explicit_curation(project):
+    manifest_path = project / "actual-fov-evidence-20261103/figures/figure_manifest.json"
+    sources = {
+        s["neuron_id"]: s["trace_manifest_sha256"]
+        for s in json.loads(manifest_path.read_text())["sources"]
+    }
+    roles = {
+        "longitudinal": "N05_N010",
+        "segmentation": "E05_N057",
+        "tracking": "J05_N028",
+        "ownership_ambiguous": "J05_N029",
+    }
+    p = project / "curation.json"
+    write_json(
+        p,
+        {
+            "schema_version": "tmem.example_curation.v1",
+            "figure_manifest_sha256": pi.digest(manifest_path.read_bytes()),
+            "selections": {
+                role: {
+                    "neuron_id": n,
+                    "trace_manifest_sha256": sources[n],
+                    "status": "AMBIGUOUS",
+                    "channel": "488",
+                    "rationale": "SOFTWARE_FIXTURE_ONLY",
+                    "source_refs": ["constructed"],
+                }
+                for role, n in roles.items()
+            },
+        },
+    )
+    return p
 
 
 def test_symlink_output_and_unavailable_panel_remain_explicit(tmp_path):
