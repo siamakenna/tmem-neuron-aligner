@@ -24,8 +24,7 @@
   "script_sha256": "208eae93189841afbc63f7ef24b05eb699ae93251eb5ebbd1a4493a022ff4cc8",
   "graphic_files": [
     "original_ND2_to_well.svg",
-    "original_ND2_to_well.png",
-    "segmentation_tracking.svg",
-    "segmentation_tracking.png"
-  ]
+    "segmentation_tracking.svg"
+  ],
+  "public_asset_selection": "SVG design diagrams only. Generated PNG counterparts remain private and are reproducible with the renderer."
 }
