@@ -521,12 +521,14 @@ class Deck:
         return chart
 
 
-def build(e):
+def build(e, examples=None):
     d, m = Deck(e), e.metrics()
-    ids = list(e.manifest["render_cases"])
-    regular = next(n for n in ids if n.startswith("N05"))
-    problem = next(n for n in ids if n.startswith("J05_N028"))
-    example = next(n for n in ids if n.startswith("E05"))
+    if examples is None:
+        raise ValueError("Explicit source-bound example curation is required")
+    regular = examples["longitudinal"]["neuron_id"]
+    problem = examples["tracking"]["neuron_id"]
+    example = examples["segmentation"]["neuron_id"]
+    ownership = examples["ownership_ambiguous"]["neuron_id"]
     f = lambda n, day: f"{n}_day{day:02d}_flow"
     c = lambda n, day: f"{n}_day{day:02d}_comparison"
     row = lambda rows, n, day, k, v: next(
@@ -897,7 +899,7 @@ def build(e):
             (regular, 39, 13, "Selected soma"),
             (regular, 39, 23, "Identity core"),
             (regular, 39, 24, "Fixed phenotype ROI"),
-            (problem, 32, 24, "Ambiguous neighboring support"),
+            (ownership, 32, 24, "Ambiguous neighboring support"),
         )
     ):
         d.card(f(n, day), index, 0.55 + j * 3.18, 1.65, 2.8, 3.3, f"{n}, Day {day}\n{label}")
@@ -1363,7 +1365,7 @@ def build(e):
     return d
 
 
-def generate(project, out):
+def generate(project, out, curation=None, transform=None, name=NAME):
     project, out = Path(project).absolute(), Path(out).absolute()
     for p in (out, *out.parents):
         if p.is_symlink():
@@ -1394,14 +1396,24 @@ def generate(project, out):
     ):
         raise ValueError("Use a new private output outside source/data trees")
     e = Evidence(project)
-    deck = build(e)
+    from tmem_align.audit_v1.full_plate import validate_curation
+
+    if curation is None:
+        raise ValueError("Pass an explicit --curation declaration")
+    declaration = json.loads(e.read(curation))
+    examples = validate_curation(
+        declaration, e.manifest, digest(e.read(e.fig / "figure_manifest.json"))
+    )
+    deck = build(e, examples)
+    if transform is not None:
+        transform(deck, examples)
     if len(deck.prs.slides) != 20 or any(
         not 60 <= r["narration_words"] <= 120 for r in deck.records[:15]
     ):
         raise ValueError("Slide/notes count contract failed")
     e.finish()
     out.mkdir(parents=True, mode=0o700, exist_ok=False)
-    pptx = out / (NAME + ".pptx")
+    pptx = out / (name + ".pptx")
     deck.prs.save(pptx)
     (out / "TMEM106B_Presentation_Script.md").write_text(
         "# PI meeting script\n\n15 main slides, approximately 10-15 minutes. Five appendix slides for discussion.\n\n"
@@ -1451,9 +1463,10 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", required=True, type=Path)
     parser.add_argument("--out", required=True, type=Path)
+    parser.add_argument("--curation", required=True, type=Path)
     args = parser.parse_args(argv)
     try:
-        result = generate(args.project, args.out)
+        result = generate(args.project, args.out, args.curation)
     except (ValueError, KeyError, TypeError, OSError) as exc:
         parser.exit(2, "PRESENTATION_BLOCKED: " + str(exc) + "\n")
     print(
