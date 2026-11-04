@@ -95,3 +95,10 @@ def test_actual_fov_private_manifest_not_publishable():
             {"schema_version": "tmem.actual_fov_figures.v1", "real_accepted_ids": []}
         ).encode(),
     )
+
+
+def test_private_pi_presentation_manifest_not_publishable():
+    assert audit.inspect_blob(
+        "docs/presentation.json",
+        json.dumps({"schema_version": "tmem.pi_presentation.v1", "accepted_ids": []}).encode(),
+    )
