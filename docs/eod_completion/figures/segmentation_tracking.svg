@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="2560" viewBox="0 0 1200 2560" role="img">
+<title>Segmentation, soma tracking and phenotype</title>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#53677b"/></marker></defs>
+<rect width="1200" height="100%" fill="#f4f7fb"/>
+<text x="50" y="58" font-family="sans-serif" font-size="30" font-weight="bold" fill="#14283e">Segmentation, soma tracking and phenotype</text>
+<text x="50" y="95" font-family="sans-serif" font-size="18" fill="#53677b">WORKFLOW DESIGN — does not establish that these steps executed on original ND2 data.</text>
+<text x="50" y="127" font-family="sans-serif" font-size="16" fill="#53677b">Recorded trace: no_trace_supplied. Preview integrity verified: false.</text>
+<path d="M600,310 C600,330.0 600,330.0 600,350" fill="none" stroke="#53677b" stroke-width="2.4" marker-end="url(#arrow)"/>
+<path d="M600,470 C600,490.0 600,490.0 600,510" fill="none" stroke="#53677b" stroke-width="2.4" marker-end="url(#arrow)"/>
+<path d="M760,570 C760,570.0 830,570.0 830,570" fill="none" stroke="#53677b" stroke-width="2.4" marker-end="url(#arrow)"/>
+<path d="M600,630 C600,650.0 600,650.0 600,670" fill="none" stroke="#53677b" stroke-width="2.4" marker-end="url(#arrow)"/>
+<path d="M440,730 L405.0,730 L405.0,890 L370,890" fill="none" stroke="#53677b" stroke-width="2.4" marker-end="url(#arrow)"/>
+<path d="M600,790 C600,810.0 600,810.0 600,830" fill="none" stroke="#53677b" stroke-width="2.4" marker-end="url(#arrow)"/>
+<path d="M760,730 L795.0,730 L795.0,890 L830,890" fill="none" stroke="#53677b" stroke-width="2.4" marker-end="url(#arrow)"/>
+<path d="M600,950 C600,970.0 600,970.0 600,990" fill="none" stroke="#53677b" stroke-width="2.4" marker-end="url(#arrow)"/>
+<path d="M600,1110 C600,1130.0 600,1130.0 600,1150" fill="none" stroke="#53677b" stroke-width="2.4" marker-end="url(#arrow)"/>
+<path d="M370,890 L405.0,890 L405.0,1210 L440,1210" fill="none" stroke="#53677b" stroke-width="2.4" marker-end="url(#arrow)"/>
+<path d="M600,1270 C600,1290.0 600,1290.0 600,1310" fill="none" stroke="#53677b" stroke-width="2.4" marker-end="url(#arrow)"/>
+<rect x="440" y="190" width="320" height="120" rx="14" fill="#e9f3fc" stroke="#b7c8d8"/>
+<text x="456" y="216" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">Before segmentation</text>
+<text x="456" y="256" font-family="sans-serif" font-size="13" fill="#14283e">Registered 488 source and frozen</text>
+<text x="456" y="272" font-family="sans-serif" font-size="13" fill="#14283e">anchor; retain raw intensities and</text>
+<text x="456" y="288" font-family="sans-serif" font-size="13" fill="#14283e">supported-pixel mask.</text>
+<rect x="440" y="350" width="320" height="120" rx="14" fill="#e9f3fc" stroke="#b7c8d8"/>
+<text x="456" y="376" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">Normalize and smooth</text>
+<text x="456" y="416" font-family="sans-serif" font-size="13" fill="#14283e">Save the actual estimation image,</text>
+<text x="456" y="432" font-family="sans-serif" font-size="13" fill="#14283e">smoothing result, seed and allowed</text>
+<text x="456" y="448" font-family="sans-serif" font-size="13" fill="#14283e">region.</text>
+<rect x="440" y="510" width="320" height="120" rx="14" fill="#e9f3fc" stroke="#b7c8d8"/>
+<text x="456" y="536" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">Threshold candidates</text>
+<text x="456" y="576" font-family="sans-serif" font-size="13" fill="#14283e">Record every threshold candidate</text>
+<text x="456" y="592" font-family="sans-serif" font-size="13" fill="#14283e">before and after morphology and</text>
+<text x="456" y="608" font-family="sans-serif" font-size="13" fill="#14283e">component labeling.</text>
+<rect x="830" y="510" width="320" height="120" rx="14" fill="#e9f3fc" stroke="#b7c8d8"/>
+<text x="846" y="536" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">Parameter sensitivity</text>
+<text x="846" y="576" font-family="sans-serif" font-size="13" fill="#14283e">Change one declared parameter at a</text>
+<text x="846" y="592" font-family="sans-serif" font-size="13" fill="#14283e">time; retain failures and never rank</text>
+<text x="846" y="608" font-family="sans-serif" font-size="13" fill="#14283e">using 561.</text>
+<rect x="440" y="670" width="320" height="120" rx="14" fill="#e9f3fc" stroke="#b7c8d8"/>
+<text x="456" y="696" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">Select the soma support</text>
+<text x="456" y="736" font-family="sans-serif" font-size="13" fill="#14283e">Save component scores, chosen support</text>
+<text x="456" y="752" font-family="sans-serif" font-size="13" fill="#14283e">and validity reasons; image review</text>
+<text x="456" y="768" font-family="sans-serif" font-size="13" fill="#14283e">checks identity.</text>
+<rect x="50" y="830" width="320" height="120" rx="14" fill="#e9f3fc" stroke="#b7c8d8"/>
+<text x="66" y="856" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">Soma tracking</text>
+<text x="66" y="896" font-family="sans-serif" font-size="13" fill="#14283e">Template, search region, correlation</text>
+<text x="66" y="912" font-family="sans-serif" font-size="13" fill="#14283e">surface, peak and displacement from</text>
+<text x="66" y="928" font-family="sans-serif" font-size="13" fill="#14283e">the frozen anchor.</text>
+<rect x="440" y="830" width="320" height="120" rx="14" fill="#e9f3fc" stroke="#b7c8d8"/>
+<text x="456" y="856" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">Longitudinal 488 identity</text>
+<text x="456" y="876" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">core</text>
+<text x="456" y="896" font-family="sans-serif" font-size="13" fill="#14283e">Show visit masks, vote counts,</text>
+<text x="456" y="912" font-family="sans-serif" font-size="13" fill="#14283e">consensus, hole filling and final</text>
+<text x="456" y="928" font-family="sans-serif" font-size="13" fill="#14283e">core.</text>
+<rect x="830" y="830" width="320" height="120" rx="14" fill="#e9f3fc" stroke="#b7c8d8"/>
+<text x="846" y="856" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">LUT-constrained box</text>
+<text x="846" y="876" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">proposal</text>
+<text x="846" y="896" font-family="sans-serif" font-size="13" fill="#14283e">Declare intensity range,</text>
+<text x="846" y="912" font-family="sans-serif" font-size="13" fill="#14283e">visible/within-range policy, anchor</text>
+<text x="846" y="928" font-family="sans-serif" font-size="13" fill="#14283e">component and padding.</text>
+<rect x="440" y="990" width="320" height="120" rx="14" fill="#e9f3fc" stroke="#b7c8d8"/>
+<text x="456" y="1016" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">After segmentation: fixed</text>
+<text x="456" y="1036" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">ROI</text>
+<text x="456" y="1056" font-family="sans-serif" font-size="13" fill="#14283e">Record core and dilation separately;</text>
+<text x="456" y="1072" font-family="sans-serif" font-size="13" fill="#14283e">preserve geometry and unresolved</text>
+<text x="456" y="1088" font-family="sans-serif" font-size="13" fill="#14283e">neighbor ownership.</text>
+<rect x="440" y="1150" width="320" height="120" rx="14" fill="#fff2da" stroke="#b7c8d8"/>
+<text x="456" y="1176" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">Review and automated QC</text>
+<text x="456" y="1216" font-family="sans-serif" font-size="13" fill="#14283e">A stronger score or a smaller ROI is</text>
+<text x="456" y="1232" font-family="sans-serif" font-size="13" fill="#14283e">not proof of identity or ownership.</text>
+<rect x="440" y="1310" width="320" height="120" rx="14" fill="#e9f3fc" stroke="#b7c8d8"/>
+<text x="456" y="1336" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">Independent 561</text>
+<text x="456" y="1356" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14283e">measurements</text>
+<text x="456" y="1376" font-family="sans-serif" font-size="13" fill="#14283e">Save local background, DoG response,</text>
+<text x="456" y="1392" font-family="sans-serif" font-size="13" fill="#14283e">puncta mask and diffuse residual;</text>
+<text x="456" y="1408" font-family="sans-serif" font-size="13" fill="#14283e">export stays gated.</text>
+<text x="50" y="1494" font-family="sans-serif" font-size="24" font-weight="bold" fill="#14283e">Recorded before / during / after previews</text>
+<text x="50" y="1527" font-family="sans-serif" font-size="15" fill="#53677b">Existing display PNGs only. Missing stages remain unavailable. Quantitative arrays are unchanged.</text>
+<rect x="50" y="1560" width="320" height="220" rx="10" fill="white" stroke="#b7c8d8"/>
+<text x="64" y="1584" font-family="sans-serif" font-size="15" font-weight="bold" fill="#14283e">Original ND2 read</text>
+<text x="64" y="1645" font-family="sans-serif" font-size="17" fill="#53677b">Unavailable in supplied evidence</text>
+<text x="64" y="1677" font-family="sans-serif" font-size="13" fill="#53677b">No replacement image has been invented.</text>
+<rect x="440" y="1560" width="320" height="220" rx="10" fill="white" stroke="#b7c8d8"/>
+<text x="454" y="1584" font-family="sans-serif" font-size="15" font-weight="bold" fill="#14283e">Before IC</text>
+<text x="454" y="1645" font-family="sans-serif" font-size="17" fill="#53677b">Unavailable in supplied evidence</text>
+<text x="454" y="1677" font-family="sans-serif" font-size="13" fill="#53677b">No replacement image has been invented.</text>
+<rect x="830" y="1560" width="320" height="220" rx="10" fill="white" stroke="#b7c8d8"/>
+<text x="844" y="1584" font-family="sans-serif" font-size="15" font-weight="bold" fill="#14283e">After IC</text>
+<text x="844" y="1645" font-family="sans-serif" font-size="17" fill="#53677b">Unavailable in supplied evidence</text>
+<text x="844" y="1677" font-family="sans-serif" font-size="13" fill="#53677b">No replacement image has been invented.</text>
+<rect x="50" y="1805" width="320" height="220" rx="10" fill="white" stroke="#b7c8d8"/>
+<text x="64" y="1829" font-family="sans-serif" font-size="15" font-weight="bold" fill="#14283e">After background</text>
+<text x="64" y="1890" font-family="sans-serif" font-size="17" fill="#53677b">Unavailable in supplied evidence</text>
+<text x="64" y="1922" font-family="sans-serif" font-size="13" fill="#53677b">No replacement image has been invented.</text>
+<rect x="440" y="1805" width="320" height="220" rx="10" fill="white" stroke="#b7c8d8"/>
+<text x="454" y="1829" font-family="sans-serif" font-size="15" font-weight="bold" fill="#14283e">Stitched well</text>
+<text x="454" y="1890" font-family="sans-serif" font-size="17" fill="#53677b">Unavailable in supplied evidence</text>
+<text x="454" y="1922" font-family="sans-serif" font-size="13" fill="#53677b">No replacement image has been invented.</text>
+<rect x="830" y="1805" width="320" height="220" rx="10" fill="white" stroke="#b7c8d8"/>
+<text x="844" y="1829" font-family="sans-serif" font-size="15" font-weight="bold" fill="#14283e">Alignment / registered input</text>
+<text x="844" y="1890" font-family="sans-serif" font-size="17" fill="#53677b">Unavailable in supplied evidence</text>
+<text x="844" y="1922" font-family="sans-serif" font-size="13" fill="#53677b">No replacement image has been invented.</text>
+<rect x="50" y="2050" width="320" height="220" rx="10" fill="white" stroke="#b7c8d8"/>
+<text x="64" y="2074" font-family="sans-serif" font-size="15" font-weight="bold" fill="#14283e">During segmentation</text>
+<text x="64" y="2135" font-family="sans-serif" font-size="17" fill="#53677b">Unavailable in supplied evidence</text>
+<text x="64" y="2167" font-family="sans-serif" font-size="13" fill="#53677b">No replacement image has been invented.</text>
+<rect x="440" y="2050" width="320" height="220" rx="10" fill="white" stroke="#b7c8d8"/>
+<text x="454" y="2074" font-family="sans-serif" font-size="15" font-weight="bold" fill="#14283e">Selected segmentation</text>
+<text x="454" y="2135" font-family="sans-serif" font-size="17" fill="#53677b">Unavailable in supplied evidence</text>
+<text x="454" y="2167" font-family="sans-serif" font-size="13" fill="#53677b">No replacement image has been invented.</text>
+<rect x="830" y="2050" width="320" height="220" rx="10" fill="white" stroke="#b7c8d8"/>
+<text x="844" y="2074" font-family="sans-serif" font-size="15" font-weight="bold" fill="#14283e">Tracking</text>
+<text x="844" y="2135" font-family="sans-serif" font-size="17" fill="#53677b">Unavailable in supplied evidence</text>
+<text x="844" y="2167" font-family="sans-serif" font-size="13" fill="#53677b">No replacement image has been invented.</text>
+<rect x="50" y="2295" width="320" height="220" rx="10" fill="white" stroke="#b7c8d8"/>
+<text x="64" y="2319" font-family="sans-serif" font-size="15" font-weight="bold" fill="#14283e">Final core / ROI</text>
+<text x="64" y="2380" font-family="sans-serif" font-size="17" fill="#53677b">Unavailable in supplied evidence</text>
+<text x="64" y="2412" font-family="sans-serif" font-size="13" fill="#53677b">No replacement image has been invented.</text>
+<rect x="440" y="2295" width="320" height="220" rx="10" fill="white" stroke="#b7c8d8"/>
+<text x="454" y="2319" font-family="sans-serif" font-size="15" font-weight="bold" fill="#14283e">Puncta / diffuse</text>
+<text x="454" y="2380" font-family="sans-serif" font-size="17" fill="#53677b">Unavailable in supplied evidence</text>
+<text x="454" y="2412" font-family="sans-serif" font-size="13" fill="#53677b">No replacement image has been invented.</text>
+</svg>

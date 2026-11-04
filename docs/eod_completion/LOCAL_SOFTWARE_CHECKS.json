@@ -1,0 +1,32 @@
+{
+  "inspected_base": "72c7ee058075af0e2c40b5ca0e909780967f502e",
+  "scope": "targeted unittest controls; not full production integration or original ND2 execution",
+  "python": "3.12.14",
+  "tests": 131,
+  "subtest_observations": 58,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "modules": {
+    "test_visualization.py": 15,
+    "test_parameters.py": 3,
+    "test_core.py": 30,
+    "test_stage_trace.py": 22,
+    "test_legacy_nd2_guards.py": 6,
+    "test_original_nd2_well.py": 23,
+    "test_pipeline_flowcharts.py": 10,
+    "test_claire_stress_packet.py": 8,
+    "test_terminal_completion.py": 14
+  },
+  "passed": true,
+  "full_production_integration_run": false,
+  "original_nd2_pixels_run": false,
+  "last_scoped_recheck": {
+    "module": "test_claire_stress_packet.py",
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "reason": "Added new ND2 guard/trace source bindings and regression paths to Claire packet; not additive to 131"
+  }
+}

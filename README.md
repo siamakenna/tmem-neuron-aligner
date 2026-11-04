@@ -9,6 +9,13 @@ gate. It preserves the historical candidate atlas and registered crops.
 
 ## Current instructions
 
+The [November 3 Terminal continuation](docs/eod_completion/STATUS.md) adds
+strict original-ND2 observation guards, a well-tracing entry point, executable
+SVG/PNG workflow graphics and a source-bound stress packet. Its
+[runbook](docs/eod_completion/RUNBOOK.md) runs affected unit and integration
+checks before optional original-image diagnostics. Scientific readiness remains
+separate from successful software execution.
+
 The [October 27 processing-stage guide](docs/diagnostics_20261027/PIPELINE_GUIDE.md)
 documents numerical outputs and fixed-LUT previews from the actual preprocessing,
 registration, soma tracking, segmentation, consensus and phenotype functions.
