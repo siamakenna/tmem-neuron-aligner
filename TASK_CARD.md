@@ -1,16 +1,11 @@
-# MAC-RECOVER — one bounded Codex task
+# REAL-PILOT — next bounded task after verified recovery
 
-Goal: recover the already-created publication branch on this Mac, run its real checks and push only the verified source/docs. Read AGENTS.md, PROJECT_STATE.md, NEXT_TASKS.md, EVIDENCE.md and tools/full_dataset_v2/README.md first.
+MAC-RECOVER is complete: source-only push e4d70b3bc7b0319393dabdd71dccbb2d69ec3263 on the same preserved branch matched the remote; draft PR #15 is open. Mac50 contracts, the actual production-function adapter and affected182 tests+75 subtests passed with zero failures/errors/skips and source unchanged. Read E-007 for the additional optional-details observer regression and retained failed attempt.
 
-Existing session: $HOME/Downloads/tmem_finish_1KkiKJ3Z
-Existing checkout: $HOME/Downloads/tmem_finish_1KkiKJ3Z/results/publication/source
-Expected branch: completion/full-dataset-v2-20261105T165938Z-bc25f12f
-Logged baseline HEAD: 47a2db795133e4b6a79baf5d5f3b36855d857dec
+Preserve the existing checkout/session, original ND2 and every result. Do not run the old launcher or create a worktree. The original supplied recovery package and exact hash-checked local repair overlay are private evidence.
 
-The old script failed before commit/push because FakeND2.files used unresolved temporary paths. Apply the canonical-path-only fixture fix plus symlink regression. Do not relax source/site/QC checks. Existing scientific Python: $HOME/Downloads/tmem_completion_9cbf60nt/venv/bin/python, or the failed session's venv/bin/python if present; probe before choosing. Never disable TLS verification.
+The entire February header inventory and independent native-roster reconciliation are verified. Native Nikon job/frame evidence authenticates the selected two-well, nine-visit stored acquisition-mosaic grouping. Run the real serial/two-worker FIELD-SERIES pilot using all stored selected visits and fixed production QC. These are instrument-preassembled3x3 mosaics; raw constituent placement replay and physical whole-well coverage are separate unavailable proofs. Do not substitute guessed tile geometry or relaxed QC.
 
-Use the supplied RESUME_EXISTING_MAC.sh with --verify-only first. It patches only the known old fixture hash, preserves instructions on conflict and runs the existing verification runner in a new private log directory inside the SAME session. Inspect source diff and fresh origin/main before running with --publish. Publication is source-only and already authorized; no merge or force push. If current main changed, inspect compatibility and record the difference; do not silently reset or rebase user changes.
+Then execute the independent five-role Cell Paint TIFF diagnostic under its own hashed metadata/profile. It is a single acquisition: ingestion/preprocessing/LUT only, with no invented visits, neuronal segmentation or temporal tracking. Keep calibration unavailable/skipped unless genuine applicable arrays are supplied.
 
-Acceptance: 49new contracts pass on this Mac; the actual production-function adapter and affected existing tests pass; source unchanged while testing; staged diff contains only tools/full_dataset_v2, its workflow and the reconciled project instruction docs; normal push verified against remote SHA. Save a receipt and update the ledgers. Stop after two failed approaches with the exact log and next diagnostic.
-
-Excluded: new plate jobs, raw-data transfer, publication of image results, changing LUT/segmentation/QC policies, whole-well claims without acquisition geometry, and unrelated improvements. After acceptance, the next ticket is the authentic original-ND2 pilot; do not report that ticket complete from fixture tests.
+Update private evidence, the baseline editable PowerPoint and the Claire review folder from actual outputs. Record measured failures and exact source/config/input/output hashes. Source/docs-only normal pushes and the draft PR remain authorized; no merge, force push, image release, charges or sending.

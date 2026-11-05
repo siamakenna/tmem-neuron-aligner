@@ -249,7 +249,7 @@ def _candidate_tracks(registered, tracker, observer, profile, qc, out):
         observer.capture("soma_tracking_unavailable", status="unavailable", why="Frame smaller than required 128-pixel production box")
         return {"status": "unavailable_small_frame", "accepted": False}
     from tmem_align.audit_v1.display import LUT
-    from tmem_align.audit_v1.visualization import propose_lut_bbox
+    from tmem_align.audit_v1.visualization import propose_lut_bbox, render_preview
     day8 = registered[0, identity]
     tuning = profile["processing"].get("tracking", {})
     bbox_size = tuning.get("bbox_size", 128)
@@ -281,8 +281,7 @@ def _candidate_tracks(registered, tracker, observer, profile, qc, out):
         # Same actual spatial viewport before/after box display. The box never
         # clips the segmentation or changes any measurement pixel.
         from PIL import Image, ImageDraw
-        limits = np.clip((image[search.y0:search.y1, search.x0:search.x1].astype(float) - low) / (high-low), 0, 1)
-        before = Image.fromarray(np.rint(limits * 255).astype(np.uint8)).convert("RGB")
+        before = Image.fromarray(render_preview(image, LUT(low, high, "488"), bounds=search))
         after = before.copy()
         if bbox["bounds"]:
             b = bbox["bounds"]

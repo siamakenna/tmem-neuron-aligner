@@ -209,7 +209,22 @@ Copy `cellpaint.profile.TEMPLATE.json` to a private profile and replace **actual
 
 The new fixture checks five-channel reordering, but no Cell Paint source files were provided here. Therefore real Cell Paint usability is **pending**. Current filename parsing expects `WellA01`/`DayN` labels; another naming scheme, multi-Z/T acquisition, TIFF-only input or five-channel mosaics needs a tested adapter and must appear in the usability failure matrix rather than being silently coerced. Cell Paint segmentation/biological accuracy requires a suitable assay-specific model/reference.
 
+### Independent single-acquisition TIFF input
+
+`preview_cellpaint_tiff.py` supports a separately authenticated five-role TIFF batch. The private manifest must bind every DNA/ER/RNA/AGP/Mito image and its exact role/filename metadata by SHA256, actual field timestamp and a uniquely selected experiment-metadata row proving one imaging pass. Each source must be a scalar uint16 YX plane; no projection, resize or temporal axis is invented. Raw and preprocessed CYX arrays, per-role fixed-LUT `render_preview` outputs, skipped calibration stages and failure receipts are retained outside Git. LZW TIFFs use the existing Pillow/libtiff decoder only when tifffile lacks imagecodecs, preserving all header and exact-value gates.
+
+```bash
+PYTHONPATH="$TMEM_REPO/src:$TMEM_REPO/tools/full_dataset_v2" \
+"$TMEM_PYTHON" -B "$TMEM_REPO/tools/full_dataset_v2/preview_cellpaint_tiff.py" \
+  --repo "$TMEM_REPO" --manifest /actual/private/CELLPAINT_MANIFEST.json \
+  --out /actual/private/new_cellpaint_diagnostics --compare-workers
+```
+
+The serial/two-worker check compares every field result and artifact hash, then verifies all originals, metadata, manifest and source remain unchanged. This tests ingestion/preprocessing/display portability. Cell Paint segmentation, temporal tracking, calibration benefits and whole-well coverage remain unvalidated; February neuronal models and geometry are not applied.
+
 ## 9. Publish the new source to GitHub
+
+For the preserved November5 recovery session, use its reviewed `RESUME_EXISTING_MAC.sh` and existing branch. Do not restart the old launcher or use the initial standalone publisher below to create another worktree. The verified recovery and subsequent source-only increments are recorded in the root ledgers.
 
 Source publication uses an isolated branch and, when GitHub CLI authentication permits, a draft PR. Existing local fixes stay in their current checkout. For an initial standalone-kit publication, after local verification:
 
