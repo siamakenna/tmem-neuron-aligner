@@ -308,9 +308,11 @@ def make_plan(inv, site_map, profile, repo, out, *, allow_subset=False):
         if not (isinstance(low, (int, float)) and isinstance(high, (int, float)) and low < high):
             raise ValueError("Every channel needs a fixed finite increasing LUT range")
     # Current adapter intentionally does not retune the frozen registration QC.
-    if set(profile["processing"]) - {"background_radius", "max_read_bytes", "trace_arrays", "candidate_tracking", "tracking"}:
+    if set(profile["processing"]) - {"background_radius", "max_read_bytes", "trace_arrays", "candidate_tracking", "tracking", "array_storage"}:
         raise ValueError("Unknown processing parameter; no silently ignored settings")
     settings = profile["processing"]
+    if type(settings.get("array_storage", "npy")) is not str or settings.get("array_storage", "npy") not in {"npy", "npy.gz"}:
+        raise ValueError("array_storage must be npy or npy.gz")
     if type(settings.get("max_read_bytes", 512 * 1024**2)) is not int or settings.get("max_read_bytes", 1) < 1:
         raise ValueError("Positive integer memory guard required")
     radius = settings.get("background_radius")

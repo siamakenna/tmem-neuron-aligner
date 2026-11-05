@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import base64
 from contextlib import contextmanager
+import gzip
 import html
 import importlib
 import inspect
@@ -391,6 +392,21 @@ def resolve_registration_parameters(profile, *, frozen=None):
     return {k: frozen[k] for k in ["ref_mode", "anchor_corr_thresh", "min_post_correlation", "plate_offsets"]}
 
 
+def save_quantitative_array(path, array, storage="npy"):
+    """Store exact NPY values, optionally using deterministic streaming gzip."""
+    if type(storage) is not str or storage not in {"npy", "npy.gz"}:
+        raise ValueError("array_storage must be npy or npy.gz")
+    path = Path(path)
+    if storage == "npy":
+        np.save(path, array, allow_pickle=False)
+        return path
+    path = path.with_name(path.name + ".gz")
+    with path.open("wb") as output:
+        with gzip.GzipFile(filename="", mode="wb", fileobj=output, compresslevel=1, mtime=0) as compressed:
+            np.save(compressed, array, allow_pickle=False)
+    return path
+
+
 def process(manifest, task, out):
     pilot, tracker, preprocessing = attach_repo(manifest["repo"])
     profile = manifest["profile"]
@@ -419,7 +435,7 @@ def process(manifest, task, out):
                 frame = fields_this_visit[0]
             # Durable bite-sized result for every visit; not all-or-nothing RAM aggregation.
             p = out / f"day{day:02}_preprocessed.npy"
-            np.save(p, frame, allow_pickle=False)
+            save_quantitative_array(p, frame, settings.get("array_storage", "npy"))
             frames.append(frame)
         shape = frames[0].shape
         if any(f.shape != shape for f in frames):
@@ -440,7 +456,7 @@ def process(manifest, task, out):
         for i, day in enumerate(profile["days"]):
             observer.capture(f"d{day}_after_alignment", registered[i, identity_index], channel=profile["identity_channel"],
                              why="Same visit after transform; geometric QC remains in REGISTRATION_QC_PRIVATE.json")
-            np.save(out / f"day{day:02}_registered.npy", registered[i], allow_pickle=False)
+            save_quantitative_array(out / f"day{day:02}_registered.npy", registered[i], settings.get("array_storage", "npy"))
         del stack
         save(out / "CHANNEL_REMAPS_PRIVATE.json", remaps)
         save(out / "REGISTRATION_QC_PRIVATE.json", {"visits": qc, "common_crop": crop,
