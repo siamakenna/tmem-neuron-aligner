@@ -407,8 +407,71 @@ def save_quantitative_array(path, array, storage="npy"):
     return path
 
 
+def process_unsupported(manifest, task, out, preprocessing):
+    """Retain actual extraction/preprocessing/display for unsupported analyses."""
+    from PIL import Image
+    from tmem_align.audit_v1.display import LUT
+    from tmem_align.audit_v1.visualization import render_preview
+    profile = manifest["profile"]
+    channels, settings = profile["channels"], profile["processing"]
+    observer = Observer(out / "stages", channels, profile["luts"], profile["identity_channel"],
+                        arrays=settings.get("trace_arrays", False))
+    remaps = []
+    try:
+        for day in profile["days"]:
+            observations = [o for o in task["observations"] if o["day"] == day]
+            if len(observations) != 1:
+                raise ValueError("Extraction-only series requires exactly one authenticated field per actual visit")
+            observation = observations[0]
+            raw, mapping = read_selection(observation, channels, settings.get("max_read_bytes", 512 * 1024**2))
+            remaps.append({"day": day, "site": observation["site"], **mapping})
+            fields = _calibration(observation, profile, channels)
+            frame = preprocessing.preprocess_image(raw, ic_field=fields["flatfield"], darkfield=fields["darkfield"],
+                background_radius=settings.get("background_radius"), trace=observer,
+                trace_prefix=f"d{day}_{observation['site']}_preprocess")
+            save_quantitative_array(out / f"day{day:02}_raw.npy", raw, settings.get("array_storage", "npy"))
+            save_quantitative_array(out / f"day{day:02}_preprocessed.npy", frame, settings.get("array_storage", "npy"))
+            for channel_index, role in enumerate(channels):
+                limits = profile["luts"][role]
+                lut = LUT(*limits, scope="fixed-per-role-across-declared-acquisitions", source="bound modality profile")
+                for name, plane in [("raw", raw[channel_index]), ("preprocessed", frame[channel_index])]:
+                    preview = Image.fromarray(render_preview(plane, lut))
+                    preview.thumbnail((640, 640))
+                    observer.capture_display(f"d{day}_c{channel_index:02}_{name}_preview", preview, plane,
+                        "Actual render_preview; fixed declared role LUT; display only")
+                    observer.records[-1].update(preview_lut=limits, channel=role,
+                        source_selection={"day": day, "site": observation["site"], "position": observation["position"],
+                            "time": observation["time"], "z": observation["z"], "canonical_channel_index": channel_index})
+        reason = "Explicit unsupported downstream mode for this acquisition; no neuronal registration, segmentation or tracking model is applied"
+        operations = {name: {"status": "executed"} for name in ["extraction", "preprocessing", "viewing"]}
+        for name in ["registration", "segmentation", "tracking"]:
+            operations[name] = {"status": "unsupported", "reason": reason}
+            observer.capture(name + "_unsupported", status="unsupported", why=reason)
+        result = {"days": profile["days"], "scope": task["scope"], "modality": profile.get("modality", "fluorescence"),
+            "operation_status": operations, "channels_checked_every_visit": True, "qc_failed_days": [],
+            "well_registration_qc_pass": None, "registration_qc_status": "unsupported",
+            "soma_tracking": {"status": "unsupported", "accepted": False},
+            "source_original_nd2": True, "whole_well_coverage_verified": False,
+            "ic_applied_days": sorted({o["day"] for o in task["observations"] if o.get("calibration", {}).get("flatfield")}),
+            "accepted_identities": 0, "phenotype_exported": False, "mcherry_analysis_valid": None,
+            "mcherry_status": "unsupported modality analysis; no phenotype export"}
+        save(out / "CHANNEL_REMAPS_PRIVATE.json", remaps)
+        save(out / "RESULT_PRIVATE.json", result)
+        return result
+    finally:
+        from full_dataset import object_sha
+        for record in observer.records:
+            record["source_provenance"] = {"source_config_task_sha256": object_sha({"source": manifest["source"], "profile": profile, "task": task}), "task_id": task["id"],
+                "execution_receipt": "../../COMPLETED.json", "source_observations": task["observations"]}
+        observer.finish()
+
+
 def process(manifest, task, out):
     pilot, tracker, preprocessing = attach_repo(manifest["repo"])
+    if manifest["profile"]["processing"].get("downstream") == "unsupported":
+        if task["scope"] != "extraction_only_series":
+            raise ValueError("Explicit extraction-only task scope required")
+        return process_unsupported(manifest, task, out, preprocessing)
     profile = manifest["profile"]
     channels = profile["channels"]
     settings = profile["processing"]
@@ -472,6 +535,13 @@ def process(manifest, task, out):
         neuronal = profile["name"] == "february_neuron"
         nonreporter = task["well"][0] in "CDGHKL" and neuronal
         result = {"days": profile["days"], "qc_failed_days": failed, "scope": task["scope"],
+                  "modality": profile.get("modality", "fluorescence"),
+                  "operation_status": {"extraction": {"status": "executed"}, "preprocessing": {"status": "executed"},
+                      "viewing": {"status": "executed"}, "registration": {"status": "executed", "qc_failed_days": failed},
+                      "segmentation": {"status": "executed" if tracking.get("status") == "diagnostic_candidate" else tracking.get("status", "unavailable"),
+                          "failed_days": tracking.get("segmentation_failed_days", [])},
+                      "tracking": {"status": "executed" if tracking.get("status") == "diagnostic_candidate" else tracking.get("status", "unavailable"),
+                          "failed_days": tracking.get("tracking_failed_days", [])}},
                   "well_registration_qc_pass": all(r.get("well_registration_qc_pass", r["qc_pass"]) for r in qc),
                   "channels_checked_every_visit": True, "soma_tracking": tracking,
                   "optical_identity": "metadata labels only; independent optical authentication unresolved",

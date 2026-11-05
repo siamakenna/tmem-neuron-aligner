@@ -1,0 +1,17 @@
+{
+  "name": "february_brightfield",
+  "modality": "brightfield",
+  "days": [8],
+  "channels": ["brightfield"],
+  "identity_channel": "brightfield",
+  "metadata_labels": {"brightfield": "REPLACE_WITH_EXACT_ACQUISITION_CHANNEL_LABEL"},
+  "luts": {"brightfield": [0, 4096]},
+  "processing": {
+    "downstream": "unsupported",
+    "background_radius": null,
+    "max_read_bytes": 536870912,
+    "trace_arrays": false,
+    "candidate_tracking": false,
+    "array_storage": "npy.gz"
+  }
+}

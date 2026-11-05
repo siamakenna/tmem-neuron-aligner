@@ -26,8 +26,8 @@ def prepare(inventory, profile, acquisition_csv, reason):
             if path not in by_path:
                 raise ValueError("Acquisition map references a source outside this inventory")
             h = by_path[path]
-            if h["modality"] != "fluorescence":
-                raise ValueError("Brightfield belongs to a separate modality plan")
+            if h["modality"] != profile.get("modality", "fluorescence"):
+                raise ValueError("Acquisition input belongs to a different modality plan")
             observations.append({"path": path, "position": int(row["position"]), "site": row["site"],
                                  "well": h["well"], "day": h["day"], "time": 0, "z": 0,
                                  "channel_map": channel_map(h, profile),

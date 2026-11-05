@@ -18,3 +18,13 @@
 - [ ] Final private presentation/packet artifact and native-render receipt finalized; not sent.
 
 Software and execution QC do not establish physical coverage or biological accuracy. Detailed measurements, hashes, graphics and failures remain private.
+
+## Current Biowulf execution checkpoint
+- [x] Minimal brightfield/unsupported-analysis source route:83 contracts, actual adapter and affected182pytest+75subtests passed.
+- [x] Existing account/repository/Python/quota/jobs and legacy compatibility inspected; no old result promoted without complete bindings.
+- [x] Completed Mac deck and packet finalized, verified and preserved before this pivot.
+- [x] Supplied authentication renewed and read-only probe passed after interruption.
+- [ ] Full private original transfer verified.
+- [ ] Allocated complete inventory/native mapping, real serial/two-worker gates, measured resources and full verified Swarm.
+- [ ] Afterany aggregation, complete failure/unsupported accounting, plate-wide reports and distinct updated presentation.
+This is a source checkpoint; private continuation scripts and partial transfer are not completed execution.

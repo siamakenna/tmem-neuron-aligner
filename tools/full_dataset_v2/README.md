@@ -239,3 +239,11 @@ If Git author identity is missing, set your real identity in that repository and
 ## Claire / collaborator folder
 
 `CLAIRE_PACKET_CHECKLIST.md` defines the technical review packet. Copy only source-bound real pilot stage graphics, QC/failure summaries, measured alignment/LUT inspection changes and a parameter/I/O explanation into a private share folder. Keep original ND2 inputs and full pixel traces on approved storage. This package prepares review material; nothing has been sent.
+
+## Complete brightfield accounting alongside longitudinal fluorescence
+
+`february_brightfield.profile.TEMPLATE.json` defines a separate actual-Day8 modality. Fill exact source labels in the private profile/site map before planning. `modality:"brightfield"` and `processing.downstream:"unsupported"` retain exact selected raw/preprocessed arrays, channel remaps, compact actual production-rendered images and explicit unsupported registration/segmentation/tracking. Missing calibration remains skipped. No temporal axis, neuronal model or acceptance is fabricated.
+
+The normal `plan`, `pilot`, `swarm` and `aggregate` interfaces apply. The named February brightfield profile requires the complete expected well roster, actual Day8 files and every declared position; incomplete mapping and falsely cleared subset flags are refused. A single actual acquisition can pass the extraction-only serial/two-worker software gate; longitudinal neuronal pilots still require real multiple visits and the full February profile still requires all nine. Aggregate operation statuses distinguish supported execution from unsupported analysis. Keep separate modality manifests/results; cap combined scheduler concurrency rather than independently assigning the full cap to each.
+
+Private batch continuations must inspect `report.passed`/`summary.execution_complete`, not only CLI return codes. Swarm generation independently revalidates the bound real pilot and full mapping. Use final `afterany` dependencies to account for failed subjobs. Do not treat ACTIVE.lock or a queue entry as verified completion.

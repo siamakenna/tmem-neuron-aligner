@@ -294,23 +294,43 @@ def make_plan(inv, site_map, profile, repo, out, *, allow_subset=False):
     if not required.issubset(profile):
         raise ValueError("Incomplete dataset profile")
     days, channels = profile["days"], profile["channels"]
+    modality = profile.get("modality", "fluorescence")
+    if type(modality) is not str or modality not in {"fluorescence", "brightfield"}:
+        raise ValueError("Explicit supported acquisition modality required")
     if not days or days != sorted(set(days)) or len(channels) != len(set(channels)):
         raise ValueError("Unique ordered days/channels required")
     if profile["identity_channel"] not in channels:
         raise ValueError("Identity role must be a declared metadata-mapped channel")
-    if profile["name"] == "february_neuron" and (channels != ["405", "561", "488"] or profile["identity_channel"] != "488"):
+    if profile["name"] == "february_neuron" and (modality != "fluorescence" or channels != ["405", "561", "488"] or profile["identity_channel"] != "488"):
         raise ValueError("Neuronal diagnostics require canonical 405/561/488, with 488 identity")
     if profile["name"] == "february_neuron" and not allow_subset:
         if days != DAYS or not inv["summary"].get("file_counts_192x9_plus_192_BF"):
             raise ValueError("Full February planning requires all nine visits and the complete declared file collection; label a pilot subset explicitly")
+    if profile["name"] == "february_brightfield":
+        if allow_subset or modality != "brightfield" or days != [8] or not inv["summary"].get("file_counts_192x9_plus_192_BF"):
+            raise ValueError("February brightfield requires the complete original collection and its single actual Day 8 acquisition")
+        bf_headers = [r for r in inv["headers"] if r["modality"] == "brightfield"]
+        observed_wells = set(inv["summary"].get("observed_wells", []))
+        expected_wells = set(inv["summary"].get("expected_wells", observed_wells))
+        if (not expected_wells or expected_wells != observed_wells
+                or {r["well"] for r in bf_headers} != expected_wells
+                or any(r["day"] != 8 for r in bf_headers)):
+            raise ValueError("Every expected February well requires actual Day 8 brightfield; acquisition roster/day mismatch")
     for c in channels:
         low, high = profile["luts"][c]
         if not (isinstance(low, (int, float)) and isinstance(high, (int, float)) and low < high):
             raise ValueError("Every channel needs a fixed finite increasing LUT range")
     # Current adapter intentionally does not retune the frozen registration QC.
-    if set(profile["processing"]) - {"background_radius", "max_read_bytes", "trace_arrays", "candidate_tracking", "tracking", "array_storage"}:
+    if set(profile["processing"]) - {"background_radius", "max_read_bytes", "trace_arrays", "candidate_tracking", "tracking", "array_storage", "downstream"}:
         raise ValueError("Unknown processing parameter; no silently ignored settings")
     settings = profile["processing"]
+    downstream = settings.get("downstream", "neuron")
+    if type(downstream) is not str or downstream not in {"neuron", "unsupported"}:
+        raise ValueError("downstream must be neuron or unsupported")
+    if modality == "brightfield" and downstream != "unsupported":
+        raise ValueError("Brightfield downstream registration/segmentation/tracking is unsupported")
+    if downstream == "unsupported" and (settings.get("candidate_tracking", False) or settings.get("tracking")):
+        raise ValueError("Unsupported downstream mode cannot request neuronal tracking parameters")
     if type(settings.get("array_storage", "npy")) is not str or settings.get("array_storage", "npy") not in {"npy", "npy.gz"}:
         raise ValueError("array_storage must be npy or npy.gz")
     if type(settings.get("max_read_bytes", 512 * 1024**2)) is not int or settings.get("max_read_bytes", 1) < 1:
@@ -337,8 +357,8 @@ def make_plan(inv, site_map, profile, repo, out, *, allow_subset=False):
         if path not in rows_by_path:
             raise ValueError("Observation not present in this inventory")
         row = rows_by_path[path]
-        if row["error"] or row["modality"] != "fluorescence":
-            raise ValueError("Only readable fluorescence inputs can enter a fluorescence task")
+        if row["error"] or row["modality"] != modality:
+            raise ValueError("Only readable " + modality + " inputs can enter this modality plan")
         if supplied.get("well") != row["well"] or supplied.get("day") != row["day"]:
             raise ValueError("Well/day metadata mismatch")
         if row["day"] not in days:
@@ -369,7 +389,7 @@ def make_plan(inv, site_map, profile, repo, out, *, allow_subset=False):
                            evidence=evidence_record(supplied.get("evidence"), raw))
         grouped.setdefault((row["well"], site), []).append(observation)
     expected = {(r["path"], p, 0, 0) for r in inv["headers"]
-                if not r["error"] and r["modality"] == "fluorescence" and r["day"] in days
+                if not r["error"] and r["modality"] == modality and r["day"] in days
                 for p in range(r["declared_positions"])}
     missing = expected - covered
     if not allow_subset and missing:
@@ -380,12 +400,15 @@ def make_plan(inv, site_map, profile, repo, out, *, allow_subset=False):
         if [x["day"] for x in observations] != days:
             raise ValueError("Every well/site must contain all selected visits exactly once")
         tasks.append({"id": well + "__" + site, "well": well, "site": site,
-                      "scope": "field_series", "observations": observations})
+                      "scope": "extraction_only_series" if downstream == "unsupported" else "field_series", "observations": observations})
     if not tasks:
         raise ValueError("No tasks planned")
     manifest = {"schema": SCHEMA, "repo": str(Path(repo).resolve()), "raw_root": str(raw),
                 "out_root": str(out), "profile": profile, "source": source_binding(repo),
                 "tasks": tasks, "declared_positions": len(expected), "mapped_positions": len(covered),
+                "planned_modality": modality,
+                "inventory_positions_by_modality": {name: sum(r["declared_positions"] for r in inv["headers"]
+                    if not r["error"] and r["modality"] == name) for name in ["fluorescence", "brightfield"]},
                 "all_declared_positions_mapped": not missing, "subset_requested": allow_subset,
                 "unmapped_positions": [list(k) for k in sorted(missing)],
                 "whole_well_coverage_verified": False, "accepted_identities": 0}
@@ -593,8 +616,14 @@ def aggregate(manifest, *, hash_inputs=False):
     rows = []
     for task in manifest["tasks"]:
         root = Path(manifest["out_root"]) / task["id"]
+        operations = {name: {"status": "not_executed"} for name in
+                      ["extraction", "preprocessing", "viewing", "registration", "segmentation", "tracking"]}
+        if manifest["profile"]["processing"].get("downstream") == "unsupported":
+            operations.update({name: {"status": "unsupported", "reason": "Bound profile explicitly excludes downstream analysis"}
+                               for name in ["registration", "segmentation", "tracking"]})
         row = {"id": task["id"], "well": task["well"], "site": task["site"],
-               "expected_days": manifest["profile"]["days"], "status": "missing", "qc_failed_days": []}
+               "expected_days": manifest["profile"]["days"], "status": "missing", "qc_failed_days": [],
+               "modality": manifest.get("planned_modality", "fluorescence"), "operation_status": operations}
         if (root / "COMPLETED.json").is_file():
             try:
                 receipt = load(root / "COMPLETED.json")
@@ -607,6 +636,7 @@ def aggregate(manifest, *, hash_inputs=False):
                 if result["days"] != manifest["profile"]["days"]:
                     raise ValueError("Completed task omitted visits")
                 row.update(status="completed", qc_failed_days=result.get("qc_failed_days", []),
+                           operation_status=result.get("operation_status", operations),
                            well_registration_qc_pass=result.get("well_registration_qc_pass"),
                            segmentation_failed_days=result.get("soma_tracking", {}).get("segmentation_failed_days", []),
                            tracking_failed_days=result.get("soma_tracking", {}).get("tracking_failed_days", []),
@@ -647,7 +677,8 @@ def pilot(manifest_path, out, wells):
     tasks = [t for t in original["tasks"] if t["well"] in wells]
     if set(t["well"] for t in tasks) != set(wells):
         raise ValueError("Both pilot wells must be mapped in manifest")
-    if len(original["profile"]["days"]) < 2:
+    extraction_only = original["profile"]["processing"].get("downstream") == "unsupported" and all(t["scope"] == "extraction_only_series" for t in tasks)
+    if len(original["profile"]["days"]) < 2 and not extraction_only:
         raise ValueError("Pilot needs at least two real visits")
     out = new_directory(out, original["raw_root"], original["repo"], original["out_root"])
     paths, logs = {}, {}

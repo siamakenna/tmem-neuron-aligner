@@ -1,18 +1,9 @@
-# Next tasks — bounded remaining increments
+# Next tasks — Biowulf full acquisition execution
 
-## P0 — MAC-RECOVER: complete
-Verified on this Mac and normally published on the preserved branch. Current71 software contracts, default/compressed production adapters and affected182 tests+75 subtests pass. E-007 through E-010 preserve exact recovery history. No rerun of the old launcher or new worktree.
+1. Finish the resumable private original transfer over the renewed authenticated connection. Preserve all existing remote files/results; verify full transfer against independently captured original hashes. Actual remote paths, quota, environment and one-time legacy compatibility decisions are recorded privately.
+2. Run the entire header/position inventory inside Slurm; reconcile the independent native acquisition roster and authenticate every eligible well/site/visit. Retain per-file channel remapping. Do not invent constituent geometry or physical whole-well coverage.
+3. Freeze source/configuration/environment and run both real serial/two-worker gates: full nine-visit fluorescence series for two representative largest wells/all sites, and the separate actual Day8 brightfield extraction route. Verify numerical equivalence, source/input immutability, resume, Linux memory/runtime and storage. Failed QC remains visible.
+4. Automatically inspect/generate/submit the fully mapped commands only after bound gates pass. Combined Swarm concurrency is capped at eight; resource requests derive from allocated measurements. Schedule final aggregation afterany, including failures. Independent valid inputs may proceed without mislabeling a subset as a full acquisition pass.
+5. Produce authoritative completed/failed/invalid/unsupported/missing/running accounting, registration QC, actual-image navigation, bounded sensitivity/LUT summaries and the full acquisition report. Update a distinct presentation from real results while preserving the finalized Mac presentation.
 
-## P1 — resource gate before ND2 parallel comparison
-Completed:entire February headers/native-roster reconciliation; four original-image diagnostics; two authentic stored-mosaic nine-visit serial series; selected exact numeric stages; input/output hash verification and exact-source no-op resume. All original visits/resolution/precision and frozen QC retained.
-
-Pending:serial/two-worker ND2 equivalence. It was not launched because measured memory/host swap evidence does not establish capacity. Preserve serial successes and interrupted attempts/locks. First verify existing compute memory/disk/concurrency and actual remote repository/data/Python paths. One configured Biowulf authentication attempt failed; no submission/transfer occurred. Use the existing48GiB/four-CPU pilot script only after those prerequisites and a newly source/environment-bound manifest are verified. No resource-exhausting retry on this Mac.
-
-## P2 — coverage and broader usability
-- Whole-well reconstruction remains blocked:vendor-preassembled mosaics are available, constituent pixels/realized offsets/support and calibrated physical coverage are not. Do not infer a grid or accept a field footprint as an entire well.
-- No applicable flat/dark arrays:IC remains explicitly skipped. Optical contradictions and independently referenced soma/segmentation accuracy remain unresolved. Preserve every historical and new QC/failure flag.
-- Real JUMP portability completed only for ten original TIFFs,two five-channel fields,one acquisition. Actual metadata roles/input hashes and serial/parallel equality retained. Cell Painting segmentation, temporal tracking and broader usability require representative fields and appropriate annotations; no invented visits.
-- Remaining full-plate processing/Swarm and reusable legacy remote provenance remain pending. No duplicate plate run has been launched.
-
-## Private presentation and reproducibility packet
-Finish the editable baseline with actual E05/JUMP images, executed intermediate arrays and fixed-LUT/parameter comparisons. Retain measured non-benefits and unaccepted alternatives, unavailable calibration and exact source/config/input/output bindings. Validate the final presentation and packet, keep them private and do not send them.
+Verified source increment:83 contracts, live actual-production adapter and affected182pytest+75subtests passed. No new Biowulf pilot or full run has yet completed. Authentication renewal succeeded; the resumed transfer and private prepared scripts are not submitted jobs. Missing calibration stays skipped; soma candidates remain unaccepted exemplars rather than an exhaustive neuron census.

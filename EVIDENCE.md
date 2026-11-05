@@ -54,3 +54,12 @@ A bounded replay from completed E05 registered outputs retained122 exact small n
 
 ## E-013 — execution-source CI
 Both GitHub workflow executions for e1badba02152b0076b63bc211b8adb8f54b80c4c completed successfully: https://github.com/siamakenna/tmem-neuron-aligner/actions/runs/42083399663 and https://github.com/siamakenna/tmem-neuron-aligner/actions/runs/42083412989. The workflow runs new contracts, actual production adapter and full existing tests. Exact CI artifact/JUnit receipts are private. Later documentation-head CI and final remote SHA must be verified independently; no merge authorized.
+
+## E-014 — minimal full-acquisition brightfield accounting route
+The user reprioritized full acquisition execution on Biowulf while preserving completed Mac evidence. Added an explicit unsupported-downstream mode with exact original extraction/preprocessing arrays, actual fixed-LUT production previews and unavailable operation statuses. A separate complete February brightfield plan requires the independent expected well roster, actual Day8 observations, exact per-file labels and every declared position. Fluorescence planning and full-Swarm subset gates are retained. A one-visit extraction-only reproducibility gate does not create temporal evidence.
+
+Mac verification:83 contracts passed; actual production adapter passed; affected pytest182 passed plus75 subtests; JUnit257, failures0/errors0/skips0; source unchanged. Tests cover missing/wrong-day/conflicting brightfield rosters, real production preprocessing/rendering, exact arrays/resume, serial/two-worker equality and unchanged neuronal restrictions. No original data are used in these synthetic software checks.
+
+The supplied authenticated connection initially verified actual compute/data/environment/quota/legacy state. Bounded searches did not locate the full original collection. A new private original transfer and independently hashed input manifest are preserved, but authentication was lost before allocated inventory/execution. No remote submission or full-plate result is asserted. Exact paths, transfer status, measurements and private evidence remain outside the public commit.
+
+The user subsequently renewed the authenticated control connection; a fresh BatchMode probe succeeded and the partial private transfer resumed. Allocated inventory and scientific execution remain pending at this source checkpoint.
