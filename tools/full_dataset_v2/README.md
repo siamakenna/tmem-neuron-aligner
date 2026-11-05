@@ -135,7 +135,9 @@ Use that well manifest for the pilot and later Swarm. Each task first preprocess
 
 ## 6. Biowulf/Swarm after the real pilot
 
-All paths must point to actual files **on Biowulf**. Neither a Mac path nor this ZIP transfers the raw acquisition folder. Run heavy work on allocated compute.
+All paths must point to actual files on NIH storage. Neither a Mac path nor this ZIP transfers the raw acquisition folder. Route bulk transfers through Helix (`helix.nih.gov`) and lightweight scheduler/status commands through Biowulf (`biowulf.nih.gov`). Run all scientific processing, software tests, package/environment setup, full header/native authentication and large hash verification in allocated Slurm jobs. Preserve NIH login-node process-killer failures and partial transfers; do not restart bulk transfer on the Biowulf login node.
+
+For the existing November5 continuation, keep the inventory job held until transfer completion, allocated verification of all 1,920 original hashes and frozen source/runtime gates pass. Then release the existing job rather than submitting another inventory. The example below describes an initial submission; actual IDs and operational paths remain private.
 
 ```bash
 export TMEM_KIT="/data/$USER/tmem_hpc_private/TMEM106B_FullDataset_v2_20261105"

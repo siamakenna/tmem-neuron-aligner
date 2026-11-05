@@ -9,13 +9,13 @@
 - [x] Entire February header/native-roster reconciliation and original stat preservation verified privately.
 - [x] Two complete nine-visit stored-mosaic serial cases, input/output hashes and exact-source no-op resume verified.
 - [ ] ND2 serial/two-worker equivalence:withheld until measured memory/resources and actual existing remote paths verified.
-- [ ] Cloud/remote legacy-run reuse provenance; configured Biowulf authentication currently blocked.
+- [ ] Cloud/remote legacy-run reuse provenance; preserve incompatible/unbound historical results.
 - [ ] Replayable constituent tile geometry and physical whole-well support; no guessed placements.
 - [ ] Applicable calibration/IC before-after benefit; currently skipped, no asserted benefit.
 - [ ] Independently annotated segmentation/identity accuracy or biological acceptance.
 - [x] Independent JUMP ten-TIFF/two-field/five-role/single-acquisition ingestion/preprocessing/LUT serial/parallel check.
 - [ ] Broader Cell Painting usability/segmentation/reference annotations; no temporal tracking claim.
-- [ ] Final private presentation/packet artifact and native-render receipt finalized; not sent.
+- [x] Historical Mac private presentation/packet artifact and native-render receipt finalized; not sent.
 
 Software and execution QC do not establish physical coverage or biological accuracy. Detailed measurements, hashes, graphics and failures remain private.
 
@@ -24,7 +24,9 @@ Software and execution QC do not establish physical coverage or biological accur
 - [x] Existing account/repository/Python/quota/jobs and legacy compatibility inspected; no old result promoted without complete bindings.
 - [x] Completed Mac deck and packet finalized, verified and preserved before this pivot.
 - [x] Supplied authentication renewed and read-only probe passed after interruption.
+- [x] Later NIH login-node process-killer transfer terminations recorded separately; Helix transfer/Biowulf scheduler/allocated Slurm compute routing established in project instructions.
 - [ ] Full private original transfer verified.
+- [ ] All 1,920 original hashes and frozen source/runtime verified in allocated Slurm jobs; existing inventory hold released only after those gates pass.
 - [ ] Allocated complete inventory/native mapping, real serial/two-worker gates, measured resources and full verified Swarm.
 - [ ] Afterany aggregation, complete failure/unsupported accounting, plate-wide reports and distinct updated presentation.
-This is a source checkpoint; private continuation scripts and partial transfer are not completed execution.
+This is a source checkpoint; queued dependencies, held inventory, private continuation scripts and partial transfers are not completed execution.
