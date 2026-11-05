@@ -96,6 +96,22 @@ def stat_record(path):
     return {"bytes": s.st_size, "mtime_ns": s.st_mtime_ns, "device": s.st_dev, "inode": s.st_ino}
 
 
+def portable_stat_record(record):
+    """Shared-file identity across hosts; st_dev is a local mount identifier."""
+    return {key: record[key] for key in ["bytes", "mtime_ns", "inode"]}
+
+
+def _hashed_input_record(path, *, expected_stat=None):
+    # Full local identity still guards each read, including device changes.
+    before = stat_record(path)
+    if expected_stat is not None and portable_stat_record(before) != portable_stat_record(expected_stat):
+        raise ValueError("Original ND2 size/mtime changed after inventory (including inode): " + str(path))
+    checksum = digest(path)
+    if stat_record(path) != before:
+        raise ValueError("Source changed during checksum read: " + str(path))
+    return {**portable_stat_record(before), "sha256": checksum}
+
+
 def parse_name(name):
     wells, days = list(WELL.finditer(name)), list(DAY.finditer(name))
     w = wells[0] if len(wells) == 1 else None
@@ -434,26 +450,29 @@ def input_records(task):
     records = {}
     for obs in task["observations"]:
         p = obs["path"]
-        if stat_record(p) != obs["header"]["stat"]:
-            raise ValueError("Original ND2 size/mtime changed after inventory: " + p)
+        if portable_stat_record(stat_record(p)) != portable_stat_record(obs["header"]["stat"]):
+            raise ValueError("Original ND2 size/mtime changed after inventory (including inode): " + p)
         if p not in records:
-            records[p] = {**stat_record(p), "sha256": digest(p)}
+            records[p] = _hashed_input_record(p, expected_stat=obs["header"]["stat"])
         ev = obs["evidence"]
-        if digest(ev["path"]) != ev["sha256"]:
+        record = _hashed_input_record(ev["path"])
+        if record["sha256"] != ev["sha256"]:
             raise ValueError("Acquisition site evidence changed")
-        records[ev["path"]] = {**stat_record(ev["path"]), "sha256": ev["sha256"]}
+        records[ev["path"]] = record
         for spec in obs.get("calibration", {}).values():
             if not isinstance(spec, dict) or not spec.get("path") or not spec.get("sha256"):
                 raise ValueError("Calibration path and checksum required")
             path = str(Path(spec["path"]).expanduser().resolve(strict=True))
-            if digest(path) != spec["sha256"]:
+            record = _hashed_input_record(path)
+            if record["sha256"] != spec["sha256"]:
                 raise ValueError("Calibration source bytes changed")
-            records[path] = {**stat_record(path), "sha256": spec["sha256"]}
+            records[path] = record
     if task.get("geometry_evidence"):
         ev = task["geometry_evidence"]
-        if digest(ev["path"]) != ev["sha256"]:
+        record = _hashed_input_record(ev["path"])
+        if record["sha256"] != ev["sha256"]:
             raise ValueError("Whole-well geometry evidence changed")
-        records[ev["path"]] = {**stat_record(ev["path"]), "sha256": ev["sha256"]}
+        records[ev["path"]] = record
     return records
 
 
