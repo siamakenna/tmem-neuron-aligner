@@ -207,7 +207,7 @@ The LUT-box panel quantifies **inspection area reduction**, not a measured segme
 
 Copy `cellpaint.profile.TEMPLATE.json` to a private profile and replace **actual visits, every exact channel label and structural role** from the new acquisition metadata. It deliberately has no neuronal segmentation/561 phenotype assumptions. Run a new inventory with `--profile` and **without** `--expect-february-counts`, then original-image previews, per-file remapping checks and a separate serial/two-worker pilot using authenticated sites. Do not reuse February calibration/anchors/site geometry or label a repeated February run external validation.
 
-The new fixture checks five-channel reordering, but no Cell Paint source files were provided here. Therefore real Cell Paint usability is **pending**. Current filename parsing expects `WellA01`/`DayN` labels; another naming scheme, multi-Z/T acquisition, TIFF-only input or five-channel mosaics needs a tested adapter and must appear in the usability failure matrix rather than being silently coerced. Cell Paint segmentation/biological accuracy requires a suitable assay-specific model/reference.
+The ND2 filename parser expects `WellA01`/`DayN` labels; other naming schemes, multi-Z/T data and five-channel mosaics remain unsupported until explicitly tested. The separate TIFF adapter below was exercised on ten real independent JUMP TIFFs,two five-channel fields,one acquisition, with metadata role/hash verification and serial/parallel equality. Its scope is ingestion/preprocessing/LUT portability. Broader usability needs representative additional fields and reference annotations; Cell Painting segmentation/temporal tracking/biological accuracy were not validated.
 
 ### Independent single-acquisition TIFF input
 

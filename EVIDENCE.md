@@ -1,5 +1,7 @@
 # Evidence ledger — 2026-11-05
 
+E-001 through E-006 describe the supplied historical bundle. Their pending-device statuses are superseded by E-007 onward; preserve historical failures and scopes.
+
 ## E-001 — source inspected
 Main SHA 47a2db795133e4b6a79baf5d5f3b36855d857dec; 424 source/text blobs matched GitHub blob hashes in the cloud snapshot. Source-only GitHub write attempts returned 403. No new push verified here. Fresh fetch on the Mac is required.
 
@@ -39,3 +41,16 @@ The first real source-bound two-well pilot completed one nine-visit field series
 A minimal optional `array_storage:npy.gz` saves exact preprocessed/registered NPY arrays through deterministic gzip; default NPY, shape/dtype/values, stage recording, coverage and science/QC are unchanged. Six storage contracts cover exact uint16/max-value roundtrip, byte determinism, default behavior, planner binding/refusal and tamper detection. Both storage modes passed the actual production-function adapter against synthetic readers; all16 retained numerical outputs match after decode. This option reduces stored bytes, not in-memory registration allocations. The retry must use a new source/config-bound private output root with a disk guard, preserving the first attempt.
 
 Actual Mac verification after integrating lossless storage:71 contracts passed, actual production adapter passed in default and compressed modes, all16 numerical outputs matched exactly after gzip decode, and affected pytest182+75 subtests passed with zero failures/errors/skips. Both verification runs recorded source unchanged. Private receipts: lossless_storage_verification_20261105/VERIFICATION_PRIVATE.json and LOSSLESS_ARRAY_VALUES_COMPARISON_PRIVATE_20261105.json.
+
+## E-011 — real serial completion; parallel deliberately unexecuted
+Two selected native stored-mosaic field series completed all nine actual visits serially at full resolution/precision with frozen QC. Every task output/input hash and exact-source no-op resume verified at execution source e1badba02152b0076b63bc211b8adb8f54b80c4c. Detailed coverage, stage/QC flags, measurements and hashes remain private. No accepted identities, whole-well claim or entire-plate result. The ND2 driver was stopped after both serial tasks completed and before a parallel directory was created. There is no passed ND2 serial/two-worker report.
+
+Measured RAM, visit/stack construction, masked-FFT temporaries, swap growth, available disk and worker concurrency are recorded privately. Storage compression is not RAM remediation. No further ND2 launch until measured resources and actual existing source/data/Python paths support it. A single read-only configured Biowulf probe failed authentication; no remote job/transfer occurred.
+
+## E-012 — exact scoped independent batch and selected numeric stages
+Real independent JUMP check:ten original TIFFs,two five-channel fields,one acquisition; original hashes, metadata role mapping, source/config bindings, actual preprocessing/render_preview and byte-equal serial/parallel outputs verified. Scope is ingestion/preprocessing/LUT portability only. Cell Painting segmentation, temporal tracking and broader usability are unvalidated; more representative fields and suitable reference annotations remain necessary.
+
+A bounded replay from completed E05 registered outputs retained122 exact small numeric arrays and125 stage records;124 corresponding original stage hashes matched, tracked candidates and baseline segmentation matched exactly, source/registered files unchanged. No ND2 decode or new whole-field registration was launched. Actual fixed-LUT and parameter alternatives remain unadopted; their measured limitations and all unsuccessful attempts remain in the private presentation/packet.
+
+## E-013 — execution-source CI
+Both GitHub workflow executions for e1badba02152b0076b63bc211b8adb8f54b80c4c completed successfully: https://github.com/siamakenna/tmem-neuron-aligner/actions/runs/42083399663 and https://github.com/siamakenna/tmem-neuron-aligner/actions/runs/42083412989. The workflow runs new contracts, actual production adapter and full existing tests. Exact CI artifact/JUnit receipts are private. Later documentation-head CI and final remote SHA must be verified independently; no merge authorized.

@@ -1,25 +1,21 @@
 # TMEM106B longitudinal — verified state, 2026-11-05
 
-Owner: Makenna Rodriguez. Goal: reproducible original-ND2 longitudinal analysis with inspectable image intermediates, authentic well assembly, tests and a clear presentation. Requested deadline: end of day; user timezone America/New_York. Default new-service budget: $0.
+The preserved checkout and branch remain in the original session; no new worktree, merge, force push or private-image upload. Execution source e1badba02152b0076b63bc211b8adb8f54b80c4c was normally pushed and verified against the remote. Draft PR #15: https://github.com/siamakenna/tmem-neuron-aligner/pull/15. Later documentation commits must be distinguished from execution bindings.
 
-Audited GitHub main: 47a2db795133e4b6a79baf5d5f3b36855d857dec. Fetch again before any publication. Cloud materialization is a SHA-verified source snapshot, not a Git clone. Mac recovery was completed on the preserved branch. Source-only push e4d70b3bc7b0319393dabdd71dccbb2d69ec3263 matched the remote SHA; draft PR #15 is open. The connector rejected PR creation with HTTP403, but existing local Git authentication succeeded. See E-007 for the failed and successful receipts.
+## Completed evidence
+- Mac recovery fixed canonical temporary paths, then an independently exposed optional observer-details bug. All failed attempts remain private. The supplied recovery script published the explicit source/doc allowlist on the existing branch.
+- Current software:71 contracts, actual production-function adapters in default/compressed modes,16 exactly equal decoded arrays, and affected pytest182+75 subtests passed with zero failures/errors/skips and source unchanged. Execution-source CI push and PR workflows both passed. Detailed logs/JUnit/environment receipts remain private.
+- Entire original February header inventory matched the independently decoded native Nikon well roster. Detailed counts, paths and hashes remain private. All original source stat records still match the initial inventory; selected task inputs were fully hashed.
+- Two authentic stored-mosaic field series completed serially across every selected visit at full resolution/precision/frozen QC. Input/output hashes and exact-source no-op resume verified. This is serial execution evidence, not a passed serial/two-worker pilot or an entire-plate result. Candidate identities remain unaccepted.
+- Independent JUMP:ten original TIFFs,two five-channel fields,one acquisition. Hash-bound metadata roles, ingestion/preprocessing/LUT portability and serial/parallel equality passed. This does not validate Cell Painting segmentation, temporal tracking or broad assay usability.
+- Actual E05 small-stage replay retained exact normalization, threshold/morphology/component, template/search/correlation/peak arrays with original-stage hash comparisons. The private editable baseline presentation is being reconciled to actual evidence, including limitations and preserved unsuccessful attempts.
 
-## Current capabilities and proof
-- Current source contains LUT rendering/box proposals, trace observers, segmentation/tracking diagnostics, flowchart exports and well assembly. See tools/full_dataset_v2/SOURCE_REVIEW.md and EVIDENCE.md.
-- Added tools/full_dataset_v2: original-ND2 inventory, explicit axis/channel/site contracts, source-bound resumable receipts, actual-function adapter, serial/two-worker pilot, well assembly planning and Swarm generation gates. These additions passed Mac contracts, the actual production-function adapter and affected science tests, and were pushed source-only.
-- Existing source: 98 focused tests passed locally; new contracts: 49 passed normally and the same 49 passed through a symlinked temporary parent. These are fixtures, not original-data or biological validation.
-- Actual C05 original-ND2 Day8/12 alignment preview evidence is available. Separate real registered J05_N015 nine-visit segmentation/tracking stages are available from the October27 archive. Their source histories are distinct and are not a replay of one raw-to-tracking sample.
-- Private PowerPoint: TMEM106B_actual_images_and_workflow_20261105.pptx in the recovery package. Native presentation editing rejected C05 image references, so the downloadable deck is the intended deliverable; do not treat the partial online draft as complete.
+## Resource decision and blocked work
+No two-worker ND2 execution was launched. A paused driver was terminated after both serial tasks completed. Measured peak RSS, retained visit/stack construction, masked-FFT temporaries, swap growth, disk and concurrency are recorded privately. Lossless gzip saves storage; it does not establish RAM capacity. No further ND2 retry or full-plate expansion until an adequately resourced existing allocation and actual source/data/Python paths are verified.
 
-## Preserved recovery session
-Mac session: $HOME/Downloads/tmem_finish_1KkiKJ3Z
-Checkout: results/publication/source
-Branch: completion/full-dataset-v2-20261105T165938Z-bc25f12f
-Logged HEAD: 47a2db7. The historical first command stopped with48 fixture setup errors. Recovery fixed that defect, then a separately discovered optional observer-details bug. Both failed evidence and successful verification/publication are preserved.
-Reproduced root cause: macOS /var aliases /private/var; fake ND2 fixture keys used an unresolved temporary path while inventory read its resolved path. Fixed only the fixture to use Path(self.tmp.name).resolve(), with an explicit regression for symlinked temp directories. Production validation is unchanged.
+The configured Biowulf connection rejected one read-only authentication attempt; no job or transfer was submitted. Remote paths and allocated resources remain unverified. The existing submit_pilot.sbatch requests48GiB/four CPUs, but a conditional command is not a verified remote execution environment.
 
-## Data and scientific limits
-Original February folder was observed under Desktop/260213_Feb16recopy_HYdiff_landingpadlines_survival_384well1; Documents is another supplied candidate. Verify the path on this device. The entire February header inventory and native-roster reconciliation are now verified privately. Native Nikon job/frame evidence supports the selected two-well stored-mosaic grouping across nine visits. Physical whole-well support, reconstructible constituent offsets, optical-label reconciliation and actual IC calibration remain unavailable. A real independent five-role, single-acquisition Cell Paint TIFF batch was located; its execution is pending. P=1 does not establish whole-well coverage. Reported 192 wells ×9 visits +192 BF is a target, not a newly verified count. No new biological acceptance or inference is authorized by these diagnostics.
+Native Nikon metadata establishes instrument-preassembled acquisition mosaics. It does not supply replayable constituent pixels/realized offsets or establish physical whole-well support. Applicable flat/dark calibration, optical-label reconciliation, independently annotated identity/segmentation references and cloud/remote legacy provenance remain unresolved. Broader JUMP usability needs representative additional fields and suitable annotations.
 
-## Next handoff
-Read NEXT_TASKS.md. Recovery is verified. Next run the authentic two-well stored-mosaic field-series pilot, preserving QC failures and distinguishing instrument assembly from replayable constituent stitching. Then run the independent single-acquisition Cell Paint TIFF diagnostics. Keep private evidence and the edited PowerPoint outside Git.
+## Next
+Read TASK_CARD.md and the private resource/packet receipts. Preserve valid serial outputs; authenticate an adequately resourced existing environment before the remaining ND2 comparison. Keep all images/results/private paths and measurements outside GitHub. Source/docs-only normal pushes and the draft PR remain authorized; no merge.

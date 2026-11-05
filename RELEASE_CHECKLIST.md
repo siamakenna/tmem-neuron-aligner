@@ -1,19 +1,20 @@
-# Release checks — source completion and scientific limits
+# Release checks — execution and scientific limits
 
-- [x] User requested source-only push to siamakenna/tmem-neuron-aligner.
-- [x] Existing actual code and current-source tests inspected; focused Linux checks recorded.
-- [x] Mac test-path defect reproduced and fixture/regression fixed without changing production guards.
-- [x] Portable operating-system templates preserved and project ledgers filled.
-- [x] Corrected49 plus an independent optional-details regression pass on the Mac (50); actual production adapter and affected182 tests+75 subtests pass with zero failures/errors/skips.
-- [x] Fresh remote source and explicit staged diff reviewed; no private paths/data/config/measurements included.
-- [x] Same preserved branch committed and normal push verified against ls-remote SHA e4d70b3bc7b0319393dabdd71dccbb2d69ec3263.
-- [x] Draft PR #15 verified open/draft; initial push CI succeeded, PR-triggered CI pending at capture. No merge authorized.
-- [x] Entire original February ND2 header inventory and independent native-roster reconciliation verified privately.
-- [ ] Exact legacy run reusable provenance/cloud/remote reconciliation (no local active plate process found).
-- [ ] Authentic cross-day sites and well acquisition geometry verified; all sites assembled before well registration.
-- [ ] Actual calibration available and correction tested, or IC remains explicitly unexecuted.
-- [ ] Real all-site serial/two-worker pilot and remaining task coverage verified.
-- [ ] Independent real Cell Paint batch tested with its own channel/axis profile.
-- [ ] Claire packet contains provenance and clear limits; prepared privately, not sent.
+- [x] User authorized source-only normal pushes and draft PR; existing branch/session preserved.
+- [x] Canonical-path and optional-details observer regressions fixed without weaker production/QC guards.
+- [x] All8 original operating-system templates preserved; no global memory preference installed.
+- [x] Mac71 contracts, default/compressed production adapters and affected182 tests+75 subtests pass; no failures/errors/skips; source unchanged.
+- [x] Explicit staged source/doc allowlists reviewed and normal pushes remotely verified; no private images/results/paths/measurements staged.
+- [x] Draft PR #15 open; execution-source push/PR CI passed. Final documentation-head CI must be reported separately.
+- [x] Entire February header/native-roster reconciliation and original stat preservation verified privately.
+- [x] Two complete nine-visit stored-mosaic serial cases, input/output hashes and exact-source no-op resume verified.
+- [ ] ND2 serial/two-worker equivalence:withheld until measured memory/resources and actual existing remote paths verified.
+- [ ] Cloud/remote legacy-run reuse provenance; configured Biowulf authentication currently blocked.
+- [ ] Replayable constituent tile geometry and physical whole-well support; no guessed placements.
+- [ ] Applicable calibration/IC before-after benefit; currently skipped, no asserted benefit.
+- [ ] Independently annotated segmentation/identity accuracy or biological acceptance.
+- [x] Independent JUMP ten-TIFF/two-field/five-role/single-acquisition ingestion/preprocessing/LUT serial/parallel check.
+- [ ] Broader Cell Painting usability/segmentation/reference annotations; no temporal tracking claim.
+- [ ] Final private presentation/packet artifact and native-render receipt finalized; not sent.
 
-Passing unit tests does not check these scientific/data gates. Do not mark an unchecked item complete from a placeholder, synthetic fixture or unverified historical receipt.
+Software and execution QC do not establish physical coverage or biological accuracy. Detailed measurements, hashes, graphics and failures remain private.
