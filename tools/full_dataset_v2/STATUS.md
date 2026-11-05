@@ -1,0 +1,23 @@
+# Status: November 5, 2026
+
+- Implemented in this package: safer all-original header inventory; explicit site/day/channel maps; per-well/site durable workers; exact-source resume; retained failure attempts; source/calibration/input/output hashes; actual-stage PNG/SVG exports; production segmentation/tracking candidates; display-only within-range LUT boxes; bounded min-area sensitivity; well-mosaic-before-registration path; whole-task aggregation and coverage graphics; serial/two-worker real pilot and Swarm gate; separate Cell Paint profile; source-only publication script and CI definition.
+- Verified locally: 49 synthetic contract/integration tests passed on Python 3.12, with zero failures/errors/skips, both normally and through a symlinked temporary parent. The added regression covers the macOS /var versus /private/var fixture alias; production checks were not weakened. Corrected tests still require the actual Mac rerun. These exercise two wells × two visits × two declared positions, per-file channel swaps, a five-channel fixture, immutable inputs/outputs, conflicting evidence, resume, actual-call observer preservation, RGB/shape/inode checks, private output permissions and frozen plate-policy selection. CI separately runs the actual-checkout adapter and full existing suite.
+- Also verified against current main: 98 existing core stitching, LUT/preview, stage-trace, display-policy, resolved-parameter and flowchart tests passed, with zero failures, errors or skips. These are software checks; they do not establish original-image or biological accuracy.
+- Still requires original data: February full-plate processing, genuine cross-day site correspondence/geometry, actual IC calibration, independently accurate neuron identities and Cell Paint usability. None of the attached archives contains an original ND2 file. Synthetic pixels are confined to explicitly labeled software checks.
+- Additional older-source checks passed: asymmetric tile placement/channel preservation, overlap mean/coverage, NaN gaps, and adapter refusal to register unsupported gaps. These used synthetic arrays with the uploaded older stitching source, not current main or original ND2.
+- Historical private evidence retained: an earlier original-ND2 field pair with actual before/after alignment, and separate nine-visit registered segmentation/tracking traces. Images, input hashes and unpublished measurements stay in the private recovery packet; they are distinct cases and do not establish a same-source raw-to-tracking replay, calibrated IC, whole-well coverage or biological discovery.
+- Live GitHub main was inspected at `47a2db795133e4b6a79baf5d5f3b36855d857dec`. Existing preflight/checkpoint adapters remain unchanged. The new task worker reads the source's frozen plate registration policy and explicitly maps channels for each selected file. Publication and CI state are recorded by the draft PR and its checks; a source push is separate from a real-data completion receipt.
+- Full-plate runtime remains unknown until an actual pilot measures it. Printed legacy progress and reported 979 passes from the deck are not fresh receipts. Preserve and reconcile existing outputs before scheduling new plate work.
+
+## Remaining completion gates
+
+- [x] Inspect current GitHub main and reconcile the extension with its source/preflight/checkpoint contracts.
+- [ ] Run the live adapter and existing source tests in CI; reconcile any additional unpushed local-device fixes separately.
+- [ ] Reconcile any existing full-plate process/results so completed work is not duplicated.
+- [ ] Inventory every original February acquisition and compare against the independent plate/site plan.
+- [ ] Generate the actual original-image stage gallery; provide physical flat/dark calibration if IC benefit is to be claimed.
+- [ ] Authenticate cross-day site correspondence and whole-well geometry; run a real two-well/all-site pilot serial vs two-worker with equal outputs.
+- [ ] Run the remaining verified well/site or well-mosaic tasks on allocated compute; aggregate every expected slot and retain failures.
+- [ ] Measure segmentation/tracking/stitched landmarks against independent reference annotations; no biological acceptance is inferred from software QC.
+- [ ] Run the independent Cell Paint batch with its actual channel/axis profile and record supported/unsupported steps.
+- [ ] Push the verified new source branch, review CI and prepare the private collaborator packet.
