@@ -1,0 +1,27 @@
+name: Full dataset contracts
+on:
+  pull_request:
+  push:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e '.[nd2,dev]' pytest-subtests python-pptx
+      - name: New contracts then existing science and diagnostics
+        run: >-
+          python -B tools/full_dataset_v2/verify_project.py
+          --repo "$GITHUB_WORKSPACE"
+          --out "$RUNNER_TEMP/tmem-verification"
+          --full
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: software-verification
+          path: ${{ runner.temp }}/tmem-verification

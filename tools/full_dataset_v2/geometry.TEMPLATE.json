@@ -1,0 +1,10 @@
+{
+  "wells": {
+    "E05": {
+      "coordinate_model": "UNVERIFIED_REPLACE_ONLY_AFTER_CALIBRATION",
+      "canvas_yx": [0, 0],
+      "evidence": {"path": "REPLACE_WITH_AUTHENTIC_GEOMETRY_EVIDENCE_FILE", "reason": "Document actual site order, origin, camera orientation, calibration, landmarks and coordinate frame"},
+      "visits": {"8": [{"site": "REPLACE_WITH_AUTHENTIC_SITE_ID", "offset_yx": [0, 0]}]}
+    }
+  }
+}
