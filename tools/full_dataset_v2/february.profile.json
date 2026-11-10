@@ -1,0 +1,14 @@
+{
+  "name": "february_neuron",
+  "days": [8, 12, 16, 20, 25, 29, 32, 36, 39],
+  "channels": ["405", "561", "488"],
+  "identity_channel": "488",
+  "luts": {"405": [0, 4096], "561": [0, 4096], "488": [0, 4096]},
+  "processing": {
+    "background_radius": null,
+    "max_read_bytes": 536870912,
+    "trace_arrays": false,
+    "candidate_tracking": true,
+    "tracking": {"bbox_size": 128, "template_size": 41, "search_radius": 60, "min_area": 180, "initial_search_radius": 45}
+  }
+}

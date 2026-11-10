@@ -1,0 +1,15 @@
+{
+  "name": "cellpaint_usability_unvalidated",
+  "days": [0, 1],
+  "channels": ["DNA", "ER", "RNA", "AGP", "Mito"],
+  "identity_channel": "DNA",
+  "metadata_labels": {
+    "DNA": "REPLACE_WITH_EXACT_METADATA_LABEL",
+    "ER": "REPLACE_WITH_EXACT_METADATA_LABEL",
+    "RNA": "REPLACE_WITH_EXACT_METADATA_LABEL",
+    "AGP": "REPLACE_WITH_EXACT_METADATA_LABEL",
+    "Mito": "REPLACE_WITH_EXACT_METADATA_LABEL"
+  },
+  "luts": {"DNA": [0, 4096], "ER": [0, 4096], "RNA": [0, 4096], "AGP": [0, 4096], "Mito": [0, 4096]},
+  "processing": {"background_radius": null, "max_read_bytes": 536870912, "trace_arrays": false, "candidate_tracking": false}
+}
